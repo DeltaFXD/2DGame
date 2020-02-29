@@ -11,17 +11,21 @@ namespace GameEngine
     class Level : Renderable
     {
         //Temp
-        int[,] map = new int[10, 10];
+        int mapWidth, mapHeight;
+        int[,] map;
 
         /// <summary>
         /// Level inicializalas
         /// </summary>
         public void init()
         {
+            mapWidth = 10;
+            mapHeight = 10;
+            map = new int[mapWidth, mapHeight];
             //Temp
-            for (int x = 0; x < 10; x++)
+            for (int x = 0; x < mapWidth; x++)
             {
-                for (int y = 0; y < 10; y++)
+                for (int y = 0; y < mapHeight; y++)
                 {
                     map.SetValue(1, x, y);
                 }
@@ -32,9 +36,9 @@ namespace GameEngine
         {
             //Super Basic Map Render
             CanvasBitmap bitmap = null;
-            for (int x = 0; x < 10; x++)
+            for (int x = 0; x < mapWidth; x++)
             {
-                for (int y = 0; y < 10; y++)
+                for (int y = 0; y < mapHeight; y++)
                 {
                     if (Sprite.Sprites.TryGetValue(map[x, y], out bitmap))
                     {

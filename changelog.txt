@@ -2,3 +2,5 @@
 -Project Setup
 #2020.02.24
 -Implement Basic Rendering
+#2020.02.29
+-Refactor and remove obsolete code

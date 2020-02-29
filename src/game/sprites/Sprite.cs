@@ -10,9 +10,9 @@ namespace GameEngine
 {
     public static class Sprite
     {
-        static public Dictionary<int, CanvasBitmap> Sprites = new Dictionary<int, CanvasBitmap>();
+        public static Dictionary<int, CanvasBitmap> Sprites = new Dictionary<int, CanvasBitmap>();
 
-        static public CanvasAnimatedControl canvas = null;
+        public static CanvasAnimatedControl canvas = null;
 
         /// <summary>
         /// Sprite betoltes
@@ -20,7 +20,7 @@ namespace GameEngine
         /// <param name="id">Sprite neve</param>
         /// <param name="path">Sprite helye</param>
         /// <returns></returns>
-        static public async Task<bool> addSprite(int id, string path)
+        public static async Task<bool> addSprite(int id, string path)
         {
             if (canvas == null) return false;
 

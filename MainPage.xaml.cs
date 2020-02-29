@@ -23,8 +23,6 @@ using System.Diagnostics;
 
 using GameEngine;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
-
 namespace Game2D
 {
     /// <summary>
@@ -32,29 +30,12 @@ namespace Game2D
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        Random rnd = new Random();
         Stopwatch watch = new Stopwatch();
         Level level = new Level();
         long lastTime;
         int upCount = 0;
+        int frameCount = 0;
 
-        GaussianBlurEffect blur;
-        private Vector2 RndPosition()
-        {
-            double x = rnd.NextDouble() * 500f;
-            double y = rnd.NextDouble() * 500f;
-            return new Vector2((float)x, (float)y);
-        }
-
-        private float RndRadius()
-        {
-            return (float)rnd.NextDouble() * 150f;
-        }
-
-        private byte RndByte()
-        {
-            return (byte)rnd.Next(256);
-        }
         public MainPage()
         {
             this.InitializeComponent();
@@ -72,6 +53,7 @@ namespace Game2D
             watch.Start();
             lastTime = watch.ElapsedMilliseconds;
 
+            //Init level
             level.init();
         }
 
@@ -87,24 +69,6 @@ namespace Game2D
 
             //Load sprite
             await Sprite.addSprite(1, @"resources/test_tile.png");
-
-            //Test code
-            /*CanvasCommandList cl = new CanvasCommandList(sender);
-            using (CanvasDrawingSession clds = cl.CreateDrawingSession())
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    clds.DrawText("Hello, World!", RndPosition(), Color.FromArgb(255, RndByte(), RndByte(), RndByte()));
-                    clds.DrawCircle(RndPosition(), RndRadius(), Color.FromArgb(255, RndByte(), RndByte(), RndByte()));
-                    clds.DrawLine(RndPosition(), RndPosition(), Color.FromArgb(255, RndByte(), RndByte(), RndByte()));
-                }
-            }
-            
-            blur = new GaussianBlurEffect()
-            {
-                Source = cl,
-                BlurAmount = 10.0f
-            };*/
         }
 
         /// <summary>
@@ -114,10 +78,7 @@ namespace Game2D
         /// <param name="args"></param>
         void canvas_Draw(ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args)
         {
-            /*float radius = (float)(1 + Math.Sin(args.Timing.TotalTime.TotalSeconds)) * 10f;
-            blur.BlurAmount = radius;
-            args.DrawingSession.DrawImage(blur);*/
-
+            frameCount++;
             level.Render(args.DrawingSession);    
         }
 
@@ -127,8 +88,9 @@ namespace Game2D
             if ((watch.ElapsedMilliseconds - lastTime) > 1000)
             {
                 lastTime = watch.ElapsedMilliseconds;
-                Debug.WriteLine("UPS: " + upCount);
+                Debug.WriteLine("UPS: " + upCount + " , FPS: " + frameCount);
                 upCount = 0;
+                frameCount = 0;
             }
         }
 
