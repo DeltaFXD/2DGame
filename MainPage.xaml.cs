@@ -31,10 +31,11 @@ namespace Game2D
     public sealed partial class MainPage : Page
     {
         Stopwatch watch = new Stopwatch();
-        Level level = new Level();
+        Level level;
         long lastTime;
         int upCount = 0;
         int frameCount = 0;
+        Matrix3x2 scale;
 
         public MainPage()
         {
@@ -49,6 +50,11 @@ namespace Game2D
             ApplicationView.PreferredLaunchViewSize = new Size(1366, 768);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
+            scale = Matrix3x2.CreateScale(new Vector2(2.66f, 2.66f));
+
+            //Create level
+            level = new PlannedLevel(@"\resources\planned_levels\test_map.png");
+            
             //Ido meres
             watch.Start();
             lastTime = watch.ElapsedMilliseconds;
@@ -65,10 +71,19 @@ namespace Game2D
         async void canvas_CreateResources(CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args)
         {
             //Setup
-            Sprite.canvas = sender;
+            Sprite.init(sender);
 
-            //Load sprite
-            await Sprite.addSprite(1, @"resources/test_tile.png");
+            //Load sprites
+            //0x00000001 - test tile
+            //await Sprite.addSprite(0x00000001, @"resources/spritesheets/test_tile.png");
+            //0x01000000 -  wall
+            await Sprite.addSprite(0x01000000, @"resources/spritesheets/wall_tile.png");
+            //0x009B9B9C - base floor
+            await Sprite.addSprite(0x009B9B9C, @"resources/spritesheets/base_floor_tile.png");
+            //0x00C8C8C8 - floor 2
+            await Sprite.addSprite(0x00373738, @"resources/spritesheets/floor2_tile.png");
+            //0x00FFFFFF - void
+            await Sprite.addSprite(0x00000001, @"resources/spritesheets/void_tile.png");
         }
 
         /// <summary>
@@ -79,7 +94,8 @@ namespace Game2D
         void canvas_Draw(ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args)
         {
             frameCount++;
-            level.Render(args.DrawingSession);    
+            args.DrawingSession.Transform = scale;
+            level.Render(args.DrawingSession);
         }
 
         private void canvas_Update(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)
@@ -92,6 +108,7 @@ namespace Game2D
                 upCount = 0;
                 frameCount = 0;
             }
+            level.update();
         }
 
         void Page_Unloaded(object sender, RoutedEventArgs e)

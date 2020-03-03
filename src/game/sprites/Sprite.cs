@@ -10,9 +10,29 @@ namespace GameEngine
 {
     public static class Sprite
     {
-        public static Dictionary<int, CanvasBitmap> Sprites = new Dictionary<int, CanvasBitmap>();
+        //TODO: rework from single sprites to spritesheet loading
+        private static Dictionary<int, CanvasBitmap> Sprites = new Dictionary<int, CanvasBitmap>();
 
-        public static CanvasAnimatedControl canvas = null;
+        private static CanvasAnimatedControl canvas = null;
+
+        private static CanvasBitmap defaultSprite = null;
+
+        public static void init(CanvasAnimatedControl canvas)
+        {
+            Sprite.canvas = canvas;
+        }
+
+        public static CanvasBitmap getSprite(int id)
+        {
+            if (Sprites.ContainsKey(id))
+            {
+                return Sprites[id];
+            } 
+            else
+            {
+                return defaultSprite;
+            }
+        }
 
         /// <summary>
         /// Sprite betoltes
