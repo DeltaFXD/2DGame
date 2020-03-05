@@ -36,7 +36,6 @@ namespace GameEngine
                 for (int y = 0; y < mapHeight; y++)
                 { 
                     map.SetValue(-BitConverter.ToInt32(bytes, (x + y * mapWidth) * sizeof (int)), x, y);
-                    //Debug.WriteLine("values: " + map[x, y]);
                 }
             }
         }

@@ -149,7 +149,9 @@
     <Content Include="resources\spritesheets\floor2_tile.png" />
     <Content Include="resources\spritesheets\test_tile.png" />
     <Content Include="resources\spritesheets\void_tile.png" />
+    <Content Include="resources\spritesheets\wall_nw_tile.png" />
     <Content Include="resources\spritesheets\wall_tile.png" />
+    <Content Include="resources\spritesheets\wall_w_tile.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

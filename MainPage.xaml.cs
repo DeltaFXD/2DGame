@@ -35,7 +35,7 @@ namespace Game2D
         long lastTime;
         int upCount = 0;
         int frameCount = 0;
-        Matrix3x2 scale;
+        Matrix3x2 iso;
 
         public MainPage()
         {
@@ -50,7 +50,7 @@ namespace Game2D
             ApplicationView.PreferredLaunchViewSize = new Size(1366, 768);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
-            scale = Matrix3x2.CreateScale(new Vector2(2.66f, 2.66f));
+            iso = new Matrix3x2(2.828f , 1.414f, -2.828f, 1.414f , 0.0f, 0.0f);
 
             //Create level
             level = new PlannedLevel(@"\resources\planned_levels\test_map.png");
@@ -78,6 +78,10 @@ namespace Game2D
             //await Sprite.addSprite(0x00000001, @"resources/spritesheets/test_tile.png");
             //0x01000000 -  wall
             await Sprite.addSprite(0x01000000, @"resources/spritesheets/wall_tile.png");
+            //0x00CCCCCD -  wall_north_west
+            await Sprite.addSprite(0x00CCCCCD, @"resources/spritesheets/wall_nw_tile.png");
+            //0x00B3B3B4 -  wall_west
+            await Sprite.addSprite(0x00B3B3B4, @"resources/spritesheets/wall_w_tile.png");
             //0x009B9B9C - base floor
             await Sprite.addSprite(0x009B9B9C, @"resources/spritesheets/base_floor_tile.png");
             //0x00C8C8C8 - floor 2
@@ -94,7 +98,8 @@ namespace Game2D
         void canvas_Draw(ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args)
         {
             frameCount++;
-            args.DrawingSession.Transform = scale;
+            //args.DrawingSession.Transform = scale;
+            args.DrawingSession.Transform = iso;
             level.Render(args.DrawingSession);
         }
 

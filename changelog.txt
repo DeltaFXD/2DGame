@@ -8,3 +8,5 @@
 -Implemented pre-made level loading
 -Made test assets
 -Added basic scrolling of level
+#2020.03.06
+-Changed rendering to isometric projection

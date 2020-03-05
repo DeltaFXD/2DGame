@@ -29,8 +29,8 @@ namespace GameEngine
         {
             xOffset = 0;
             yOffset = 0;
-            screenWidth = 512;
-            screenHeight = 288;
+            screenWidth = 1000;
+            screenHeight = 500;
             tileSize = 32;
             sprite_base = new Rect(0, 0, 32, 32);
 
@@ -46,7 +46,7 @@ namespace GameEngine
                 for (int y = 0; y < mapHeight; y++)
                 {
                     //Boundary Check
-                    if (-tileSize > (x * tileSize - xOffset) || screenWidth < (x * tileSize - xOffset) || -tileSize > (y * tileSize - yOffset) || screenHeight < (y * tileSize - yOffset)) continue;
+                    if ((-tileSize * 10) > (x * tileSize - xOffset) || screenWidth < (x * tileSize - xOffset) || (-tileSize * 20) > (y * tileSize - yOffset) || screenHeight < (y * tileSize - yOffset)) continue;
                     //Draw
                     sprite = Sprite.getSprite(map[x, y]);
                     if (sprite != null)
@@ -60,8 +60,10 @@ namespace GameEngine
         public void update()
         {
             //Test code
-            xOffset += Convert.ToInt32(2 * Math.Cos((watch.ElapsedMilliseconds / 2000 ) * (Math.PI / 180)));
-            yOffset += Convert.ToInt32(2 * Math.Sin((watch.ElapsedMilliseconds / 2000 ) * (Math.PI / 180)));
+            //xOffset += Convert.ToInt32(2 * Math.Cos((watch.ElapsedMilliseconds / 2000 ) * (Math.PI / 180)) - 2 * Math.Sin((watch.ElapsedMilliseconds / 2000) * (Math.PI / 180)));
+            //yOffset += Convert.ToInt32(2 * Math.Sin((watch.ElapsedMilliseconds / 2000 ) * (Math.PI / 180)) + 2 * Math.Cos((watch.ElapsedMilliseconds / 2000) * (Math.PI / 180)));
+            xOffset = -120;
+            yOffset = 120;
         }
     }
 }
