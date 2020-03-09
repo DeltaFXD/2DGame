@@ -10,3 +10,5 @@
 -Added basic scrolling of level
 #2020.03.06
 -Changed rendering to isometric projection
+#2020.03.09
+-Spiresheet loading instead of single Sprites

@@ -73,21 +73,8 @@ namespace Game2D
             //Setup
             Sprite.init(sender);
 
-            //Load sprites
-            //0x00000001 - test tile
-            //await Sprite.addSprite(0x00000001, @"resources/spritesheets/test_tile.png");
-            //0x01000000 -  wall
-            await Sprite.addSprite(0x01000000, @"resources/spritesheets/wall_tile.png");
-            //0x00CCCCCD -  wall_north_west
-            await Sprite.addSprite(0x00CCCCCD, @"resources/spritesheets/wall_nw_tile.png");
-            //0x00B3B3B4 -  wall_west
-            await Sprite.addSprite(0x00B3B3B4, @"resources/spritesheets/wall_w_tile.png");
-            //0x009B9B9C - base floor
-            await Sprite.addSprite(0x009B9B9C, @"resources/spritesheets/base_floor_tile.png");
-            //0x00C8C8C8 - floor 2
-            await Sprite.addSprite(0x00373738, @"resources/spritesheets/floor2_tile.png");
-            //0x00FFFFFF - void
-            await Sprite.addSprite(0x00000001, @"resources/spritesheets/void_tile.png");
+            //Load spritesheets
+            await Sprite.loadSheet(@"\resources\spritesheets\tiles_sheet_data.txt", @"\resources\spritesheets\tiles.png");
         }
 
         /// <summary>
