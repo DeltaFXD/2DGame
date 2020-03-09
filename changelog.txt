@@ -13,3 +13,5 @@
 #2020.03.09
 -Spiresheet loading instead of single Sprites
 -Level and screen logic separated
+#2020.03.10
+-Added basics of Entities
