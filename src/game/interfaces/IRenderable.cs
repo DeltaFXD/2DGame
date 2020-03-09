@@ -7,12 +7,12 @@ using Microsoft.Graphics.Canvas;
 
 namespace GameEngine
 {
-    interface Renderable
+    interface IRenderable
     {
         /// <summary>
         /// Ezen methodussal tud rajzolni a canvas-re
         /// </summary>
-        /// <param name="cds">Canvas felulet amire lehet rajzolni</param>
-        void Render(CanvasDrawingSession cds);
+        /// <param name="screen">Screen to render on</param>
+        void Render(Screen screen);
     }
 }

@@ -123,11 +123,13 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\game\interfaces\Renderable.cs" />
-    <Compile Include="src\game\interfaces\Updateable.cs" />
+    <Compile Include="src\game\entity\Entity.cs" />
+    <Compile Include="src\game\graphics\Screen.cs" />
+    <Compile Include="src\game\interfaces\IRenderable.cs" />
+    <Compile Include="src\game\interfaces\IUpdateable.cs" />
     <Compile Include="src\game\level\Level.cs" />
     <Compile Include="src\game\level\PlannedLevel.cs" />
-    <Compile Include="src\game\sprites\Sprite.cs" />
+    <Compile Include="src\game\graphics\Sprite.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

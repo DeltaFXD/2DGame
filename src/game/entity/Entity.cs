@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace GameEngine
 {
-    interface Updateable
+    class Entity
     {
-        /// <summary>
-        /// Általános update függvény
-        /// </summary>
-        void update();
+
     }
 }

@@ -9,17 +9,12 @@ using Windows.Foundation;
 
 namespace GameEngine
 {
-    class Level : Renderable , Updateable
+    class Level : IUpdateable
     {
         //Temp
         protected int mapWidth, mapHeight;
-        //Map scrolling offset
-        int xOffset, yOffset;
-        //Maximum values for rendering boundaries
-        int screenWidth, screenHeight;
         int tileSize;
         protected int[,] map;
-        Rect sprite_base;
         Stopwatch watch = new Stopwatch();
 
         /// <summary>
@@ -27,31 +22,25 @@ namespace GameEngine
         /// </summary>
         public void init()
         {
-            xOffset = 0;
-            yOffset = 0;
-            screenWidth = 1000;
-            screenHeight = 500;
             tileSize = 32;
-            sprite_base = new Rect(0, 0, 32, 32);
 
             watch.Start();
         }
 
-        public void Render(CanvasDrawingSession cds)
+        public void Render(int xScroll, int yScroll, Screen screen)
         {
-            //Super Basic Map Render
+            screen.setOffset(xScroll, yScroll);
+            //Render tiles
             CanvasBitmap sprite;
-            for (int x = 0; x < mapWidth; x++)
+            for (int y = 0; y < mapHeight; y++)
             {
-                for (int y = 0; y < mapHeight; y++)
+                for (int x = 0; x < mapWidth; x++)
                 {
-                    //Boundary Check
-                    if ((-tileSize * 10) > (x * tileSize - xOffset) || screenWidth < (x * tileSize - xOffset) || (-tileSize * 20) > (y * tileSize - yOffset) || screenHeight < (y * tileSize - yOffset)) continue;
-                    //Draw
+                   //Draw
                     sprite = Sprite.getSprite(map[x, y]);
                     if (sprite != null)
                     {
-                        cds.DrawImage(sprite,x * tileSize - xOffset, y * tileSize - yOffset, sprite_base, 1,CanvasImageInterpolation.NearestNeighbor);
+                        screen.renderRectangle(x * tileSize, y * tileSize, tileSize, sprite);
                     }
                 }
             }
@@ -59,11 +48,7 @@ namespace GameEngine
 
         public void update()
         {
-            //Test code
-            //xOffset += Convert.ToInt32(2 * Math.Cos((watch.ElapsedMilliseconds / 2000 ) * (Math.PI / 180)) - 2 * Math.Sin((watch.ElapsedMilliseconds / 2000) * (Math.PI / 180)));
-            //yOffset += Convert.ToInt32(2 * Math.Sin((watch.ElapsedMilliseconds / 2000 ) * (Math.PI / 180)) + 2 * Math.Cos((watch.ElapsedMilliseconds / 2000) * (Math.PI / 180)));
-            xOffset = -120;
-            yOffset = 120;
+            
         }
     }
 }

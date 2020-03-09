@@ -1,23 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI;
+﻿using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using Microsoft.Graphics.Canvas.UI;
 using System.Numerics;
-using Microsoft.Graphics.Canvas;
-using Microsoft.Graphics.Canvas.Effects;
 using Windows.UI.ViewManagement;
 using System.Diagnostics;
 
@@ -32,6 +18,7 @@ namespace Game2D
     {
         Stopwatch watch = new Stopwatch();
         Level level;
+        Screen screen;
         long lastTime;
         int upCount = 0;
         int frameCount = 0;
@@ -51,6 +38,9 @@ namespace Game2D
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
             iso = new Matrix3x2(2.828f , 1.414f, -2.828f, 1.414f , 0.0f, 0.0f);
+
+            //Create screen
+            screen = new Screen(1000, 500);
 
             //Create level
             level = new PlannedLevel(@"\resources\planned_levels\test_map.png");
@@ -85,9 +75,10 @@ namespace Game2D
         void canvas_Draw(ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args)
         {
             frameCount++;
-            //args.DrawingSession.Transform = scale;
+            
             args.DrawingSession.Transform = iso;
-            level.Render(args.DrawingSession);
+            screen.setCDS(args.DrawingSession);
+            level.Render(-120,120, screen);
         }
 
         private void canvas_Update(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)

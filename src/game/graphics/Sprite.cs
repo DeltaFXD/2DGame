@@ -66,6 +66,7 @@ namespace GameEngine
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                return false;
             }
 
             //Load sheet data
@@ -78,6 +79,7 @@ namespace GameEngine
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                return false;
             }
 
             int x, y, id, xAbs, yAbs;
