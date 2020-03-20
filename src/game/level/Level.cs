@@ -16,6 +16,7 @@ namespace GameEngine
         int tileSize;
         protected int[,] map;
         Stopwatch watch = new Stopwatch();
+        List<Entity> entities = new List<Entity>();
 
         /// <summary>
         /// Level inicializalas
@@ -23,8 +24,13 @@ namespace GameEngine
         public void init()
         {
             tileSize = 32;
-
             watch.Start();
+        }
+
+        public void addEntity(Entity entity)
+        {
+            entity.initalize(this);
+            entities.Add(entity);
         }
 
         public void Render(int xScroll, int yScroll, Screen screen)
@@ -44,11 +50,16 @@ namespace GameEngine
                     }
                 }
             }
+            //Render entities
+            entities.ForEach(entity => entity.render(screen));
+            //TODO: Render walls
+            
         }
 
         public void update()
         {
-            
+            //Update entities
+            entities.ForEach(entity => entity.update());
         }
     }
 }

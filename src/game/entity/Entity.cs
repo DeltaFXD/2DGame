@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace GameEngine
 {
     abstract class Entity : IRenderable , IUpdateable
     {
-        protected int x, y;
+        protected Vector2 position;
         protected Level level;
         bool removed = false;
 
@@ -27,17 +28,22 @@ namespace GameEngine
             removed = true;
         }
 
-        public int getX()
+        public float getX()
         {
-            return x;
+            return position.X;
         }
 
-        public int getY()
+        public float getY()
         {
-            return y;
+            return position.Y;
         }
 
-        public abstract void Render(Screen screen);
+        public Vector2 getXY()
+        {
+            return position;
+        }
+
+        public abstract void render(Screen screen);
         public abstract void update();
     }
 }

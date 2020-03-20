@@ -51,9 +51,9 @@ namespace GameEngine
         {
             if (canvas == null) return false;
             //Load whole sheet
-            byte[] bytes = null;
-            int sheetWidth = 0;
-            int sheetHeight = 0;
+            byte[] bytes;
+            int sheetWidth;
+            int sheetHeight;
             try {
                 StorageFile sheet_file = await StorageFile.GetFileFromPathAsync(Environment.CurrentDirectory + path);
                 IRandomAccessStream stream = await RandomAccessStreamReference.CreateFromFile(sheet_file).OpenReadAsync();
@@ -70,7 +70,7 @@ namespace GameEngine
             }
 
             //Load sheet data
-            string data = "";
+            string data;
             try
             {
                 StorageFile data_file = await StorageFile.GetFileFromPathAsync(Environment.CurrentDirectory + id_path);

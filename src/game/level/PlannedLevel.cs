@@ -20,15 +20,25 @@ namespace GameEngine
 
         async void load_level(string path)
         {
-            StorageFile file = await StorageFile.GetFileFromPathAsync(Environment.CurrentDirectory + path);
-            IRandomAccessStream stream = await RandomAccessStreamReference.CreateFromFile(file).OpenReadAsync();
-            BitmapDecoder decoder = await BitmapDecoder.CreateAsync(stream);
-            PixelDataProvider pixelData = await decoder.GetPixelDataAsync();
-            byte[] bytes = pixelData.DetachPixelData();
+            byte[] bytes;
+            try
+            {
+                StorageFile file = await StorageFile.GetFileFromPathAsync(Environment.CurrentDirectory + path);
+                IRandomAccessStream stream = await RandomAccessStreamReference.CreateFromFile(file).OpenReadAsync();
+                BitmapDecoder decoder = await BitmapDecoder.CreateAsync(stream);
+                PixelDataProvider pixelData = await decoder.GetPixelDataAsync();
+                bytes = pixelData.DetachPixelData();
 
-            mapWidth = Convert.ToInt32(decoder.PixelWidth);
-            mapHeight = Convert.ToInt32(decoder.PixelHeight);
-            
+                mapWidth = Convert.ToInt32(decoder.PixelWidth);
+                mapHeight = Convert.ToInt32(decoder.PixelHeight);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return;
+            }
+
+
             map = new int[mapWidth, mapHeight];
 
             for (int x = 0; x < mapWidth; x++)

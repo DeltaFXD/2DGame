@@ -23,12 +23,13 @@ namespace Game2D
         int upCount = 0;
         int frameCount = 0;
         Matrix3x2 iso;
+        bool assests_ready = false;
 
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.init();
+            init();
         }
 
         void init()
@@ -44,7 +45,10 @@ namespace Game2D
 
             //Create level
             level = new PlannedLevel(@"\resources\planned_levels\test_map.png");
-            
+
+            //Add Player
+            level.addEntity(new Player(144, 144));
+
             //Ido meres
             watch.Start();
             lastTime = watch.ElapsedMilliseconds;
@@ -64,7 +68,7 @@ namespace Game2D
             Sprite.init(sender);
 
             //Load spritesheets
-            await Sprite.loadSheet(@"\resources\spritesheets\tiles_sheet_data.txt", @"\resources\spritesheets\tiles.png");
+            assests_ready = await Sprite.loadSheet(@"\resources\spritesheets\tiles_sheet_data.txt", @"\resources\spritesheets\tiles.png");
         }
 
         /// <summary>
@@ -75,7 +79,7 @@ namespace Game2D
         void canvas_Draw(ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args)
         {
             frameCount++;
-            
+            if (!assests_ready) return;
             args.DrawingSession.Transform = iso;
             screen.setCDS(args.DrawingSession);
             level.Render(-120,120, screen);
@@ -96,8 +100,8 @@ namespace Game2D
 
         void Page_Unloaded(object sender, RoutedEventArgs e)
         {
-            this.canvas.RemoveFromVisualTree();
-            this.canvas = null;
+            canvas.RemoveFromVisualTree();
+            canvas = null;
         }
     }
 }

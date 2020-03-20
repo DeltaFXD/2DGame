@@ -131,6 +131,7 @@
     <Compile Include="src\game\level\Level.cs" />
     <Compile Include="src\game\level\PlannedLevel.cs" />
     <Compile Include="src\game\graphics\Sprite.cs" />
+    <Compile Include="src\game\utility\Math.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

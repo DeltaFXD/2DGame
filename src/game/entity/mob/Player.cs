@@ -9,10 +9,10 @@ namespace GameEngine
     class Player : Entity
     {
 
-        public Player(int x , int y)
+        public Player(float x , float y)
         {
-            this.x = x;
-            this.y = y;
+            position.X = x;
+            position.Y = y;
         }
 
         public override void update()
@@ -20,9 +20,9 @@ namespace GameEngine
 
         }
 
-        public override void Render(Screen screen)
+        public override void render(Screen screen)
         {
-            throw new NotImplementedException();
+            screen.renderRectangle(position, 32, Sprite.getSprite(2));
         }
     }
 }

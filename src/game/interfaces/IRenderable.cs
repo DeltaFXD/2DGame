@@ -13,6 +13,6 @@ namespace GameEngine
         /// Ezen methodussal tud rajzolni a canvas-re
         /// </summary>
         /// <param name="screen">Screen to render on</param>
-        void Render(Screen screen);
+        void render(Screen screen);
     }
 }
