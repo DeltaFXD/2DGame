@@ -13,6 +13,8 @@ namespace GameEngine
     {
         int width, height;
         int xOffset, yOffset;
+        int drawWidth = 480;
+        int drawHeightAbs = 256;
         static Rect sprite_base = new Rect(0, 0, 32, 32);
         CanvasDrawingSession cds = null;
 
@@ -33,7 +35,7 @@ namespace GameEngine
         {
             if (cds == null) return;
             //Boundary check
-            if (0 > (xPos - xOffset) || width < (xPos - xOffset) || (-spriteSize * 8) > (yPos - yOffset) || height < (yPos - yOffset)) return;
+            if (0 > (xPos - xOffset + spriteSize) || drawWidth < (xPos - xOffset - spriteSize) || -drawHeightAbs > (yPos - yOffset) || drawHeightAbs < (yPos - yOffset)) return;
             //Draw
             cds.DrawImage(sprite, xPos - xOffset, yPos - yOffset, sprite_base, 1, CanvasImageInterpolation.NearestNeighbor);
         }

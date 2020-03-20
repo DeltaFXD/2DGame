@@ -126,6 +126,7 @@
     <Compile Include="src\game\entity\Entity.cs" />
     <Compile Include="src\game\entity\mob\Player.cs" />
     <Compile Include="src\game\graphics\Screen.cs" />
+    <Compile Include="src\game\input\KeyBoard.cs" />
     <Compile Include="src\game\interfaces\IRenderable.cs" />
     <Compile Include="src\game\interfaces\IUpdateable.cs" />
     <Compile Include="src\game\level\Level.cs" />

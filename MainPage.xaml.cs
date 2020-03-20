@@ -6,9 +6,11 @@ using Microsoft.Graphics.Canvas.UI;
 using System.Numerics;
 using Windows.UI.ViewManagement;
 using System.Diagnostics;
+using Windows.UI.Core;
+using Windows.System;
+using System;
 
 using GameEngine;
-using System;
 
 namespace Game2D
 {
@@ -27,6 +29,7 @@ namespace Game2D
         bool assests_ready = false;
         Player player;
         Vector2 screenOffset;
+        KeyBoard key;
 
         public MainPage()
         {
@@ -51,8 +54,11 @@ namespace Game2D
             //Create level
             level = new PlannedLevel(@"\resources\planned_levels\test_map.png");
 
+            //Create KeyBoard instance
+            key = new KeyBoard();
+
             //Create Player
-            player = new Player(500, 160);
+            player = new Player(500, 320, key);
 
             //Add Player
             level.addEntity(player);
@@ -63,6 +69,47 @@ namespace Game2D
 
             //Init level
             level.init();
+        }
+
+        void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Register for keyboard events
+            Window.Current.CoreWindow.KeyDown += KeyDown_UIThread;
+            Window.Current.CoreWindow.KeyUp += KeyUp_UIThread;
+        }
+
+        // The KeyDown handler runs on the UI thread...
+        private void KeyDown_UIThread(CoreWindow sender, KeyEventArgs args)
+        {
+            args.Handled = true;
+
+            // extract the data from the args before marshaling it to the
+            // game loop thread
+            var virtualKey = args.VirtualKey;
+
+            var action = canvas.RunOnGameLoopThreadAsync(() => KeyDown_GameLoopThread(virtualKey));
+        }
+
+        // The KeyUp handler runs on the UI thread...
+        private void KeyUp_UIThread(CoreWindow sender, KeyEventArgs args)
+        {
+            args.Handled = true;
+
+            // extract the data from the args before marshaling it to the
+            // game loop thread
+            var virtualKey = args.VirtualKey;
+
+            var action = canvas.RunOnGameLoopThreadAsync(() => KeyUp_GameLoopThread(virtualKey));
+        }
+
+        void KeyDown_GameLoopThread(VirtualKey vk)
+        {
+            key.update(vk, true);
+        }
+
+        void KeyUp_GameLoopThread(VirtualKey vk)
+        {
+            key.update(vk, false);
         }
 
         /// <summary>
@@ -111,6 +158,9 @@ namespace Game2D
 
         void Page_Unloaded(object sender, RoutedEventArgs e)
         {
+            Window.Current.CoreWindow.KeyDown -= KeyDown_UIThread;
+            Window.Current.CoreWindow.KeyUp -= KeyUp_UIThread;
+
             canvas.RemoveFromVisualTree();
             canvas = null;
         }
