@@ -33,7 +33,7 @@ namespace GameEngine
         {
             if (cds == null) return;
             //Boundary check
-            if ((-spriteSize * 5) > (xPos - xOffset) || width < (xPos - xOffset) || (-spriteSize * 20) > (yPos - yOffset) || height < (yPos - yOffset)) return;
+            if (0 > (xPos - xOffset) || width < (xPos - xOffset) || (-spriteSize * 8) > (yPos - yOffset) || height < (yPos - yOffset)) return;
             //Draw
             cds.DrawImage(sprite, xPos - xOffset, yPos - yOffset, sprite_base, 1, CanvasImageInterpolation.NearestNeighbor);
         }
@@ -41,6 +41,16 @@ namespace GameEngine
         public void renderRectangle(Vector2 pos,int spriteSize, CanvasBitmap sprite)
         {
             renderRectangle(pos.X, pos.Y, spriteSize, sprite);
+        }
+
+        public int getWidth()
+        {
+            return width;
+        }
+
+        public int getHeight()
+        {
+            return height;
         }
 
         public void setOffset(int xOffset, int yOffset)

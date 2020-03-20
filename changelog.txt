@@ -15,3 +15,6 @@
 -Level and screen logic separated
 #2020.03.10
 -Added basics of Entities
+#2020.03.20
+-Refactor and Minor Additions
+-Center camera around the player

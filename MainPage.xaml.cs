@@ -8,6 +8,7 @@ using Windows.UI.ViewManagement;
 using System.Diagnostics;
 
 using GameEngine;
+using System;
 
 namespace Game2D
 {
@@ -24,6 +25,8 @@ namespace Game2D
         int frameCount = 0;
         Matrix3x2 iso;
         bool assests_ready = false;
+        Player player;
+        Vector2 screenOffset;
 
         public MainPage()
         {
@@ -41,13 +44,18 @@ namespace Game2D
             iso = new Matrix3x2(2.828f , 1.414f, -2.828f, 1.414f , 0.0f, 0.0f);
 
             //Create screen
-            screen = new Screen(1000, 500);
+            screen = new Screen(1366, 768);
+            //Offset to center screen
+            screenOffset = Coordinate.isoToNormal(new Vector2((screen.getWidth() / 2), (screen.getHeight() / 2)));
 
             //Create level
             level = new PlannedLevel(@"\resources\planned_levels\test_map.png");
 
+            //Create Player
+            player = new Player(500, 160);
+
             //Add Player
-            level.addEntity(new Player(144, 144));
+            level.addEntity(player);
 
             //Ido meres
             watch.Start();
@@ -82,7 +90,10 @@ namespace Game2D
             if (!assests_ready) return;
             args.DrawingSession.Transform = iso;
             screen.setCDS(args.DrawingSession);
-            level.Render(-120,120, screen);
+            int xMap = (int) Math.Round(player.getX() - screenOffset.X);
+            int yMap = (int) Math.Round(player.getY() - screenOffset.Y);
+
+            level.Render(xMap,yMap, screen);
         }
 
         private void canvas_Update(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)

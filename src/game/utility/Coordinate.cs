@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GameEngine
 {
-    class Math
+    class Coordinate
     {
         public static Vector2 normalToIso(Vector2 vec2)
         {
