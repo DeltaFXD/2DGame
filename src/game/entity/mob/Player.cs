@@ -20,10 +20,26 @@ namespace GameEngine
         {
             int xChange = 0;
             int yChange = 0;
-            if (input.up) yChange--;
-            if (input.down) yChange++;
-            if (input.left) xChange--;
-            if (input.right) xChange++;
+            if (input.up)
+            {
+                yChange--;
+                xChange--;
+            }
+            if (input.down)
+            {
+                yChange++;
+                xChange++;
+            }
+            if (input.left)
+            {
+                xChange--;
+                yChange++;
+            }
+            if (input.right)
+            {
+                xChange++;
+                yChange--;
+            }
 
             position.X += xChange;
             position.Y += yChange;

@@ -25,10 +25,8 @@ namespace Game2D
         long lastTime;
         int upCount = 0;
         int frameCount = 0;
-        Matrix3x2 iso;
         bool assests_ready = false;
         Player player;
-        Vector2 screenOffset;
         KeyBoard key;
 
         public MainPage()
@@ -44,12 +42,8 @@ namespace Game2D
             ApplicationView.PreferredLaunchViewSize = new Size(1366, 768);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
-            iso = new Matrix3x2(2.828f , 1.414f, -2.828f, 1.414f , 0.0f, 0.0f);
-
             //Create screen
             screen = new Screen(1366, 768);
-            //Offset to center screen
-            screenOffset = Coordinate.isoToNormal(new Vector2((screen.getWidth() / 2), (screen.getHeight() / 2)));
 
             //Create level
             level = new PlannedLevel(@"\resources\planned_levels\test_map.png");
@@ -135,12 +129,8 @@ namespace Game2D
         {
             frameCount++;
             if (!assests_ready) return;
-            args.DrawingSession.Transform = iso;
             screen.setCDS(args.DrawingSession);
-            int xMap = (int) Math.Round(player.getX() - screenOffset.X);
-            int yMap = (int) Math.Round(player.getY() - screenOffset.Y);
-
-            level.Render(xMap,yMap, screen);
+            level.Render(player.getXY(), screen);
         }
 
         private void canvas_Update(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)
