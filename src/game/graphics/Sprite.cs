@@ -20,8 +20,6 @@ namespace GameEngine
 
         private static CanvasAnimatedControl canvas = null;
 
-        private static CanvasBitmap defaultSprite = null;
-
         private static int DSS = 32;
 
         public static void init(CanvasAnimatedControl canvas)
@@ -37,17 +35,17 @@ namespace GameEngine
             } 
             else
             {
-                return defaultSprite;
+                return null;
             }
         }
 
         /// <summary>
         /// Sprite betoltes
         /// </summary>
-        /// <param name="id_path">sheet_data helye</param>
-        /// <param name="path">Spritesheet helye</param>
+        /// <param name="spriteSheetDataPath">sheet_data helye</param>
+        /// <param name="spriteSheetPath">Spritesheet helye</param>
         /// <returns></returns>
-        public static async Task<bool> loadSheet(string id_path, string path)
+        public static async Task<bool> loadSheet(string spriteSheetDataPath, string spriteSheetPath)
         {
             if (canvas == null) return false;
             //Load whole sheet
@@ -55,7 +53,7 @@ namespace GameEngine
             int sheetWidth;
             int sheetHeight;
             try {
-                StorageFile sheet_file = await StorageFile.GetFileFromPathAsync(Environment.CurrentDirectory + path);
+                StorageFile sheet_file = await StorageFile.GetFileFromPathAsync(Environment.CurrentDirectory + spriteSheetPath);
                 IRandomAccessStream stream = await RandomAccessStreamReference.CreateFromFile(sheet_file).OpenReadAsync();
                 BitmapDecoder decoder = await BitmapDecoder.CreateAsync(stream);
                 PixelDataProvider pixelData = await decoder.GetPixelDataAsync();
@@ -73,7 +71,7 @@ namespace GameEngine
             string data;
             try
             {
-                StorageFile data_file = await StorageFile.GetFileFromPathAsync(Environment.CurrentDirectory + id_path);
+                StorageFile data_file = await StorageFile.GetFileFromPathAsync(Environment.CurrentDirectory + spriteSheetDataPath);
                 data = await FileIO.ReadTextAsync(data_file);
             }
             catch (Exception e)

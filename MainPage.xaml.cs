@@ -26,6 +26,7 @@ namespace Game2D
         int upCount = 0;
         int frameCount = 0;
         bool assests_ready = false;
+        bool animated_assests_ready = false;
         Player player;
         KeyBoard key;
 
@@ -118,6 +119,12 @@ namespace Game2D
 
             //Load spritesheets
             assests_ready = await Sprite.loadSheet(@"\resources\spritesheets\tiles_sheet_data.txt", @"\resources\spritesheets\tiles.png");
+
+            //AnimatedSprite Setup
+            AnimatedSprite.Init(sender);
+
+            //Load AnimatedSpriteSheets
+            animated_assests_ready = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\player_sheet_data.txt", @"\resources\spritesheets\player_sprites.png");
         }
 
         /// <summary>
@@ -129,6 +136,7 @@ namespace Game2D
         {
             frameCount++;
             if (!assests_ready) return;
+            if (!animated_assests_ready) return;
             screen.setCDS(args.DrawingSession);
             level.Render(player.getXY(), screen);
         }
@@ -144,6 +152,7 @@ namespace Game2D
                 frameCount = 0;
             }
             level.update();
+            AnimatedSprite.GetUpdateables().ForEach(e => e.update());
         }
 
         void Page_Unloaded(object sender, RoutedEventArgs e)

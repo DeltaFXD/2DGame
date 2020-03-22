@@ -56,7 +56,7 @@ namespace GameEngine
 
         public override void render(Screen screen)
         {
-            screen.renderRectangle(position, 32, Sprite.getSprite(2));
+            screen.renderRectangle(position, 32, AnimatedSprite.GetAnimatedSprite("player").GetSprite());
         }
     }
 }

@@ -26,7 +26,12 @@ namespace GameEngine
         public void init()
         {
             tileSize = 32;
-            iso = new Matrix3x2(2.828f, 1.414f, -2.828f, 1.414f, 0.0f, 0.0f);
+            float root2 = (float) Math.Sqrt(2.0f);
+            /*  Transformation matrix
+             *  2*sqrt(2)   -2*sqrt(2)  0
+             *  sqrt(2)     sqrt(2)     0
+             */
+            iso = new Matrix3x2(2 * root2, root2, -2 * root2, root2, 0.0f, 0.0f);
             watch.Start();
         }
 
@@ -82,8 +87,9 @@ namespace GameEngine
             bool solid = false;
             for (int i = 0; i < 4; i++)
             {
-                int xFuture = (xChange + (i % 2) * width) >> 5;
-                int yFuture = (yChange + (i >> 1) * height) >> 5;
+                // i % 2 and i >> 1 creates all 4 corners of a tile (0,0) (0,1) (1,0) (1,1)
+                int xFuture = (xChange + (i % 2) * width) / tileSize;
+                int yFuture = (yChange + (i >> 1) * height) / tileSize;
                 Tile tile = GetTile(xFuture, yFuture);
                 if (tile == null) continue;
                 else if (tile.IsSolid()) solid = true;

@@ -126,6 +126,7 @@
     <Compile Include="src\game\entity\Entity.cs" />
     <Compile Include="src\game\entity\mob\Mob.cs" />
     <Compile Include="src\game\entity\mob\Player.cs" />
+    <Compile Include="src\game\graphics\AnimatedSprite.cs" />
     <Compile Include="src\game\graphics\Screen.cs" />
     <Compile Include="src\game\input\KeyBoard.cs" />
     <Compile Include="src\game\interfaces\IRenderable.cs" />
@@ -152,6 +153,8 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="changelog.txt" />
     <Content Include="resources\planned_levels\test_map.png" />
+    <Content Include="resources\spritesheets\player_sheet_data.txt" />
+    <Content Include="resources\spritesheets\player_sprites.png" />
     <Content Include="resources\spritesheets\tiles_sheet_data.txt" />
     <Content Include="resources\spritesheets\tiles.png" />
   </ItemGroup>

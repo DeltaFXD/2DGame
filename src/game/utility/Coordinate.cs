@@ -9,6 +9,8 @@ namespace GameEngine
 {
     class Coordinate
     {
+        static float root2 = (float)Math.Sqrt(2.0f);
+
         public static Vector2 normalToIso(Vector2 vec2)
         {
             /*  Transformation matrix
@@ -19,8 +21,8 @@ namespace GameEngine
             float x = vec2.X;
             float y = vec2.Y;
 
-            vec2.X = (x * 2.828f - y * 2.828f);
-            vec2.Y = (x * 1.414f + y * 1.414f);
+            vec2.X = (x * 2.0f * root2 - y * 2.0f * root2);
+            vec2.Y = (x * root2 + y * root2);
 
             return vec2;
         }
@@ -34,8 +36,8 @@ namespace GameEngine
             float x = vec2.X;
             float y = vec2.Y;
 
-            vec2.X = (x * 0.177f + y * 0.353f);
-            vec2.Y = (x * -0.177f + y * 0.353f);
+            vec2.X = (x * root2 / 8.0f + y * root2 / 4.0f);
+            vec2.Y = (x * -root2 / 8.0f + y * root2 / 4.0f);
 
             return vec2;
         }
