@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameEngine
 {
-    class Player : Entity
+    class Player : Mob
     {
         KeyBoard input;
         public Player(float x , float y, KeyBoard input)
@@ -18,6 +18,7 @@ namespace GameEngine
 
         public override void update()
         {
+            CheckHP();
             int xChange = 0;
             int yChange = 0;
             if (input.up)
@@ -41,8 +42,16 @@ namespace GameEngine
                 yChange--;
             }
 
-            position.X += xChange;
-            position.Y += yChange;
+            if (xChange == 0 && yChange == 0)
+            {
+                moving = false;
+            }
+
+            if (xChange != 0 || yChange != 0)
+            {
+                moving = true;
+                Move(xChange, yChange);
+            }
         }
 
         public override void render(Screen screen)

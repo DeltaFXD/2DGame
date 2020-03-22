@@ -76,5 +76,24 @@ namespace GameEngine
             //Update entities
             entities.ForEach(entity => entity.update());
         }
+
+        public bool TileCollision(int xChange, int yChange, int width, int height)
+        {
+            bool solid = false;
+            for (int i = 0; i < 4; i++)
+            {
+                int xFuture = (xChange + (i % 2) * width) >> 5;
+                int yFuture = (yChange + (i >> 1) * height) >> 5;
+                Tile tile = GetTile(xFuture, yFuture);
+                if (tile == null) continue;
+                else if (tile.IsSolid()) solid = true;
+            }
+            return solid;
+        }
+        Tile GetTile(int x, int y)
+        {
+            if (x < 0 || y < 0 || x >= mapWidth || y >= mapHeight) return null;
+            return Tile.GetTile(map[x, y]);
+        }
     }
 }

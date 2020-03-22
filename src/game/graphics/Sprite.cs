@@ -83,14 +83,16 @@ namespace GameEngine
             }
 
             int x, y, id, xAbs, yAbs;
+            bool solid, penetrateable;
             byte[] bitmap_bytes = new byte[DSS * DSS * 4];
             //Sheet data proccesing
-            MatchCollection matches = Regex.Matches(data, @"(\d) (\d) (\d+)");
+            MatchCollection matches = Regex.Matches(data, @"(\d) (\d) (\d+) (\d) (\d)");
             foreach (Match match in matches)
             {
                 x = int.Parse(match.Groups[1].Value);
                 y = int.Parse(match.Groups[2].Value);
                 id = int.Parse(match.Groups[3].Value);
+
                 //Out of bound check
                 if (x * DSS > sheetWidth || y * DSS > sheetHeight || x < 0 || y < 0) continue;
 
@@ -110,6 +112,13 @@ namespace GameEngine
 
                 Sprites.Add(id, bitmap);
                 
+                //Data for tiles
+                solid = 1 == int.Parse(match.Groups[4].Value);
+                penetrateable = 1 == int.Parse(match.Groups[5].Value);
+     
+                //Create tiles based on sprites
+                new Tile(solid, penetrateable, id);
+
                 if (Sprites.ContainsKey(id))
                 {
                     continue;
