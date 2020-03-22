@@ -14,7 +14,7 @@ namespace GameEngine
         int width, height;
         int xOffset, yOffset;
         int drawWidth = 480;
-        int drawHeightAbs = 256;
+        int drawHeightAbs = 288;
         static Rect sprite_base = new Rect(0, 0, 32, 32);
         CanvasDrawingSession cds = null;
 
@@ -24,6 +24,12 @@ namespace GameEngine
             this.height = height;
             xOffset = 0;
             yOffset = 0;
+        }
+
+        public void setRenderMode(Matrix3x2 matrix)
+        {
+            if (cds == null) return;
+            cds.Transform = matrix;
         }
 
         public void setCDS(CanvasDrawingSession cds)
