@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Graphics.Canvas;
+﻿using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI.Xaml;
-using Windows.Graphics.Imaging;
-using Windows.Storage.Streams;
-using Windows.Storage;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Windows.Graphics.DirectX;
+using Windows.Graphics.Imaging;
+using Windows.Storage;
+using Windows.Storage.Streams;
 
-namespace GameEngine
+using GameEngine.Levels;
+
+namespace GameEngine.Graphics
 {
     public static class Sprite
     {
@@ -22,12 +21,12 @@ namespace GameEngine
 
         private static int DSS = 32;
 
-        public static void init(CanvasAnimatedControl canvas)
+        public static void Init(CanvasAnimatedControl canvas)
         {
             Sprite.canvas = canvas;
         }
 
-        public static CanvasBitmap getSprite(int id)
+        public static CanvasBitmap GetSprite(int id)
         {
             if (Sprites.ContainsKey(id))
             {
@@ -45,7 +44,7 @@ namespace GameEngine
         /// <param name="spriteSheetDataPath">sheet_data helye</param>
         /// <param name="spriteSheetPath">Spritesheet helye</param>
         /// <returns></returns>
-        public static async Task<bool> loadSheet(string spriteSheetDataPath, string spriteSheetPath)
+        public static async Task<bool> LoadSheet(string spriteSheetDataPath, string spriteSheetPath)
         {
             if (canvas == null) return false;
             //Load whole sheet

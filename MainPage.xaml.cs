@@ -10,7 +10,10 @@ using Windows.UI.Core;
 using Windows.System;
 using System;
 
-using GameEngine;
+using GameEngine.Levels;
+using GameEngine.Graphics;
+using GameEngine.Inputs;
+using GameEngine.Entities.Mobs;
 
 namespace Game2D
 {
@@ -34,10 +37,10 @@ namespace Game2D
         {
             InitializeComponent();
 
-            init();
+            Init();
         }
 
-        void init()
+        void Init()
         {
             //TODO: change it to a loadable property
             ApplicationView.PreferredLaunchViewSize = new Size(1366, 768);
@@ -56,14 +59,14 @@ namespace Game2D
             player = new Player(500, 320, key);
 
             //Add Player
-            level.addEntity(player);
+            level.AddEntity(player);
 
             //Ido meres
             watch.Start();
             lastTime = watch.ElapsedMilliseconds;
 
             //Init level
-            level.init();
+            level.Init();
         }
 
         void Page_Loaded(object sender, RoutedEventArgs e)
@@ -99,12 +102,12 @@ namespace Game2D
 
         void KeyDown_GameLoopThread(VirtualKey vk)
         {
-            key.update(vk, true);
+            key.Update(vk, true);
         }
 
         void KeyUp_GameLoopThread(VirtualKey vk)
         {
-            key.update(vk, false);
+            key.Update(vk, false);
         }
 
         /// <summary>
@@ -112,13 +115,13 @@ namespace Game2D
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        async void canvas_CreateResources(CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args)
+        async void Canvas_CreateResources(CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args)
         {
             //Setup
-            Sprite.init(sender);
+            Sprite.Init(sender);
 
             //Load spritesheets
-            assests_ready = await Sprite.loadSheet(@"\resources\spritesheets\tiles_sheet_data.txt", @"\resources\spritesheets\tiles.png");
+            assests_ready = await Sprite.LoadSheet(@"\resources\spritesheets\tiles_sheet_data.txt", @"\resources\spritesheets\tiles.png");
 
             //AnimatedSprite Setup
             AnimatedSprite.Init(sender);
@@ -132,16 +135,16 @@ namespace Game2D
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        void canvas_Draw(ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args)
+        void Canvas_Draw(ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args)
         {
             frameCount++;
             if (!assests_ready) return;
             if (!animated_assests_ready) return;
-            screen.setCDS(args.DrawingSession);
-            level.Render(player.getXY(), screen);
+            screen.SetCDS(args.DrawingSession);
+            level.Render(player.GetXY(), screen);
         }
 
-        private void canvas_Update(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)
+        private void Canvas_Update(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)
         {
             upCount++;
             if ((watch.ElapsedMilliseconds - lastTime) > 1000)
@@ -151,8 +154,8 @@ namespace Game2D
                 upCount = 0;
                 frameCount = 0;
             }
-            level.update();
-            AnimatedSprite.GetUpdateables().ForEach(e => e.update());
+            level.Update();
+            AnimatedSprite.GetUpdateables().ForEach(e => e.Update());
         }
 
         void Page_Unloaded(object sender, RoutedEventArgs e)

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
-namespace GameEngine
+namespace GameEngine.Graphics
 {
     class Screen
     {
@@ -32,12 +32,12 @@ namespace GameEngine
             cds.Transform = mode;
         }
 
-        public void setCDS(CanvasDrawingSession cds)
+        public void SetCDS(CanvasDrawingSession cds)
         {
             this.cds = cds;
         }
 
-        public void renderRectangle(float xPos, float yPos, int spriteSize, CanvasBitmap sprite)
+        public void RenderRectangle(float xPos, float yPos, int spriteSize, CanvasBitmap sprite)
         {
             if (cds == null) return;
             //Boundary check
@@ -46,22 +46,22 @@ namespace GameEngine
             cds.DrawImage(sprite, xPos - xOffset, yPos - yOffset, sprite_base, 1, CanvasImageInterpolation.NearestNeighbor);
         }
 
-        public void renderRectangle(Vector2 pos,int spriteSize, CanvasBitmap sprite)
+        public void RenderRectangle(Vector2 pos,int spriteSize, CanvasBitmap sprite)
         {
-            renderRectangle(pos.X, pos.Y, spriteSize, sprite);
+            RenderRectangle(pos.X, pos.Y, spriteSize, sprite);
         }
 
-        public int getWidth()
+        public int GetWidth()
         {
             return width;
         }
 
-        public int getHeight()
+        public int GetHeight()
         {
             return height;
         }
 
-        public void setOffset(int xOffset, int yOffset)
+        public void SetOffset(int xOffset, int yOffset)
         {
             this.xOffset = xOffset;
             this.yOffset = yOffset;

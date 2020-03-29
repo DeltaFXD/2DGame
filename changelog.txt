@@ -22,4 +22,7 @@
 #2020.03.22
 -Minor changes to rendering for future player UI
 -Tile system and collision detection for tiles
+#2020.03.23
 -Added animated sprites
+#2020.03.29
+-Refactoring code

@@ -8,17 +8,17 @@ using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
 using Windows.Storage;
 
-namespace GameEngine
+namespace GameEngine.Levels
 {
     class PlannedLevel : Level
     {
 
         public PlannedLevel(string path)
         {
-            load_level(path);
+            Load_level(path);
         }
 
-        async void load_level(string path)
+        async void Load_level(string path)
         {
             byte[] bytes;
             try

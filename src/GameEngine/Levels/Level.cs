@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Foundation;
 using System.Numerics;
 
-namespace GameEngine
+using GameEngine.Interfaces;
+using GameEngine.Entities;
+using GameEngine.Graphics;
+using GameEngine.Utilities;
+
+namespace GameEngine.Levels
 {
     class Level : IUpdateable
     {
@@ -23,7 +24,7 @@ namespace GameEngine
         /// <summary>
         /// Level inicializalas
         /// </summary>
-        public void init()
+        public void Init()
         {
             tileSize = 32;
             float root2 = (float) Math.Sqrt(2.0f);
@@ -35,23 +36,23 @@ namespace GameEngine
             watch.Start();
         }
 
-        public void addEntity(Entity entity)
+        public void AddEntity(Entity entity)
         {
-            entity.initalize(this);
+            entity.Initalize(this);
             entities.Add(entity);
         }
 
         public void Render(Vector2 playerCoords, Screen screen)
         {
             //Offset to center screen
-            Vector2 screenOffset = Coordinate.isoToNormal(new Vector2((screen.getWidth() / 2), (screen.getHeight() / 2)));
+            Vector2 screenOffset = Coordinate.IsoToNormal(new Vector2((screen.GetWidth() / 2), (screen.GetHeight() / 2)));
 
             //Calculate offset
             int xScroll = (int)Math.Round(playerCoords.X - screenOffset.X);
             int yScroll = (int)Math.Round(playerCoords.Y - screenOffset.Y);
 
             //Set offset
-            screen.setOffset(xScroll, yScroll);
+            screen.SetOffset(xScroll, yScroll);
 
             //Setting render mode to isometric
             screen.SetRenderMode(iso);
@@ -63,23 +64,23 @@ namespace GameEngine
                 for (int x = 0; x < mapWidth; x++)
                 {
                    //Render
-                    sprite = Sprite.getSprite(map[x, y]);
+                    sprite = Sprite.GetSprite(map[x, y]);
                     if (sprite != null)
                     {
-                        screen.renderRectangle(x * tileSize, y * tileSize, tileSize, sprite);
+                        screen.RenderRectangle(x * tileSize, y * tileSize, tileSize, sprite);
                     }
                 }
             }
             //Render entities
-            entities.ForEach(entity => entity.render(screen));
+            entities.ForEach(entity => entity.Render(screen));
             //TODO: Render walls
             
         }
 
-        public void update()
+        public void Update()
         {
             //Update entities
-            entities.ForEach(entity => entity.update());
+            entities.ForEach(entity => entity.Update());
         }
 
         public bool TileCollision(int xChange, int yChange, int width, int height)

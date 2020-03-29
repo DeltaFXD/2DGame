@@ -11,7 +11,9 @@ using System.Text.RegularExpressions;
 using Windows.Graphics.DirectX;
 using System.Collections.Generic;
 
-namespace GameEngine
+using GameEngine.Interfaces;
+
+namespace GameEngine.Graphics
 {
     class AnimatedSprite : IUpdateable
     {
@@ -43,7 +45,7 @@ namespace GameEngine
             return _bitmaps[_index];
         }
 
-        public void update()
+        public void Update()
         {
             _time++;
             if (_time % _rate == 0)

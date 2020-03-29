@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.System;
-using Windows.UI.Core;
+﻿using Windows.System;
 
-namespace GameEngine
+namespace GameEngine.Inputs
 {
     class KeyBoard
     {
         public bool up, down, left, right, reload;
-        public void update(VirtualKey vk, bool value)
+        public void Update(VirtualKey vk, bool value)
         {
             switch (vk)
             {

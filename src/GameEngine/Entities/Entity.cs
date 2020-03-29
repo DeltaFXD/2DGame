@@ -5,7 +5,11 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameEngine
+using GameEngine.Interfaces;
+using GameEngine.Levels;
+using GameEngine.Graphics;
+
+namespace GameEngine.Entities
 {
     abstract class Entity : IRenderable , IUpdateable
     {
@@ -13,37 +17,37 @@ namespace GameEngine
         protected Level level;
         bool removed = false;
 
-        public bool isRemoved()
+        public bool IsRemoved()
         {
             return removed;
         }
 
-        public void initalize(Level level)
+        public void Initalize(Level level)
         {
             this.level = level;
         }
 
-        protected void remove()
+        protected void Remove()
         {
             removed = true;
         }
 
-        public float getX()
+        public float GetX()
         {
             return position.X;
         }
 
-        public float getY()
+        public float GetY()
         {
             return position.Y;
         }
 
-        public Vector2 getXY()
+        public Vector2 GetXY()
         {
             return position;
         }
 
-        public abstract void render(Screen screen);
-        public abstract void update();
+        public abstract void Render(Screen screen);
+        public abstract void Update();
     }
 }

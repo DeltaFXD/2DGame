@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GameEngine
+namespace GameEngine.Utilities
 {
     class Coordinate
     {
-        static float root2 = (float)Math.Sqrt(2.0f);
+        static readonly float root2 = (float)Math.Sqrt(2.0f);
 
-        public static Vector2 normalToIso(Vector2 vec2)
+        public static Vector2 NormalToIso(Vector2 vec2)
         {
             /*  Transformation matrix
              *  2*sqrt(2)   -2*sqrt(2)
@@ -27,7 +23,7 @@ namespace GameEngine
             return vec2;
         }
 
-        public static Vector2 isoToNormal(Vector2 vec2)
+        public static Vector2 IsoToNormal(Vector2 vec2)
         {
             /*  Inverz Transformation matrix
              *  sqrt(2)/8   sqrt(2)/4

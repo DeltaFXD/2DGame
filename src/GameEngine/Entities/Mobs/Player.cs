@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameEngine
+using GameEngine.Inputs;
+using GameEngine.Graphics;
+
+namespace GameEngine.Entities.Mobs
 {
     class Player : Mob
     {
@@ -16,7 +19,7 @@ namespace GameEngine
             this.input = input;
         }
 
-        public override void update()
+        public override void Update()
         {
             CheckHP();
             int xChange = 0;
@@ -54,9 +57,9 @@ namespace GameEngine
             }
         }
 
-        public override void render(Screen screen)
+        public override void Render(Screen screen)
         {
-            screen.renderRectangle(position, 32, AnimatedSprite.GetAnimatedSprite("player").GetSprite());
+            screen.RenderRectangle(position, 32, AnimatedSprite.GetAnimatedSprite("player").GetSprite());
         }
     }
 }

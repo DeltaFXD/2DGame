@@ -123,19 +123,21 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\game\entity\Entity.cs" />
-    <Compile Include="src\game\entity\mob\Mob.cs" />
-    <Compile Include="src\game\entity\mob\Player.cs" />
-    <Compile Include="src\game\graphics\AnimatedSprite.cs" />
-    <Compile Include="src\game\graphics\Screen.cs" />
-    <Compile Include="src\game\input\KeyBoard.cs" />
-    <Compile Include="src\game\interfaces\IRenderable.cs" />
-    <Compile Include="src\game\interfaces\IUpdateable.cs" />
-    <Compile Include="src\game\level\Level.cs" />
-    <Compile Include="src\game\level\PlannedLevel.cs" />
-    <Compile Include="src\game\graphics\Sprite.cs" />
-    <Compile Include="src\game\level\Tile.cs" />
-    <Compile Include="src\game\utility\Coordinate.cs" />
+    <Compile Include="src\GameEngine\Entities\Entity.cs" />
+    <Compile Include="src\GameEngine\Entities\Mobs\Mob.cs" />
+    <Compile Include="src\GameEngine\Entities\Mobs\Player.cs" />
+    <Compile Include="src\GameEngine\Graphics\AnimatedSprite.cs" />
+    <Compile Include="src\GameEngine\Graphics\Screen.cs" />
+    <Compile Include="src\GameEngine\Inputs\KeyBoard.cs" />
+    <Compile Include="src\GameEngine\Interfaces\IRenderable.cs" />
+    <Compile Include="src\GameEngine\Interfaces\IUpdateable.cs" />
+    <Compile Include="src\GameEngine\Levels\Level.cs" />
+    <Compile Include="src\GameEngine\Levels\Map.cs" />
+    <Compile Include="src\GameEngine\Levels\PlannedLevel.cs" />
+    <Compile Include="src\GameEngine\Graphics\Sprite.cs" />
+    <Compile Include="src\GameEngine\Levels\Sector.cs" />
+    <Compile Include="src\GameEngine\Levels\Tile.cs" />
+    <Compile Include="src\GameEngine\Utilities\Coordinate.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

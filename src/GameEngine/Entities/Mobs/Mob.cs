@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameEngine
+namespace GameEngine.Entities.Mobs
 {
     abstract class Mob : Entity
     {
@@ -54,7 +54,7 @@ namespace GameEngine
 
 		public void IsDead()
 		{
-			if (currentHP <= 0) remove();
+			if (currentHP <= 0) Remove();
 		}
 
 		bool Collision(int xChange, int yChange)
