@@ -1,6 +1,7 @@
 ﻿using Microsoft.Graphics.Canvas;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -37,11 +38,34 @@ namespace GameEngine.Graphics
             this.cds = cds;
         }
 
-        public void RenderRectangle(float xPos, float yPos, int spriteSize, CanvasBitmap sprite)
+        public void RenderRectangle(float xPos, float yPos, int spriteSize, CanvasBitmap sprite, float opacity = 1.0f)
         {
             if (cds == null) return;
             //Boundary check
             if (0 > (xPos - xOffset + spriteSize) || drawWidth < (xPos - xOffset - spriteSize) || -drawHeightAbs > (yPos - yOffset) || drawHeightAbs < (yPos - yOffset)) return;
+            //Draw
+            cds.DrawImage(sprite, xPos - xOffset, yPos - yOffset, sprite_base, opacity, CanvasImageInterpolation.NearestNeighbor);
+        }
+        public void RenderRectangleSpecialBounds(float xPos, float yPos, int spriteSize, CanvasBitmap sprite, float opacity = 1.0f)
+        {
+            if (cds == null) return;
+            //Boundary check
+            if (-(drawWidth + spriteSize) > (xPos - xOffset + spriteSize)) return;
+            if (0 < (xPos - xOffset - spriteSize)) return;
+            if (-(drawWidth + spriteSize) > (yPos - yOffset)) return;
+            if (0 < (yPos - yOffset)) return;
+            //Draw
+            cds.DrawImage(sprite, xPos - xOffset, yPos - yOffset, sprite_base, opacity, CanvasImageInterpolation.NearestNeighbor);
+        }
+
+        public void RenderRectangle_NOCHECK(float xPos, float yPos, int spriteSize, CanvasBitmap sprite)
+        {
+            if (cds == null) return;
+            //Boundary check
+            if (0 > (xPos - xOffset + spriteSize)) Debug.WriteLine("X NEGATIVE");
+            if (drawWidth < (xPos - xOffset - spriteSize)) Debug.WriteLine("X POZITIVE");
+            if (-drawHeightAbs > (yPos - yOffset)) Debug.WriteLine("Y NEGATIVE");
+            if (drawHeightAbs < (yPos - yOffset)) Debug.WriteLine("Y POZITIVE");
             //Draw
             cds.DrawImage(sprite, xPos - xOffset, yPos - yOffset, sprite_base, 1, CanvasImageInterpolation.NearestNeighbor);
         }
@@ -65,6 +89,11 @@ namespace GameEngine.Graphics
         {
             this.xOffset = xOffset;
             this.yOffset = yOffset;
+        }
+
+        public Vector2 GetOffset()
+        {
+            return new Vector2(xOffset, yOffset);
         }
     }
 }

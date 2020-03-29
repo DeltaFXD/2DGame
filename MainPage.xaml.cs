@@ -50,13 +50,13 @@ namespace Game2D
             screen = new Screen(1366, 768);
 
             //Create level
-            level = new PlannedLevel(@"\resources\planned_levels\test_map.png");
+            level = new PlannedLevel(@"\resources\planned_levels\test_map_2.png", @"\resources\planned_levels\test_sectors.txt");
 
             //Create KeyBoard instance
             key = new KeyBoard();
 
             //Create Player
-            player = new Player(500, 320, key);
+            player = new Player(64, 64, key);
 
             //Add Player
             level.AddEntity(player);

@@ -155,6 +155,8 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="changelog.txt" />
     <Content Include="resources\planned_levels\test_map.png" />
+    <Content Include="resources\planned_levels\test_map_2.png" />
+    <Content Include="resources\planned_levels\test_sectors.txt" />
     <Content Include="resources\spritesheets\player_sheet_data.txt" />
     <Content Include="resources\spritesheets\player_sprites.png" />
     <Content Include="resources\spritesheets\tiles_sheet_data.txt" />

@@ -5,7 +5,7 @@ namespace GameEngine.Utilities
 {
     class Coordinate
     {
-        static readonly float root2 = (float)Math.Sqrt(2.0f);
+        public static readonly float root2 = (float)Math.Sqrt(2.0f);
 
         public static Vector2 NormalToIso(Vector2 vec2)
         {
@@ -36,6 +36,11 @@ namespace GameEngine.Utilities
             vec2.Y = (x * -root2 / 8.0f + y * root2 / 4.0f);
 
             return vec2;
+        }
+
+        public static Vector2 HorizontalIsoVirtualZAxisMovement(float z)
+        {
+            return new Vector2(-z, -z);
         }
     }
 }

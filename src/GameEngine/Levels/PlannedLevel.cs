@@ -13,14 +13,15 @@ namespace GameEngine.Levels
     class PlannedLevel : Level
     {
 
-        public PlannedLevel(string path)
+        public PlannedLevel(string path, string sector_data)
         {
-            Load_level(path);
+            Load_level(path, sector_data);
         }
 
-        async void Load_level(string path)
+        async void Load_level(string path, string sector_data)
         {
             byte[] bytes;
+            int mapWidth, mapHeight;
             try
             {
                 StorageFile file = await StorageFile.GetFileFromPathAsync(Environment.CurrentDirectory + path);
@@ -39,15 +40,17 @@ namespace GameEngine.Levels
             }
 
 
-            map = new int[mapWidth, mapHeight];
+            int[,] floor = new int[mapWidth, mapHeight];
 
             for (int x = 0; x < mapWidth; x++)
             {
                 for (int y = 0; y < mapHeight; y++)
                 { 
-                    map.SetValue(-BitConverter.ToInt32(bytes, (x + y * mapWidth) * sizeof (int)), x, y);
+                    floor.SetValue(-BitConverter.ToInt32(bytes, (x + y * mapWidth) * sizeof (int)), x, y);
                 }
             }
+
+            map = new Map(mapWidth, mapHeight, floor, sector_data);
         }
     }
 }
