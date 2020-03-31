@@ -35,12 +35,22 @@ namespace GameEngine.Levels
             _floor = floor;
 
             LoadSectors(sector_data);
+            Sector.SetMap(this);
         }
 
         void LoadSectors(string sector_data)
         {
-            sectors.Add(new Sector(0, 0, 0, 10, 7, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4, 4, 4 }, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 0, 0, 4, 4, 4 }));
-            sectors.Add(new Sector(0, 0, 1, 10, 7, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4, 4, 4 }, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 0, 0, 4, 4, 4 }));
+            sectors.Add(new Sector(0, 0, 0, 11, 8, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4, 4, 4, 4 }, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 0, 0, 4, 4, 4, 4 }));
+            sectors.Add(new Sector(0, 0, 1, 11, 8, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4, 4, 4, 4 }, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 0, 0, 4, 4, 4, 4 }));
+
+            sectors.Add(new Sector(11, 0, 0, 13, 8, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, null, new int[] { 3, 3, 3, 3, 0, 0, 0, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4, 4, 4, 4 }));
+            sectors.Add(new Sector(11, 0, 1, 13, 8, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, null, new int[] { 3, 3, 3, 3, 0, 0, 0, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4, 4, 4, 4 }));
+
+            sectors.Add(new Sector(0, 8, 0, 11, 5, null, new int[] { 4, 4, 4, 4, 4 }, new int[] { 3, 3, 3, 3, 0, 0, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4 }));
+            sectors.Add(new Sector(0, 8, 1, 11, 5, null, new int[] { 4, 4, 4, 4, 4 }, new int[] { 3, 3, 3, 3, 0, 0, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4 }));
+
+            sectors.Add(new Sector(0, 13, 0, 11, 6, null, new int[] { 4, 4, 4, 4, 4, 4 }, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 0, 0, 4 }));
+            sectors.Add(new Sector(0, 13, 1, 11, 6, null, new int[] { 4, 4, 4, 4, 4, 4 }, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 0, 0, 4 }));
         }
 
         public int GetWidth()
