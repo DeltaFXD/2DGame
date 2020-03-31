@@ -129,6 +129,7 @@
     <Compile Include="src\GameEngine\Graphics\AnimatedSprite.cs" />
     <Compile Include="src\GameEngine\Graphics\Screen.cs" />
     <Compile Include="src\GameEngine\Inputs\KeyBoard.cs" />
+    <Compile Include="src\GameEngine\Inputs\Mouse.cs" />
     <Compile Include="src\GameEngine\Interfaces\IRenderable.cs" />
     <Compile Include="src\GameEngine\Interfaces\IUpdateable.cs" />
     <Compile Include="src\GameEngine\Levels\Level.cs" />

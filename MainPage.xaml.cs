@@ -14,6 +14,8 @@ using GameEngine.Levels;
 using GameEngine.Graphics;
 using GameEngine.Inputs;
 using GameEngine.Entities.Mobs;
+using Windows.UI.Xaml.Input;
+using Windows.Devices.Input;
 
 namespace Game2D
 {
@@ -32,6 +34,7 @@ namespace Game2D
         bool animated_assests_ready = false;
         Player player;
         KeyBoard key;
+        Mouse mouse;
 
         public MainPage()
         {
@@ -55,6 +58,9 @@ namespace Game2D
             //Create KeyBoard instance
             key = new KeyBoard();
 
+            //Create Mouse instance
+            mouse = new Mouse();
+
             //Create Player
             player = new Player(64, 64, key);
 
@@ -74,6 +80,7 @@ namespace Game2D
             //Register for keyboard events
             Window.Current.CoreWindow.KeyDown += KeyDown_UIThread;
             Window.Current.CoreWindow.KeyUp += KeyUp_UIThread;
+            
         }
 
         // The KeyDown handler runs on the UI thread...
@@ -108,6 +115,33 @@ namespace Game2D
         void KeyUp_GameLoopThread(VirtualKey vk)
         {
             key.Update(vk, false);
+        }
+        void Canvas_PointerMoved(object sender, PointerRoutedEventArgs e)
+        {
+            e.Handled = true;
+
+            // extract data
+            var position = e.GetCurrentPoint(canvas).Position;
+            
+            var action = canvas.RunOnGameLoopThreadAsync(() => mouse.MouseMoved(position));
+        }
+        void Canvas_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            e.Handled = true;
+            if (e.Pointer.PointerDeviceType == PointerDeviceType.Mouse)
+            {
+                // extract data
+                var pointer = e.GetCurrentPoint(canvas);
+
+                mouse.MousePressed(pointer);
+            }
+        }
+
+        void Canvas_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            e.Handled = true;
+
+            var action = canvas.RunOnGameLoopThreadAsync(() => mouse.MouseReleased());
         }
 
         /// <summary>
@@ -155,6 +189,13 @@ namespace Game2D
                 frameCount = 0;
             }
             level.Update();
+            mouse.SetOffset(screen.GetOffset());
+            if (Mouse.GetButton() == Mouse.Button.Left)
+            {
+                Vector2 vec2 = Mouse.GetIsoCoordinate();
+                Debug.WriteLine("MouseX: " + vec2.X + " MouseY: " + vec2.Y);
+                Debug.WriteLine("MouseCordX: " + (int)vec2.X / 32 + " MouseCordY: " + (int)vec2.Y / 32);
+            }
             AnimatedSprite.GetUpdateables().ForEach(e => e.Update());
         }
 

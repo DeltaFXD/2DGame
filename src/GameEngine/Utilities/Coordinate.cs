@@ -37,10 +37,5 @@ namespace GameEngine.Utilities
 
             return vec2;
         }
-
-        public static Vector2 HorizontalIsoVirtualZAxisMovement(float z)
-        {
-            return new Vector2(-z, -z);
-        }
     }
 }

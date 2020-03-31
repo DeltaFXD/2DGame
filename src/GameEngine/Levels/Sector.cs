@@ -19,14 +19,15 @@ namespace GameEngine.Levels
         static Matrix3x2 verzicalIso = new Matrix3x2(0.0f, -2 * Coordinate.root2, -2 * Coordinate.root2, Coordinate.root2, 0.0f, 0.0f);
 
         bool north, east, west, south;
-        int _x, _y;
+        int _x, _y, _z;
         int _width, _height;
         int[] _northWall, _eastWall, _westWall, _southWall;
 
-        public Sector(int x, int y, int width, int height, int[] northWall, int[] westWall, int[] eastWall, int[] southWall)
+        public Sector(int x, int y,int z, int width, int height, int[] northWall, int[] westWall, int[] eastWall, int[] southWall)
         {
             _x = x;
             _y = y;
+            _z = z;
             _width = width;
             _height = height;
 
@@ -80,8 +81,8 @@ namespace GameEngine.Levels
                 screen.SetRenderMode(horizontalIso);
                 for (int i = 0; _width > i; i++)
                 {
-                    //Debug.WriteLine(playerXY.Y);
-                    screen.RenderRectangle((i + _x - _y) * Map.tileSize + offset.Y, -_y * Map.tileSize + 2 * offset.Y, Map.tileSize, Sprite.GetSprite(_northWall[i]));
+                    if (_northWall[i] == 0) continue;
+                    screen.RenderRectangle((i + _x - _y) * Map.tileSize + offset.Y, (-_y + _z) * Map.tileSize + 2 * offset.Y, Map.tileSize, Sprite.GetSprite(_northWall[i]));
                 }
             }
             if (west)
@@ -89,7 +90,8 @@ namespace GameEngine.Levels
                 screen.SetRenderMode(verzicalIso);
                 for (int i = 0; _height > i; i++)
                 {
-                    screen.RenderRectangleSpecialBounds(-_x * Map.tileSize + 2 * offset.X, (_y + i -_x) * Map.tileSize + offset.X, Map.tileSize, Sprite.GetSprite(_westWall[i]));
+                    if (_westWall[i] == 0) continue;
+                    screen.RenderRectangleSpecialBounds((-_x + _z) * Map.tileSize + 2 * offset.X, (_y + i -_x) * Map.tileSize + offset.X, Map.tileSize, Sprite.GetSprite(_westWall[i]));
                 }
             }
             /*
@@ -100,7 +102,8 @@ namespace GameEngine.Levels
                 screen.SetRenderMode(horizontalIso);
                 for (int i = 0; _width > i; i++)
                 {
-                    screen.RenderRectangle((i + _x - _height - _y) * Map.tileSize + offset.Y, (-_y -_height) * Map.tileSize + 2 * offset.Y, Map.tileSize, Sprite.GetSprite(_eastWall[i]), 0.5f);
+                    if (_eastWall[i] == 0) continue;
+                    screen.RenderRectangle((i + _x - _height - _y) * Map.tileSize + offset.Y, (-_y -_height + _z) * Map.tileSize + 2 * offset.Y, Map.tileSize, Sprite.GetSprite(_eastWall[i]), 0.5f);
                 }
             }
             if (south)
@@ -108,7 +111,8 @@ namespace GameEngine.Levels
                 screen.SetRenderMode(verzicalIso);
                 for (int i = 0; _height > i; i++)
                 {
-                    screen.RenderRectangleSpecialBounds((-_x - _width)* Map.tileSize + 2 * offset.X, (_y + i - _x - _width) * Map.tileSize + offset.X, Map.tileSize, Sprite.GetSprite(_westWall[i]), 0.5f);
+                    if (_southWall[i] == 0) continue;
+                    screen.RenderRectangleSpecialBounds((-_x - _width + _z)* Map.tileSize + 2 * offset.X, (_y + i - _x - _width) * Map.tileSize + offset.X, Map.tileSize, Sprite.GetSprite(_southWall[i]), 0.5f);
                 }
             }
         }

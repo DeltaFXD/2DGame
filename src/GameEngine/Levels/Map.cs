@@ -39,7 +39,8 @@ namespace GameEngine.Levels
 
         void LoadSectors(string sector_data)
         {
-            sectors.Add(new Sector(0, 0, 10, 7, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4, 4, 4 }, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4, 4, 4 }));
+            sectors.Add(new Sector(0, 0, 0, 10, 7, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4, 4, 4 }, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 0, 0, 4, 4, 4 }));
+            sectors.Add(new Sector(0, 0, 1, 10, 7, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4, 4, 4 }, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 0, 0, 4, 4, 4 }));
         }
 
         public int GetWidth()
