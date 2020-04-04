@@ -31,3 +31,5 @@
 #2020.03.31
 -Handling Mouse user input & Reworked rendering (progress 75%)
 -Reworked rendering (progress 80%)
+#2020.04.05
+-Reworked rendering done 100%

@@ -8,6 +8,7 @@ using GameEngine.Interfaces;
 using GameEngine.Entities;
 using GameEngine.Graphics;
 using GameEngine.Utilities;
+using System.Threading;
 
 namespace GameEngine.Levels
 {
@@ -15,6 +16,7 @@ namespace GameEngine.Levels
     {
         Stopwatch watch = new Stopwatch();
         List<Entity> entities = new List<Entity>();
+        //protected Action mapLoading;
 
         protected Map map;
 
@@ -30,6 +32,10 @@ namespace GameEngine.Levels
         {
             entity.Initalize(this);
             entities.Add(entity);
+            if (map != null)
+            {
+                map.AddEntity(entity);
+            }
         }
 
         public void Render(Vector2 playerCoords, Screen screen)
@@ -37,18 +43,15 @@ namespace GameEngine.Levels
             if (map == null) return;
             //Render map
             map.Render(playerCoords, screen);
-
-
-            //TODO: Move into map
-            //Render entities
-            entities.ForEach(entity => entity.Render(screen));
-            
         }
 
         public void Update()
         {
             //Update entities
             entities.ForEach(entity => entity.Update());
+
+            //Update map after entities
+            if (map != null) map.UpdateSectors(entities);
         }
 
         public bool TileCollision(int xChange, int yChange, int width, int height)

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
 
 using GameEngine.Graphics;
 using GameEngine.Utilities;
+using GameEngine.Entities;
 
 namespace GameEngine.Levels
 {
@@ -17,6 +18,16 @@ namespace GameEngine.Levels
          *
          */
         static Matrix3x2 verzicalIso = new Matrix3x2(0.0f, -2 * Coordinate.root2, -2 * Coordinate.root2, Coordinate.root2, 0.0f, 0.0f);
+        /*  Isometric Transformation matrix
+         *  2*sqrt(2)   -2*sqrt(2)  0
+         *  sqrt(2)     sqrt(2)     0
+         */
+        static Matrix3x2 iso = new Matrix3x2(2 * Coordinate.root2, Coordinate.root2, -2 * Coordinate.root2, Coordinate.root2, 0.0f, 0.0f);
+        /*  
+         *  2   0   0
+         *  0   2   0
+         */
+        static Matrix3x2 normal = new Matrix3x2(2.0f, 0.0f, 0.0f, 2.0f, 0.0f, 0.0f);
 
         static Map _map;
 
@@ -24,6 +35,8 @@ namespace GameEngine.Levels
         readonly int _x, _y, _z;
         readonly int _width, _height;
         int[] _northWall, _eastWall, _westWall, _southWall;
+
+        List<Entity> entities = new List<Entity>();
 
         public Sector(int x, int y,int z, int width, int height, int[] northWall, int[] westWall, int[] eastWall, int[] southWall)
         {
@@ -96,9 +109,13 @@ namespace GameEngine.Levels
                     screen.RenderRectangleSpecialBounds((-_x + _z) * Map.tileSize + 2 * offset.X, (_y + i -_x) * Map.tileSize + offset.X, Map.tileSize, Sprite.GetSprite(_westWall[i]));
                 }
             }
-            /*
-             TODO render entity
-             */
+            
+            //Set render mode to isometric
+            screen.SetRenderMode(iso);
+
+            //Render entities inside sector
+            entities.ForEach(entity => entity.Render(screen));
+
             if (east)
             {
                 float opacity;
@@ -123,6 +140,38 @@ namespace GameEngine.Levels
                     screen.RenderRectangleSpecialBounds((-_x - _width + _z)* Map.tileSize + 2 * offset.X, (_y + i - _x - _width) * Map.tileSize + offset.X, Map.tileSize, Sprite.GetSprite(_southWall[i]), opacity);
                 }
             }
+        }
+
+        public void AddEntity(Entity entity)
+        {
+            if (entities.Contains(entity)) return;
+
+            entities.Add(entity);
+        }
+
+        public void RemoveEntity(Entity entity)
+        {
+            if (entities.Contains(entity))
+            {
+                entities.Remove(entity);
+            }
+        }
+
+        public bool IsInside(int x, int y)
+        {
+            if (x >= _x && y >= _y && x <= (_x + _width) && y <= (_y + _height))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool Contains(Entity entity)
+        {
+            return entities.Contains(entity);
         }
 
         public static void SetMap(Map map)
