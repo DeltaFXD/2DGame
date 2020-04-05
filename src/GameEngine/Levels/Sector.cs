@@ -114,7 +114,7 @@ namespace GameEngine.Levels
 
             //Caculate new offset for entities
             Vector2 entity_offset = new Vector2(-screen.GetWidth() / 4, -screen.GetHeight() / 4);
-            entity_offset += Coordinate.IsoToNormal(playerXY);
+            entity_offset += Coordinate.NormalToIso(playerXY) / 2;
 
             //Set new offset for entities
             screen.SetOffset(entity_offset);

@@ -1,25 +1,23 @@
-﻿using System;
+﻿using GameEngine.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using GameEngine.Inputs;
-using GameEngine.Graphics;
 using GameEngine.Utilities;
-using System.Numerics;
+using GameEngine.Inputs;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace GameEngine.Entities.Mobs
 {
-    class Player : Mob
+    class Dummy : Mob
     {
-        KeyBoard input;
-        public Player(float x , float y, KeyBoard input)
+        public Dummy(float x, float y)
         {
             position.X = x;
             position.Y = y;
-            this.input = input;
         }
 
         public override void Update()
@@ -27,26 +25,31 @@ namespace GameEngine.Entities.Mobs
             CheckHP();
             int xChange = 0;
             int yChange = 0;
-            if (input.up)
+
+            //AI HERE
+
+            //TEST CODE
+            if (KeyBoard.upArrow)
             {
                 yChange--;
                 xChange--;
             }
-            if (input.down)
+            if (KeyBoard.downArrow)
             {
                 yChange++;
                 xChange++;
             }
-            if (input.left)
+            if (KeyBoard.leftArrow)
             {
                 xChange--;
                 yChange++;
             }
-            if (input.right)
+            if (KeyBoard.rightArrow)
             {
                 xChange++;
                 yChange--;
             }
+            //TEST CODE
 
             if (xChange == 0 && yChange == 0)
             {
@@ -59,11 +62,9 @@ namespace GameEngine.Entities.Mobs
                 Move(xChange, yChange);
             }
         }
-
         public override void Render(Screen screen)
         {
-            Debug.WriteLine(position);
-            screen.RenderEntity(Coordinate.NormalToIso(position) / 2, 32, AnimatedSprite.GetAnimatedSprite("player").GetSprite());
+            screen.RenderEntity(Coordinate.NormalToIso(position) / 2, 32, AnimatedSprite.GetAnimatedSprite("testmob").GetSprite());
         }
     }
 }

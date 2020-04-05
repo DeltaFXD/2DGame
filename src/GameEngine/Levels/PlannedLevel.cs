@@ -8,6 +8,8 @@ using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
 using Windows.Storage;
 
+using GameEngine.Entities.Mobs;
+
 namespace GameEngine.Levels
 {
     class PlannedLevel : Level
@@ -52,6 +54,8 @@ namespace GameEngine.Levels
             }
 
             map = new Map(mapWidth, mapHeight, floor, sector_data);
+
+            AddEntity(new Dummy(0.0f, 0.0f));
         }
     }
 }

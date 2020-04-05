@@ -47,11 +47,13 @@ namespace GameEngine.Graphics
             cds.DrawImage(sprite, xPos - xOffset, yPos - yOffset, sprite_base, opacity, CanvasImageInterpolation.NearestNeighbor);
         }
 
+
+        //TODO: Recheck bounds for this
         public void RenderEntity(Vector2 pos, int spriteSize, CanvasBitmap sprite, float opacity = 1.0f)
         {
             if (cds == null) return;
             //Boundary check
-            if (0 > (pos.X - xOffset + spriteSize) || drawWidth < (pos.X - xOffset - spriteSize) || -drawHeightAbs > (pos.Y - yOffset + spriteSize) || drawHeightAbs < (pos.Y - yOffset)) return;
+            if (0 > (pos.X - xOffset + spriteSize) || width / 2 < (pos.X - xOffset - spriteSize) || -drawHeightAbs > (pos.Y - yOffset + spriteSize) || height / 2 < (pos.Y - yOffset)) return;
             //Draw
             cds.DrawImage(sprite, pos.X - xOffset - spriteSize / 2, pos.Y - yOffset, sprite_base, opacity, CanvasImageInterpolation.NearestNeighbor);
         }

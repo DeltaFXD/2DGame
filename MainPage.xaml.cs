@@ -32,6 +32,7 @@ namespace Game2D
         int frameCount = 0;
         bool assests_ready = false;
         bool animated_assests_ready = false;
+        bool animated_assests_ready2 = false;
         Player player;
         KeyBoard key;
         Mouse mouse;
@@ -162,6 +163,7 @@ namespace Game2D
 
             //Load AnimatedSpriteSheets
             animated_assests_ready = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\player_sheet_data.txt", @"\resources\spritesheets\player_sprites.png");
+            animated_assests_ready2 = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\mobs_sheet_data.txt", @"\resources\spritesheets\mobs_sprites.png");
         }
 
         /// <summary>
@@ -174,6 +176,7 @@ namespace Game2D
             frameCount++;
             if (!assests_ready) return;
             if (!animated_assests_ready) return;
+            if (!animated_assests_ready2) return;
             screen.SetCDS(args.DrawingSession);
             level.Render(player.GetXY(), screen);
         }
