@@ -26,7 +26,6 @@ namespace GameEngine.Levels
         readonly int _width;
         readonly int _height;
         readonly int[,] _floor;
-        Vector2 test = new Vector2(0.0f, 0.0f);
 
         List<Sector> sectors = new List<Sector>();
 
@@ -115,17 +114,9 @@ namespace GameEngine.Levels
                     }
                 }
             }
-            if (KeyBoard.upArrow) test.Y += 1.0f;
-            if (KeyBoard.downArrow) test.Y -= 1.0f;
-            if (KeyBoard.rightArrow) test.X += 1.0f;
-            if (KeyBoard.leftArrow) test.X -= 1.0f;
-            //Debug.WriteLine("playerX: " + playerXY.X + " playerY: " + playerXY.Y + " offsetX: " + xScroll + " offsetY:" + yScroll + " myX: " + test.X + " myY: " + test.Y);
-            //Render sectors
-            sectors.ForEach(sector => sector.Render(test, screen));
 
-            //TEMP
-            //Setting render mode to isometric
-            screen.SetRenderMode(iso);
+            //Render sectors
+            sectors.ForEach(sector => sector.Render(playerXY, screen));
         }
 
         public void AddEntity(Entity entity)

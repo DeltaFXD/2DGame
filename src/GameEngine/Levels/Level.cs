@@ -61,8 +61,24 @@ namespace GameEngine.Levels
             for (int i = 0; i < 4; i++)
             {
                 // i % 2 and i >> 1 creates all 4 corners of a tile (0,0) (0,1) (1,0) (1,1)
-                int xFuture = (xChange + (i % 2) * width) / Map.tileSize;
-                int yFuture = (yChange + (i >> 1) * height) / Map.tileSize;
+                int xFuture = (xChange + (i % 2) * width);
+                int yFuture = (yChange + (i >> 1) * height);
+                if (0 > xFuture && xFuture > -Map.tileSize)
+                {
+                    xFuture = -1;
+                }
+                else
+                {
+                    xFuture /= Map.tileSize;
+                }
+                if (0 > yFuture && yFuture > -Map.tileSize)
+                {
+                    yFuture = -1;
+                }
+                else
+                {
+                    yFuture /= Map.tileSize;
+                }
                 Tile tile = map.GetTile(xFuture, yFuture);
                 if (tile == null) solid = true;
                 else if (tile.IsSolid()) solid = true;

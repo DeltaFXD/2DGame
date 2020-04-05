@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 using GameEngine.Inputs;
 using GameEngine.Graphics;
+using GameEngine.Utilities;
+using System.Numerics;
+using System.Diagnostics;
 
 namespace GameEngine.Entities.Mobs
 {
@@ -59,7 +62,7 @@ namespace GameEngine.Entities.Mobs
 
         public override void Render(Screen screen)
         {
-            screen.RenderRectangle(position, 32, AnimatedSprite.GetAnimatedSprite("player").GetSprite());
+            screen.RenderEntity(Coordinate.IsoToNormal(position), 32, AnimatedSprite.GetAnimatedSprite("player").GetSprite());
         }
     }
 }

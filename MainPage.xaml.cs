@@ -62,7 +62,7 @@ namespace Game2D
             mouse = new Mouse();
 
             //Create Player
-            player = new Player(64, 64, key);
+            player = new Player(0, 0, key);
 
             //Add Player
             level.AddEntity(player);

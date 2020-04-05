@@ -109,12 +109,24 @@ namespace GameEngine.Levels
                     screen.RenderRectangleSpecialBounds((-_x + _z) * Map.tileSize + 2 * offset.X, (_y + i -_x) * Map.tileSize + offset.X, Map.tileSize, Sprite.GetSprite(_westWall[i]));
                 }
             }
-            
+            //Store old offset
+            Vector2 old_offset = screen.GetOffset();
+
+            //Caculate new offset for entities
+            Vector2 entity_offset = new Vector2(-screen.GetWidth() / 4, -screen.GetHeight() / 4);
+            entity_offset += Coordinate.IsoToNormal(playerXY);
+
+            //Set new offset for entities
+            screen.SetOffset(entity_offset);
+
             //Set render mode to isometric
-            screen.SetRenderMode(iso);
+            screen.SetRenderMode(normal);
 
             //Render entities inside sector
             entities.ForEach(entity => entity.Render(screen));
+
+            //Set old offset
+            screen.SetOffset((int)old_offset.X, (int)old_offset.Y);
 
             if (east)
             {
@@ -123,8 +135,11 @@ namespace GameEngine.Levels
                 for (int i = 0; _width > i; i++)
                 {
                     if (_eastWall[i] == 0) continue;
-                    opacity = 0.5f;
-                    if (_map.GetTile(_x + i - _z, _y + _height - 1 - _z)== null) opacity = 1.0f;
+                    opacity = 1.0f;
+                    int isoX = _x + i - _z;
+                    int isoY = _y + _height - 1 - _z;
+                    if (playerXY.X / Map.tileSize > (isoX - 3) && playerXY.X / Map.tileSize < (isoX + 3) && playerXY.Y / Map.tileSize > (isoY - 3) && playerXY.Y / Map.tileSize < (isoY + 3)) opacity = 0.5f;
+                    //if (_map.GetTile(isoX, isoY)== null) opacity = 1.0f;
                     screen.RenderRectangle((i + _x - _height - _y) * Map.tileSize + offset.Y, (-_y -_height + _z) * Map.tileSize + 2 * offset.Y, Map.tileSize, Sprite.GetSprite(_eastWall[i]), opacity);
                 }
             }
@@ -135,8 +150,11 @@ namespace GameEngine.Levels
                 for (int i = 0; _height > i; i++)
                 {
                     if (_southWall[i] == 0) continue;
-                    opacity = 0.5f;
-                    if (_map.GetTile(_x + _width - 1 -_z, _y + i - _z) == null) opacity = 1.0f;
+                    opacity = 1.0f;
+                    int isoX = _x + _width - 1 - _z;
+                    int isoY = _y + i - _z;
+                    if (playerXY.X / Map.tileSize > (isoX - 3) && playerXY.X / Map.tileSize < (isoX + 3) && playerXY.Y / Map.tileSize > (isoY - 3) && playerXY.Y / Map.tileSize < (isoY + 3)) opacity = 0.5f;
+                    //if (_map.GetTile(isoX, isoY) == null) opacity = 1.0f;
                     screen.RenderRectangleSpecialBounds((-_x - _width + _z)* Map.tileSize + 2 * offset.X, (_y + i - _x - _width) * Map.tileSize + offset.X, Map.tileSize, Sprite.GetSprite(_southWall[i]), opacity);
                 }
             }

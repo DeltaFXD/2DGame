@@ -33,3 +33,4 @@
 -Reworked rendering (progress 80%)
 #2020.04.05
 -Reworked rendering done 100%
+-Render fixes and fixing collision detection
