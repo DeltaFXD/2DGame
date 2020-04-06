@@ -35,3 +35,5 @@
 -Reworked rendering done 100%
 -Render fixes and fixing collision detection
 -Preparations for AI related stuff and more fixes for rendering
+#2020.04.06
+-Implement A* pathfinding algorithm

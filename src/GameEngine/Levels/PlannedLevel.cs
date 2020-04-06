@@ -9,6 +9,7 @@ using Windows.Storage.Streams;
 using Windows.Storage;
 
 using GameEngine.Entities.Mobs;
+using GameEngine.Utilities;
 
 namespace GameEngine.Levels
 {
@@ -56,6 +57,9 @@ namespace GameEngine.Levels
             map = new Map(mapWidth, mapHeight, floor, sector_data);
 
             AddEntity(new Dummy(0.0f, 0.0f));
+
+            //TODO move to method
+            
         }
     }
 }

@@ -62,7 +62,6 @@ namespace GameEngine.Entities.Mobs
 
         public override void Render(Screen screen)
         {
-            Debug.WriteLine(position);
             screen.RenderEntity(Coordinate.NormalToIso(position) / 2, 32, AnimatedSprite.GetAnimatedSprite("player").GetSprite());
         }
     }

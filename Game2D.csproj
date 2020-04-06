@@ -139,6 +139,7 @@
     <Compile Include="src\GameEngine\Graphics\Sprite.cs" />
     <Compile Include="src\GameEngine\Levels\Sector.cs" />
     <Compile Include="src\GameEngine\Levels\Tile.cs" />
+    <Compile Include="src\GameEngine\Utilities\AStar.cs" />
     <Compile Include="src\GameEngine\Utilities\Coordinate.cs" />
   </ItemGroup>
   <ItemGroup>
