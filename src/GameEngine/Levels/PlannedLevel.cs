@@ -46,9 +46,9 @@ namespace GameEngine.Levels
 
             int[,] floor = new int[mapWidth, mapHeight];
 
-            for (int x = 0; x < mapWidth; x++)
+            for (int y = 0; y < mapHeight; y++)
             {
-                for (int y = 0; y < mapHeight; y++)
+                for (int x = 0; x < mapWidth; x++)
                 { 
                     floor.SetValue(-BitConverter.ToInt32(bytes, (x + y * mapWidth) * sizeof (int)), x, y);
                 }
@@ -57,9 +57,6 @@ namespace GameEngine.Levels
             map = new Map(mapWidth, mapHeight, floor, sector_data);
 
             AddEntity(new Dummy(0.0f, 0.0f));
-
-            //TODO move to method
-            
         }
     }
 }

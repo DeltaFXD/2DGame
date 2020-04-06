@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -30,6 +31,12 @@ namespace GameEngine.Utilities
             _mapHeight = mapHeight;
 
             _initialized = true;
+            Debug.WriteLine("A* Initialized");
+        }
+
+        public static bool IsInitialized()
+        {
+            return _initialized;
         }
 
         public static List<Vector2> FindPath(float xStart, float yStart, float xEnd, float yEnd)
@@ -41,7 +48,7 @@ namespace GameEngine.Utilities
             _yStart = yStart;
             _xEnd = xEnd;
             _yEnd = yEnd;
-
+            Debug.WriteLine("Finding path,from X: " + xStart + " Y: " + yStart + " to X: " + xEnd + " Y: " + yEnd);
             _current = new Node(null, xStart, yStart, 0, 0);
 
             _closed.Add(_current);
@@ -50,6 +57,7 @@ namespace GameEngine.Utilities
             {
                 if (_open.Count() == 0)
                 {
+                    Debug.WriteLine("Returning null because _open is empty");
                     return null;
                 }
                 _current = _open[0];
@@ -81,7 +89,23 @@ namespace GameEngine.Utilities
                 {
                     if (x != 0 && y != 0)
                     {
-
+                        if (_current.X + x >= 0 && _current.X + x < _mapWidth && _current.Y + y >= 0 && _current.Y + y < _mapHeight)
+                        {
+                            int cX = (int)_current.X;
+                            int cY = (int)_current.Y;
+                            if (x == y)
+                            {
+                                if (_map[cX + x, cY + x - y] == -1) continue;
+                                if (_map[cX + x - y, cY + y] == -1) continue;
+                            }
+                            else
+                            {
+                                if (_map[cX + x, cY + x + y] == -1) continue;
+                                if (_map[cX + x + y, cY + y] == -1) continue;
+                            }
+                        }
+                        else
+                            continue;
                     }
                     node = new Node(_current, _current.X + x, _current.Y + y, _current.G, Distance(x, y));
                     if ((x != 0 || y != 0) //not current node
@@ -94,7 +118,7 @@ namespace GameEngine.Utilities
                         node.G += _map[(int)_current.X + x, (int)_current.Y + y]; //add movement cost
                         if (x != 0 && y != 0)
                         {
-                            node.G += 0.4; //if it's diagonal movement add +0.4 so it's close to sqrt(2)
+                            node.G += 0.41; //if it's diagonal movement add +0.41 so it's close to sqrt(2)
                         }
                         _open.Add(node);
                     }

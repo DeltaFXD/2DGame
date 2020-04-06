@@ -37,3 +37,5 @@
 -Preparations for AI related stuff and more fixes for rendering
 #2020.04.06
 -Implement A* pathfinding algorithm
+#2020.04.07
+-Fixes to A* implementation and other small fixes

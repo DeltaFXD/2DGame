@@ -17,6 +17,7 @@ namespace GameEngine.Entities.Mobs
         List<Vector2> _path;
         bool _hasPath = false;
         int _pathIndex = 0;
+        Vector2 _prev_position;
 
         public Dummy(float x, float y)
         {
@@ -36,23 +37,27 @@ namespace GameEngine.Entities.Mobs
             {
                 Vector2 vec2 = Mouse.GetIsoCoordinate();
                 _path = AStar.FindPath((int)position.X / 32, (int)position.Y / 32, (int)vec2.X / 32, (int)vec2.Y / 32);
-                if (_path != null) _hasPath = true;
+                if (_path != null)
+                {
+                    _hasPath = true;
+                    Debug.WriteLine("Next node" + _path[_pathIndex]);
+                }
             }
 
             if (_hasPath)
             {
                 Vector2 currentDest = _path[_pathIndex];
-
-                if (currentDest.X * 32 != position.X)
+                currentDest *= 32;
+                if (currentDest.X != position.X)
                 {
-                    if (currentDest.X * 32 > position.X)
+                    if (currentDest.X > position.X)
                         xChange++;
                     else
                         xChange--;
                 }
-                if (currentDest.Y * 32 != position.Y)
+                if (currentDest.Y != position.Y)
                 {
-                    if (currentDest.Y * 32 > position.Y)
+                    if (currentDest.Y > position.Y)
                         yChange++;
                     else
                         yChange--;
@@ -66,7 +71,8 @@ namespace GameEngine.Entities.Mobs
                         _path = null;
                         _pathIndex = 0;
                         _hasPath = false;
-                    }
+                    } else
+                        Debug.WriteLine("Next node" + _path[_pathIndex]);
                 }
             }
 
@@ -98,7 +104,7 @@ namespace GameEngine.Entities.Mobs
             {
                 moving = false;
             }
-
+            _prev_position = position;
             if (xChange != 0 || yChange != 0)
             {
                 moving = true;

@@ -28,6 +28,28 @@ namespace GameEngine.Levels
             watch.Start();
         }
 
+        public void InitAStar()
+        {
+            int[,] graph_map = new int[map.GetWidth(), map.GetHeight()];
+            for (int y = 0; y < map.GetHeight(); y++)
+            {
+                for (int x = 0; x < map.GetWidth(); x++)
+                {
+                    Tile tile = map.GetTile(x, y);
+                    if (tile == null)
+                    {
+                        graph_map[x, y] = -1;
+                        continue;
+                    }
+                    if (tile.IsSolid())
+                        graph_map[x, y] = -1;
+                    else
+                        graph_map[x, y] = 1;
+                }
+            }
+            AStar.Initialize(graph_map, map.GetWidth(), map.GetHeight());
+        }
+
         public void AddEntity(Entity entity)
         {
             entity.Initalize(this);

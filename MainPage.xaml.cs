@@ -13,6 +13,7 @@ using System;
 using GameEngine.Levels;
 using GameEngine.Graphics;
 using GameEngine.Inputs;
+using GameEngine.Utilities;
 using GameEngine.Entities.Mobs;
 using Windows.UI.Xaml.Input;
 using Windows.Devices.Input;
@@ -183,6 +184,10 @@ namespace Game2D
 
         private void Canvas_Update(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)
         {
+            if (assests_ready && !AStar.IsInitialized())
+            {
+                level.InitAStar();
+            }
             upCount++;
             if ((watch.ElapsedMilliseconds - lastTime) > 1000)
             {
@@ -191,15 +196,16 @@ namespace Game2D
                 upCount = 0;
                 frameCount = 0;
             }
-            level.Update();
             mouse.SetOffset(screen.GetOffset());
+            level.Update();
             if (Mouse.GetButton() == Mouse.Button.Left)
             {
                 Vector2 vec2 = Mouse.GetIsoCoordinate();
-                Debug.WriteLine("MouseX: " + vec2.X + " MouseY: " + vec2.Y);
+                //Debug.WriteLine("MouseX: " + vec2.X + " MouseY: " + vec2.Y);
                 Debug.WriteLine("MouseCordX: " + (int)vec2.X / 32 + " MouseCordY: " + (int)vec2.Y / 32);
             }
-            AnimatedSprite.GetUpdateables().ForEach(e => e.Update());
+            if (animated_assests_ready && animated_assests_ready2)
+                AnimatedSprite.GetUpdateables().ForEach(e => e.Update());
         }
 
         void Page_Unloaded(object sender, RoutedEventArgs e)

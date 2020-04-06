@@ -24,6 +24,7 @@ namespace GameEngine.Entities.Mobs
 
         public override void Update()
         {
+            Debug.WriteLine(position);
             CheckHP();
             int xChange = 0;
             int yChange = 0;

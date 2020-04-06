@@ -59,7 +59,7 @@ namespace GameEngine.Entities.Mobs
 
 		bool Collision(int xChange, int yChange)
 		{
-			return level.TileCollision((int) position.X + xChange, (int) position.Y + yChange, 32, 32);
+			return level.TileCollision((int) position.X + xChange, (int) position.Y + yChange, 31, 31);
 		}
     }
 }
