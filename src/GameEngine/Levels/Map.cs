@@ -79,6 +79,42 @@ namespace GameEngine.Levels
 
             sectors.Add(new Sector(39, 44, 0, 12, 7, null, null, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4, 4, 4 }));
             sectors.Add(new Sector(39, 44, 1, 12, 7, null, null, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4, 4, 4 }));
+
+            sectors.Add(new Sector(10, 0, 0, 1, 2, null, null, new int[] { 3 }, null));
+            sectors.Add(new Sector(10, 0, 1, 1, 2, null, null, new int[] { 3 }, null));
+
+            sectors.Add(new Sector(10, 14, 0, 1, 2, null, null, new int[] { 3 }, null));
+            sectors.Add(new Sector(10, 14, 1, 1, 2, null, null, new int[] { 3 }, null));
+
+            sectors.Add(new Sector(39, 17, 0, 1, 2, null, null, new int[] { 3 }, null));
+            sectors.Add(new Sector(39, 17, 1, 1, 2, null, null, new int[] { 3 }, null));
+
+            sectors.Add(new Sector(10, 27, 0, 1, 2, null, null, new int[] { 3 }, null));
+            sectors.Add(new Sector(10, 27, 1, 1, 2, null, null, new int[] { 3 }, null));
+
+            sectors.Add(new Sector(16, 42, 0, 1, 2, null, null, new int[] { 3 }, null));
+            sectors.Add(new Sector(16, 42, 1, 1, 2, null, null, new int[] { 3 }, null));
+
+            sectors.Add(new Sector(38, 38, 0, 1, 2, null, null, new int[] { 3 }, null));
+            sectors.Add(new Sector(38, 38, 1, 1, 2, null, null, new int[] { 3 }, null));
+
+            sectors.Add(new Sector(38, 45, 0, 1, 2, null, null, new int[] { 3 }, null));
+            sectors.Add(new Sector(38, 45, 1, 1, 2, null, null, new int[] { 3 }, null));
+
+            sectors.Add(new Sector(13, 7, 0, 2, 1, null, null, null, new int[] { 4 }));
+            sectors.Add(new Sector(13, 7, 1, 2, 1, null, null, null, new int[] { 4 }));
+
+            sectors.Add(new Sector(42, 7, 0, 2, 1, null, null, null, new int[] { 4 }));
+            sectors.Add(new Sector(42, 7, 1, 2, 1, null, null, null, new int[] { 4 }));
+
+            sectors.Add(new Sector(2, 12, 0, 2, 1, null, null, null, new int[] { 4 }));
+            sectors.Add(new Sector(2, 12, 1, 2, 1, null, null, null, new int[] { 4 }));
+
+            sectors.Add(new Sector(17, 26, 0, 2, 1, null, null, null, new int[] { 4 }));
+            sectors.Add(new Sector(17, 26, 1, 2, 1, null, null, null, new int[] { 4 }));
+
+            sectors.Add(new Sector(24, 37, 0, 2, 1, null, null, null, new int[] { 4 }));
+            sectors.Add(new Sector(24, 37, 1, 2, 1, null, null, null, new int[] { 4 }));
         }
 
         public int GetWidth()

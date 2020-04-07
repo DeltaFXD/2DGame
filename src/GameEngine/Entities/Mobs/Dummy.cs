@@ -115,5 +115,16 @@ namespace GameEngine.Entities.Mobs
         {
             screen.RenderEntity(Coordinate.NormalToIso(position) / 2, 32, AnimatedSprite.GetAnimatedSprite("testmob").GetSprite());
         }
+
+        //TODO: implement
+        public override bool IsHit(float x, float y, HitBox hitbox)
+        {
+            throw new NotImplementedException();
+        }
+        //TODO: implement
+        public override MobType GetMobType()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -9,6 +9,7 @@ using GameEngine.Entities;
 using GameEngine.Graphics;
 using GameEngine.Utilities;
 using System.Threading;
+using GameEngine.Entities.Mobs;
 
 namespace GameEngine.Levels
 {
@@ -48,6 +49,12 @@ namespace GameEngine.Levels
                 }
             }
             AStar.Initialize(graph_map, map.GetWidth(), map.GetHeight());
+        }
+
+        //TODO: implement
+        public List<Mob> GetMobs()
+        {
+            throw new NotImplementedException();
         }
 
         public void AddEntity(Entity entity)

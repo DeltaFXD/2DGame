@@ -124,9 +124,16 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\GameEngine\Entities\Entity.cs" />
+    <Compile Include="src\GameEngine\Entities\HitBox.cs" />
     <Compile Include="src\GameEngine\Entities\Mobs\Dummy.cs" />
     <Compile Include="src\GameEngine\Entities\Mobs\Mob.cs" />
+    <Compile Include="src\GameEngine\Entities\Mobs\MobType.cs" />
     <Compile Include="src\GameEngine\Entities\Mobs\Player.cs" />
+    <Compile Include="src\GameEngine\Entities\Particles\Particle.cs" />
+    <Compile Include="src\GameEngine\Entities\Projectiles\BasicProjectile.cs" />
+    <Compile Include="src\GameEngine\Entities\Projectiles\Projectile.cs" />
+    <Compile Include="src\GameEngine\Entities\Spawners\ParticleSpawner.cs" />
+    <Compile Include="src\GameEngine\Entities\Spawners\Spawner.cs" />
     <Compile Include="src\GameEngine\Graphics\AnimatedSprite.cs" />
     <Compile Include="src\GameEngine\Graphics\Screen.cs" />
     <Compile Include="src\GameEngine\Inputs\KeyBoard.cs" />

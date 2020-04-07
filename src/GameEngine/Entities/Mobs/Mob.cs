@@ -47,6 +47,16 @@ namespace GameEngine.Entities.Mobs
 			return false;
 		}
 
+		//TODO: implement
+		public void SetKiller(MobType type)
+		{
+			throw new NotImplementedException();
+		}
+
+		public abstract bool IsHit(float x, float y, HitBox hitbox);
+
+		public abstract MobType GetMobType();
+
 		protected void CheckHP()
 		{
 			if (currentHP > maxHP) currentHP = maxHP;

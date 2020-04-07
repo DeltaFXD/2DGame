@@ -24,7 +24,7 @@ namespace GameEngine.Entities.Mobs
 
         public override void Update()
         {
-            Debug.WriteLine(position);
+            //Debug.WriteLine(position);
             CheckHP();
             int xChange = 0;
             int yChange = 0;
@@ -64,6 +64,18 @@ namespace GameEngine.Entities.Mobs
         public override void Render(Screen screen)
         {
             screen.RenderEntity(Coordinate.NormalToIso(position) / 2, 32, AnimatedSprite.GetAnimatedSprite("player").GetSprite());
+        }
+
+        //TODO: implament
+        public override bool IsHit(float x, float y, HitBox hitbox)
+        {
+            throw new NotImplementedException();
+        }
+
+        //TODO: implement
+        public override MobType GetMobType()
+        {
+            throw new NotImplementedException();
         }
     }
 }

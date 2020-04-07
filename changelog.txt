@@ -39,3 +39,4 @@
 -Implement A* pathfinding algorithm
 #2020.04.07
 -Fixes to A* implementation and other small fixes
+-Start implementing Projectiles and Particles and Spawners
