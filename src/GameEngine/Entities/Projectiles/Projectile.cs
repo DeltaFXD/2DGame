@@ -13,23 +13,25 @@ namespace GameEngine.Entities.Projectiles
     {
 		protected readonly Vector2 _origin;
 		protected double _angle;
-		protected float _changeXY;
+		protected Vector2 changeXY;
 		protected float _distance;
 		protected double _speed, _range, _damage;
 		protected Mob _owner;
+		protected float _z;
 
-		public Projectile(Vector2 origin, double angle, Mob owner)
+		public Projectile(Vector2 origin,float z, double angle, Mob owner)
 		{
 			position = origin;
 			_owner = owner;
 			_origin = origin;
 			_angle = angle;
+			_z = z;
 		}
 
 		protected bool EntityCollision(float x, float y, HitBox hitbox)
 		{
 			bool collision = false;
-			Mob mob = null;
+			Mob mob;
 			List<Mob> mobs = level.GetMobs();
 			for (int i = 0; i < mobs.Count(); i++)
 			{
@@ -41,6 +43,11 @@ namespace GameEngine.Entities.Projectiles
 				}
 			}
 			return collision;
+		}
+
+		protected double Distance()
+		{
+			return Math.Sqrt((position.X - _origin.X) * (position.X - _origin.X) + (position.Y - _origin.Y) * (position.Y - _origin.Y));
 		}
 
 		protected abstract void Move();

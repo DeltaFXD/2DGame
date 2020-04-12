@@ -9,7 +9,7 @@ namespace GameEngine.Entities.Spawners
 {
     class ParticleSpawner : Spawner
     {
-        public ParticleSpawner(float x, float y, int amount, Type type) : base(x, y, amount, type)
+        public ParticleSpawner(float x, float y,float z,int  lifeTime,int amount, string sprite_name) : base(x, y, z, amount, Type.PARTICLE)
         {
         }
 

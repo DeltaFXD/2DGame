@@ -51,6 +51,11 @@ namespace GameEngine.Levels
             AStar.Initialize(graph_map, map.GetWidth(), map.GetHeight());
         }
 
+        internal bool TilePenetration(Vector2 vector2, int projectileSize, int xOffsetSize, int yOffsetSize)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool TileCollisionForParticles(double x, double y, int size)
         {
             throw new NotImplementedException();

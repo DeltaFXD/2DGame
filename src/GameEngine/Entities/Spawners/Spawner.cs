@@ -14,13 +14,16 @@ namespace GameEngine.Entities.Spawners
             MOB
         }
 
+        float _z;
+
         protected int _amount;
         Type _type;
 
-        public Spawner(float x, float y, int amount, Type type)
+        public Spawner(float x, float y,float z, int amount, Type type)
         {
             position.X = x;
             position.Y = y;
+            _z = z;
             _amount = amount;
             _type = type;
         }

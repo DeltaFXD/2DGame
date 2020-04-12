@@ -17,7 +17,7 @@ namespace GameEngine.Entities.Particles
         int _lifeTime;
         int spriteID;
 
-        public Particle(float x, float y, float z, int lifeTime, String sprite_name)
+        public Particle(float x, float y, float z, int lifeTime, string sprite_name)
         {
             position.X = x;
             position.Y = y;
@@ -65,6 +65,7 @@ namespace GameEngine.Entities.Particles
             _z += (float) zChange;
         }
 
+        //TODO: implement screen.RenderSprite
         public override void Render(Screen screen)
         {
             //screen.RenderSprite(Coordinate.VirtualZAxisReduction(position, _z), Sprite.GetSprite(spriteID).GetSize());
