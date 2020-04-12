@@ -149,6 +149,7 @@
     <Compile Include="src\GameEngine\Utilities\AStar.cs" />
     <Compile Include="src\GameEngine\Utilities\Coordinate.cs" />
     <Compile Include="src\GameEngine\Utilities\Node.cs" />
+    <Compile Include="src\GameEngine\Utilities\NormalDistribution.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

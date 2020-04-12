@@ -161,7 +161,7 @@ namespace Game2D
 
             //AnimatedSprite Setup
             AnimatedSprite.Init(sender);
-
+            // Parallel osztályra keress rá
             //Load AnimatedSpriteSheets
             animated_assests_ready = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\player_sheet_data.txt", @"\resources\spritesheets\player_sprites.png");
             animated_assests_ready2 = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\mobs_sheet_data.txt", @"\resources\spritesheets\mobs_sprites.png");

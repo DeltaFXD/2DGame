@@ -118,7 +118,7 @@ namespace GameEngine.Utilities
                         node.G += _map[(int)_current.X + x, (int)_current.Y + y]; //add movement cost
                         if (x != 0 && y != 0)
                         {
-                            node.G += 0.41; //if it's diagonal movement add +0.41 so it's close to sqrt(2)
+                            node.G += 1.0; //if it's diagonal movement add extra cost
                         }
                         _open.Add(node);
                     }

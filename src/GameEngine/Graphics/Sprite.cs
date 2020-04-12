@@ -13,13 +13,21 @@ using GameEngine.Levels;
 
 namespace GameEngine.Graphics
 {
-    public static class Sprite
+    public class Sprite
     {
         private static Dictionary<int, CanvasBitmap> Sprites = new Dictionary<int, CanvasBitmap>();
+        private static Dictionary<String, int> table = new Dictionary<string, int>();
 
         private static CanvasAnimatedControl canvas = null;
 
         private static int DSS = 32;
+
+        int _size;
+
+        public int GetSize()
+        {
+            return _size;
+        }
 
         public static void Init(CanvasAnimatedControl canvas)
         {
@@ -36,6 +44,12 @@ namespace GameEngine.Graphics
             {
                 return null;
             }
+        }
+
+        public static int GetSpriteID(String name)
+        {
+            if (table.ContainsKey(name)) return table[name];
+            else throw new ArgumentException("Cannot find name: " + name);
         }
 
         /// <summary>

@@ -37,5 +37,12 @@ namespace GameEngine.Utilities
 
             return vec2;
         }
+
+        public static Vector2 VirtualZAxisReduction(Vector2 vec2, float z)
+        {
+            vec2.X -= z;
+            vec2.Y -= z;
+            return vec2;
+        }
     }
 }

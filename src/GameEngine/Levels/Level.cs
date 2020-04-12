@@ -51,6 +51,11 @@ namespace GameEngine.Levels
             AStar.Initialize(graph_map, map.GetWidth(), map.GetHeight());
         }
 
+        public bool TileCollisionForParticles(double x, double y, int size)
+        {
+            throw new NotImplementedException();
+        }
+
         //TODO: implement
         public List<Mob> GetMobs()
         {
@@ -76,6 +81,17 @@ namespace GameEngine.Levels
 
         public void Update()
         {
+            //Remove entities from map first
+            if (map != null)
+            {
+                entities.ForEach(entity =>
+                {
+                    if (entity.IsRemoved()) map.RemoveEntity(entity);
+                });
+            }
+            //Remove entities
+            entities.RemoveAll(entity => entity.IsRemoved());
+
             //Update entities
             entities.ForEach(entity => entity.Update());
 
