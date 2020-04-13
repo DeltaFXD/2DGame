@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace GameEngine.Entities.Mobs
 {
-    class MobType
+    enum MobType
     {
-
-        //TODO: implement
+        NONE,
+        PLAYER,
+        DUMMY
     }
 }

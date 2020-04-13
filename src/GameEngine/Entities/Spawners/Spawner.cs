@@ -13,8 +13,8 @@ namespace GameEngine.Entities.Spawners
             PARTICLE,
             MOB
         }
-
-        float _z;
+        
+        protected float _z;
 
         protected int _amount;
         Type _type;

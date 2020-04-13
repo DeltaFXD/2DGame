@@ -14,6 +14,9 @@ namespace GameEngine.Entities.Mobs
 {
     class Dummy : Mob
     {
+        static MobType type = MobType.DUMMY;
+        static HitBox _hitBox = new HitBox(20, 32, 12, 0);
+
         List<Vector2> _path;
         bool _hasPath = false;
         int _pathIndex = 0;
@@ -28,6 +31,7 @@ namespace GameEngine.Entities.Mobs
         public override void Update()
         {
             CheckHP();
+            IsDead();
             int xChange = 0;
             int yChange = 0;
 
@@ -76,30 +80,6 @@ namespace GameEngine.Entities.Mobs
                 }
             }
 
-            /*
-            //TEST CODE
-            if (KeyBoard.upArrow)
-            {
-                yChange--;
-                xChange--;
-            }
-            if (KeyBoard.downArrow)
-            {
-                yChange++;
-                xChange++;
-            }
-            if (KeyBoard.leftArrow)
-            {
-                xChange--;
-                yChange++;
-            }
-            if (KeyBoard.rightArrow)
-            {
-                xChange++;
-                yChange--;
-            }
-            //TEST CODE
-            */
             if (xChange == 0 && yChange == 0)
             {
                 moving = false;
@@ -116,15 +96,14 @@ namespace GameEngine.Entities.Mobs
             screen.RenderEntity(Coordinate.NormalToIso(position) / 2, 32, AnimatedSprite.GetAnimatedSprite("testmob").GetSprite());
         }
 
-        //TODO: implement
         public override bool IsHit(float x, float y, HitBox hitbox)
         {
-            throw new NotImplementedException();
+            return _hitBox.IsInside(x - position.X, y - position.Y, hitbox);
         }
-        //TODO: implement
+
         public override MobType GetMobType()
         {
-            throw new NotImplementedException();
+            return type;
         }
     }
 }

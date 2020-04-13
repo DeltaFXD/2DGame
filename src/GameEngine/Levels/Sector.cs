@@ -5,6 +5,7 @@ using System.Numerics;
 using GameEngine.Graphics;
 using GameEngine.Utilities;
 using GameEngine.Entities;
+using GameEngine.Entities.Mobs;
 
 namespace GameEngine.Levels
 {
@@ -121,11 +122,30 @@ namespace GameEngine.Levels
                 //Set new offset for entities
                 screen.SetOffset(entity_offset);
 
-                //Set render mode to isometric
+                //Set render mode to normal
                 screen.SetRenderMode(normal);
 
                 //Render entities inside sector
-                entities.ForEach(entity => entity.Render(screen));
+                entities.ForEach(entity => {
+                    if (!(entity is Mob))
+                    {
+                        //Set old offset
+                        screen.SetOffset((int)old_offset.X, (int)old_offset.Y);
+                        //Set ido rendermode
+                        screen.SetRenderMode(iso);
+
+                        //Render
+                        entity.Render(screen);
+
+                        //Set back new offset for entities
+                        screen.SetOffset(entity_offset);
+
+                        //Set back render mode to normal
+                        screen.SetRenderMode(normal);
+                    }
+                    else
+                        entity.Render(screen);
+                });
 
                 //Set old offset
                 screen.SetOffset((int)old_offset.X, (int)old_offset.Y);

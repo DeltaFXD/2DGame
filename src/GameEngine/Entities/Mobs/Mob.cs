@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+
+using GameEngine.Entities.Projectiles;
 
 namespace GameEngine.Entities.Mobs
 {
@@ -13,6 +16,8 @@ namespace GameEngine.Entities.Mobs
         protected int currentHP = 100;
 
         protected bool moving = false;
+
+		MobType killer = MobType.NONE;
 
         protected void Move(int xChange, int yChange)
         {
@@ -47,10 +52,14 @@ namespace GameEngine.Entities.Mobs
 			return false;
 		}
 
-		//TODO: implement
 		public void SetKiller(MobType type)
 		{
-			throw new NotImplementedException();
+			if (killer == MobType.NONE) killer = type;
+		}
+
+		protected void Shoot(Vector2 projectileXY, double angle)
+		{
+			level.AddEntity(new BasicProjectile(projectileXY, 16, angle, this));
 		}
 
 		public abstract bool IsHit(float x, float y, HitBox hitbox);

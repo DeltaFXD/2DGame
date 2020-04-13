@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using GameEngine.Inputs;
 using GameEngine.Graphics;
 using GameEngine.Utilities;
+using GameEngine.Entities.Projectiles;
 using System.Numerics;
 using System.Diagnostics;
 
@@ -14,12 +15,17 @@ namespace GameEngine.Entities.Mobs
 {
     class Player : Mob
     {
+        static MobType type = MobType.PLAYER;
+        static HitBox _hitBox = new HitBox(20, 32, 12, 0);
+
         KeyBoard input;
+        int fireRate;
         public Player(float x , float y, KeyBoard input)
         {
             position.X = x;
             position.Y = y;
             this.input = input;
+            fireRate = 0;
         }
 
         public override void Update()
@@ -28,6 +34,7 @@ namespace GameEngine.Entities.Mobs
             CheckHP();
             int xChange = 0;
             int yChange = 0;
+            if (fireRate > 0) fireRate--;
             if (input.up)
             {
                 yChange--;
@@ -59,6 +66,18 @@ namespace GameEngine.Entities.Mobs
                 moving = true;
                 Move(xChange, yChange);
             }
+            UpdateShooting();
+        }
+
+        private void UpdateShooting()
+        {
+            if (Mouse.GetButton() == Mouse.Button.Left && fireRate <= 0)
+            {
+                Vector2 vec2 = Mouse.GetIsoCoordinate() - position;
+                double angle = Math.Atan2(vec2.Y, vec2.X);
+                Shoot(position , angle);
+                fireRate = BasicProjectile.GetRateOfFire();
+            }
         }
 
         public override void Render(Screen screen)
@@ -66,16 +85,14 @@ namespace GameEngine.Entities.Mobs
             screen.RenderEntity(Coordinate.NormalToIso(position) / 2, 32, AnimatedSprite.GetAnimatedSprite("player").GetSprite());
         }
 
-        //TODO: implament
         public override bool IsHit(float x, float y, HitBox hitbox)
         {
-            throw new NotImplementedException();
+            return _hitBox.IsInside(x - position.X, y - position.Y, hitbox);
         }
 
-        //TODO: implement
         public override MobType GetMobType()
         {
-            throw new NotImplementedException();
+            return type;
         }
     }
 }

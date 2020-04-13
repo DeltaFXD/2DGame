@@ -15,7 +15,7 @@ namespace GameEngine.Entities.Particles
         float _z;
         double xChange, yChange, zChange;
         int _lifeTime;
-        int spriteID;
+        Sprite sprite;
 
         public Particle(float x, float y, float z, int lifeTime, string sprite_name)
         {
@@ -24,8 +24,7 @@ namespace GameEngine.Entities.Particles
             _z = z;
 
             _lifeTime = random.Next(lifeTime);
-            spriteID = Sprite.GetSpriteID(sprite_name);
-
+            sprite = Sprite.GetSprite(Sprite.GetSpriteID(sprite_name));
             zChange = 0;
 
             xChange = NormalDistribution.NextGaussian();
@@ -51,11 +50,11 @@ namespace GameEngine.Entities.Particles
 
         void Move()
         {
-            if (level.TileCollisionForParticles(position.X + xChange, position.Y , 10 /*tempt Sprite.GetSprite(spriteID).GetSize()*/))
+            if (level.TileCollisionForParticles(position.X + xChange, position.Y , sprite.GetWidth(), sprite.GetHeight()))
             {
                 xChange *= -1;
             }
-            if (level.TileCollisionForParticles(position.X, position.Y + yChange, 10 /*tempt Sprite.GetSprite(spriteID).GetSize()*/))
+            if (level.TileCollisionForParticles(position.X, position.Y + yChange, sprite.GetWidth(), sprite.GetHeight()))
             {
                 yChange *= -1;
             }
@@ -65,10 +64,9 @@ namespace GameEngine.Entities.Particles
             _z += (float) zChange;
         }
 
-        //TODO: implement screen.RenderSprite
         public override void Render(Screen screen)
         {
-            //screen.RenderSprite(Coordinate.VirtualZAxisReduction(position, _z), Sprite.GetSprite(spriteID).GetSize());
+            screen.RenderParticle(Coordinate.VirtualZAxisReduction(position, _z), sprite);
         }
     }
 }

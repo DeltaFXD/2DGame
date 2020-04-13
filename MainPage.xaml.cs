@@ -158,6 +158,11 @@ namespace Game2D
 
             //Load spritesheets
             assests_ready = await Sprite.LoadSheet(@"\resources\spritesheets\tiles_sheet_data.txt", @"\resources\spritesheets\tiles.png");
+            if (!Sprite.CreateSpriteFromColor("particle_normal", 100, 4, 4, 0xAA, 0xAA, 0xAA)) 
+                throw new Exception("Cannot create sprite from color");
+
+            if (!Sprite.CreateSpriteFromColor("particle_red", 101, 4, 4, 0xFF, 0x00, 0x00))
+                throw new Exception("Cannot create sprite from color");
 
             //AnimatedSprite Setup
             AnimatedSprite.Init(sender);

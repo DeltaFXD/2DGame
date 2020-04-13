@@ -47,6 +47,26 @@ namespace GameEngine.Graphics
             cds.DrawImage(sprite, xPos - xOffset, yPos - yOffset, sprite_base, opacity, CanvasImageInterpolation.NearestNeighbor);
         }
 
+        public void RenderProjectile(float xPos, float yPos, Sprite sprite, double angle,float opacity = 1.0f)
+        {
+            if (cds == null) return;
+            //Boundary check
+            if (0 > (xPos - xOffset + sprite.GetWidth()) || drawWidth < (xPos - xOffset - sprite.GetWidth()) || -drawHeightAbs > (yPos - yOffset + sprite.GetHeight()) || drawHeightAbs < (yPos - yOffset)) return;
+            Rect rect = new Rect(0, 0, sprite.GetWidth(), sprite.GetHeight());
+            //Draw
+            cds.DrawImage(sprite.GetBitmap(), xPos - xOffset, yPos - yOffset, rect, opacity, CanvasImageInterpolation.NearestNeighbor);
+        }
+
+        public void RenderParticle(Vector2 pos, Sprite sprite, float opacity = 1.0f)
+        {
+            if (cds == null) return;
+            //Boundary check
+            if (0 > (pos.X - xOffset + sprite.GetWidth()) || drawWidth < (pos.X - xOffset - sprite.GetWidth()) || -drawHeightAbs > (pos.Y - yOffset + sprite.GetHeight()) || drawHeightAbs < (pos.Y - yOffset)) return;
+            Rect rect = new Rect(0, 0, sprite.GetWidth(), sprite.GetHeight());
+            //Draw
+            cds.DrawImage(sprite.GetBitmap(), pos.X - xOffset, pos.Y - yOffset, rect, opacity, CanvasImageInterpolation.NearestNeighbor);
+        }
+
 
         //TODO: Recheck bounds for this
         public void RenderEntity(Vector2 pos, int spriteSize, CanvasBitmap sprite, float opacity = 1.0f)

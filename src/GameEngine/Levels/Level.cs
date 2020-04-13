@@ -17,6 +17,7 @@ namespace GameEngine.Levels
     {
         Stopwatch watch = new Stopwatch();
         List<Entity> entities = new List<Entity>();
+        List<Entity> tmp = new List<Entity>();
         //protected Action mapLoading;
 
         protected Map map;
@@ -51,26 +52,84 @@ namespace GameEngine.Levels
             AStar.Initialize(graph_map, map.GetWidth(), map.GetHeight());
         }
 
-        internal bool TilePenetration(Vector2 vector2, int projectileSize, int xOffsetSize, int yOffsetSize)
+        public bool TilePenetration(Vector2 xy, int projectileSize, int xOffsetSize, int yOffsetSize)
         {
-            throw new NotImplementedException();
+            bool penetrateable = false;
+            if (map == null) return penetrateable;
+            for (int i = 0; i < 4; i++)
+            {
+                // i % 2 and i >> 1 creates all 4 corners of a tile (0,0) (0,1) (1,0) (1,1)
+                int xFuture = (int)(xy.X + (i % 2) * projectileSize + xOffsetSize);
+                int yFuture = (int)(xy.Y + (i >> 1) * projectileSize + yOffsetSize);
+                if (0 > xFuture && xFuture > -Map.tileSize)
+                {
+                    xFuture = -1;
+                }
+                else
+                {
+                    xFuture /= Map.tileSize;
+                }
+                if (0 > yFuture && yFuture > -Map.tileSize)
+                {
+                    yFuture = -1;
+                }
+                else
+                {
+                    yFuture /= Map.tileSize;
+                }
+                Tile tile = map.GetTile(xFuture, yFuture);
+                if (tile == null) penetrateable = false;
+                else if (tile.IsPenetrateable()) penetrateable = true;
+            }
+            return penetrateable;
         }
 
-        public bool TileCollisionForParticles(double x, double y, int size)
+        public bool TileCollisionForParticles(double x, double y, int width, int height)
         {
-            throw new NotImplementedException();
+            bool penetrateable = false;
+            if (map == null) return penetrateable;
+            for (int i = 0; i < 4; i++)
+            {
+                // i % 2 and i >> 1 creates all 4 corners of a tile (0,0) (0,1) (1,0) (1,1)
+                int xFuture = (int)(x + (i % 2) * width);
+                int yFuture = (int)(y + (i >> 1) * height);
+                if (0 > xFuture && xFuture > -Map.tileSize)
+                {
+                    xFuture = -1;
+                }
+                else
+                {
+                    xFuture /= Map.tileSize;
+                }
+                if (0 > yFuture && yFuture > -Map.tileSize)
+                {
+                    yFuture = -1;
+                }
+                else
+                {
+                    yFuture /= Map.tileSize;
+                }
+                Tile tile = map.GetTile(xFuture, yFuture);
+                if (tile == null) penetrateable = false;
+                else if (tile.IsPenetrateable()) penetrateable = true;
+            }
+            return penetrateable;
         }
 
-        //TODO: implement
         public List<Mob> GetMobs()
         {
-            throw new NotImplementedException();
+            List<Mob> mobs = new List<Mob>();
+            entities.ForEach(entity =>
+            {
+                if (entity is Mob m) mobs.Add(m);
+            });
+            return mobs;
         }
 
         public void AddEntity(Entity entity)
         {
             entity.Initalize(this);
-            entities.Add(entity);
+            tmp.Add(entity);
             if (map != null)
             {
                 map.AddEntity(entity);
@@ -86,6 +145,8 @@ namespace GameEngine.Levels
 
         public void Update()
         {
+            entities.AddRange(tmp);
+            tmp.Clear();
             //Remove entities from map first
             if (map != null)
             {

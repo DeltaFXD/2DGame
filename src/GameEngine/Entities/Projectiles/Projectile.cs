@@ -14,7 +14,6 @@ namespace GameEngine.Entities.Projectiles
 		protected readonly Vector2 _origin;
 		protected double _angle;
 		protected Vector2 changeXY;
-		protected float _distance;
 		protected double _speed, _range, _damage;
 		protected Mob _owner;
 		protected float _z;
