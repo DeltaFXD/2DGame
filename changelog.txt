@@ -43,3 +43,5 @@
 #2020.04.12
 -Implement Particles and related changes
 -Projectiles 80%
+#2020.04.13
+-Small rework to Sprite and add new Sprite creation way

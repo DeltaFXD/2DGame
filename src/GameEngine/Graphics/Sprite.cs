@@ -15,18 +15,42 @@ namespace GameEngine.Graphics
 {
     public class Sprite
     {
-        private static Dictionary<int, CanvasBitmap> Sprites = new Dictionary<int, CanvasBitmap>();
-        private static Dictionary<String, int> table = new Dictionary<string, int>();
+        private static Dictionary<int, Sprite> sprites = new Dictionary<int, Sprite>();
+        private static Dictionary<string, int> table = new Dictionary<string, int>();
 
         private static CanvasAnimatedControl canvas = null;
 
-        private static int DSS = 32;
+        int _width, _height;
+        bool square;
+        CanvasBitmap _sprite;
 
-        int _size;
-
-        public int GetSize()
+        private Sprite(int width, int height, CanvasBitmap sprite)
         {
-            return _size;
+            _width = width;
+            _height = height;
+            if (_width == _height) square = true;
+            else square = false;
+            _sprite = sprite;
+        }
+
+        public bool IsSquare()
+        {
+            return square;
+        }
+
+        public int GetWidth()
+        {
+            return _width;
+        }
+
+        public int GetHeight()
+        {
+            return _height;
+        }
+
+        public CanvasBitmap GetBitmap()
+        {
+            return _sprite;
         }
 
         public static void Init(CanvasAnimatedControl canvas)
@@ -34,22 +58,47 @@ namespace GameEngine.Graphics
             Sprite.canvas = canvas;
         }
 
-        public static CanvasBitmap GetSprite(int id)
+        public static Sprite GetSprite(int id)
         {
-            if (Sprites.ContainsKey(id))
-            {
-                return Sprites[id];
-            } 
-            else
-            {
-                return null;
-            }
+            if (!sprites.TryGetValue(id, out Sprite sprite)) return null;
+            return sprite;
         }
 
-        public static int GetSpriteID(String name)
+        public static int GetSpriteID(string name)
         {
-            if (table.ContainsKey(name)) return table[name];
-            else throw new ArgumentException("Cannot find name: " + name);
+            if (!table.TryGetValue(name, out int id)) throw new ArgumentException("Cannot find name: " + name);
+            return id;        
+        }
+
+        public static bool CreateSpriteFromColor(string name,int id,int width, int height, byte red, byte green, byte blue)
+        {
+            if (canvas == null) return false;
+
+            byte[] bitmap_bytes = new byte[width * height * 4];
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width * 4; x+=4) //Increase by 4 because each color is 4 byte
+                {
+                    bitmap_bytes[x + 0 + y * width * 4] = red;
+                    bitmap_bytes[x + 1 + y * width * 4] = green;
+                    bitmap_bytes[x + 2 + y * width * 4] = blue;
+                    bitmap_bytes[x + 3 + y * width * 4] = 0xFF; //Alpha
+                }
+            }
+            CanvasBitmap bitmap = CanvasBitmap.CreateFromBytes(canvas, bitmap_bytes, width, height, DirectXPixelFormat.R8G8B8A8UIntNormalized);
+            Sprite sprite = new Sprite(width, height, bitmap);
+
+            sprites.Add(id, sprite);
+            table.Add(name, id);
+
+            if (sprites.ContainsKey(id))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -93,44 +142,50 @@ namespace GameEngine.Graphics
                 return false;
             }
 
-            int x, y, id, xAbs, yAbs;
+            int x, y, id, xAbs, yAbs, w, h;
             bool solid, penetrateable;
-            byte[] bitmap_bytes = new byte[DSS * DSS * 4];
+            string name;
             //Sheet data proccesing
-            MatchCollection matches = Regex.Matches(data, @"(\d) (\d) (\d+) (\d) (\d)");
+            MatchCollection matches = Regex.Matches(data, @"(\w+) (\d+) (\d+) (\d+) (\d+) (\d+) (\d) (\d)");
             foreach (Match match in matches)
             {
-                x = int.Parse(match.Groups[1].Value);
-                y = int.Parse(match.Groups[2].Value);
-                id = int.Parse(match.Groups[3].Value);
+                name = match.Groups[1].Value;
+                x = int.Parse(match.Groups[2].Value);
+                y = int.Parse(match.Groups[3].Value);
+                w = int.Parse(match.Groups[4].Value);
+                h = int.Parse(match.Groups[5].Value);
+                id = int.Parse(match.Groups[6].Value);
+                byte[] bitmap_bytes = new byte[w * h * 4];
 
                 //Out of bound check
-                if (x * DSS > sheetWidth || y * DSS > sheetHeight || x < 0 || y < 0) continue;
+                if (x * w > sheetWidth || y * h > sheetHeight || x < 0 || y < 0) continue;
 
-                for (int by = 0; by < DSS; by++)
+                for (int by = 0; by < h; by++)
                 {
-                    yAbs = by + y * DSS;
-                    for (int bx = 0; bx < DSS * 4; bx++)
+                    yAbs = by + y * h;
+                    for (int bx = 0; bx < w * 4; bx++)
                     {
-                        xAbs = bx + x * DSS * 4;
-                        bitmap_bytes[bx + by * DSS * 4] = bytes[xAbs + yAbs * sheetWidth * 4];
+                        xAbs = bx + x * w * 4;
+                        bitmap_bytes[bx + by * w * 4] = bytes[xAbs + yAbs * sheetWidth * 4];
                     }
                 }
 
-                CanvasBitmap bitmap = CanvasBitmap.CreateFromBytes(canvas, bitmap_bytes, DSS, DSS, DirectXPixelFormat.R8G8B8A8UIntNormalized);
+                CanvasBitmap bitmap = CanvasBitmap.CreateFromBytes(canvas, bitmap_bytes, w, h, DirectXPixelFormat.R8G8B8A8UIntNormalized);
 
                 if (bitmap == null) return false;
 
-                Sprites.Add(id, bitmap);
+                Sprite sprite = new Sprite(w, h, bitmap);
+                sprites.Add(id, sprite);
+                table.Add(name, id);
                 
                 //Data for tiles
-                solid = 1 == int.Parse(match.Groups[4].Value);
-                penetrateable = 1 == int.Parse(match.Groups[5].Value);
+                solid = 1 == int.Parse(match.Groups[7].Value);
+                penetrateable = 1 == int.Parse(match.Groups[8].Value);
      
                 //Create tiles based on sprites
                 new Tile(solid, penetrateable, id);
 
-                if (Sprites.ContainsKey(id))
+                if (sprites.ContainsKey(id))
                 {
                     continue;
                 }

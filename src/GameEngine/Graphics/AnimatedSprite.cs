@@ -81,8 +81,10 @@ namespace GameEngine.Graphics
             {
                 return _animatedSprites[name];
             }
-            Console.WriteLine("Missing AnimatedSprite: " + name);
-            return null;
+            else
+            {
+                throw new ArgumentException("Missing AnimatedSprite: " + name);
+            }
         }
 
         public static async Task<bool> LoadSheet(string spriteSheetDataPath, string spriteSheetPath)

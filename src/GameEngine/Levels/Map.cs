@@ -150,7 +150,7 @@ namespace GameEngine.Levels
             screen.SetRenderMode(iso);
 
             //Render tiles
-            CanvasBitmap sprite;
+            Sprite sprite;
             for (int y = 0; y < _height; y++)
             {
                 for (int x = 0; x < _width; x++)
@@ -159,7 +159,7 @@ namespace GameEngine.Levels
                     sprite = Sprite.GetSprite(_floor[x, y]);
                     if (sprite != null)
                     {
-                        screen.RenderRectangle(x * tileSize, y * tileSize, tileSize, sprite);
+                        screen.RenderRectangle(x * tileSize, y * tileSize, tileSize, sprite.GetBitmap());
                     }
                 }
             }
