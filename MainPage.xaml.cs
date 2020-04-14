@@ -15,8 +15,10 @@ using GameEngine.Graphics;
 using GameEngine.Inputs;
 using GameEngine.Utilities;
 using GameEngine.Entities.Mobs;
+using GameEngine.Sounds;
 using Windows.UI.Xaml.Input;
 using Windows.Devices.Input;
+using System.Threading.Tasks;
 
 namespace Game2D
 {
@@ -37,6 +39,7 @@ namespace Game2D
         Player player;
         KeyBoard key;
         Mouse mouse;
+        bool test = false;
 
         public MainPage()
         {
@@ -75,6 +78,8 @@ namespace Game2D
 
             //Init level
             level.Init();
+
+            Task.Run(async () => await Sound.InitSound());
         }
 
         void Page_Loaded(object sender, RoutedEventArgs e)
@@ -170,6 +175,9 @@ namespace Game2D
             //Load AnimatedSpriteSheets
             animated_assests_ready = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\player_sheet_data.txt", @"\resources\spritesheets\player_sprites.png");
             animated_assests_ready2 = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\mobs_sheet_data.txt", @"\resources\spritesheets\mobs_sprites.png");
+
+            //LoadSounds
+            await Sound.LoadSound("test.mp3");
         }
 
         /// <summary>
@@ -209,6 +217,16 @@ namespace Game2D
                 //Debug.WriteLine("MouseX: " + vec2.X + " MouseY: " + vec2.Y);
                 Debug.WriteLine("MouseCordX: " + (int)vec2.X / 32 + " MouseCordY: " + (int)vec2.Y / 32);
             }
+            if (Mouse.GetButton() == Mouse.Button.Right)
+            {
+                test = true;
+            }
+            if (test)
+            {
+                Sound.PlaySound("test.mp3");
+                test = false;
+            }
+
             if (animated_assests_ready && animated_assests_ready2)
                 AnimatedSprite.GetUpdateables().ForEach(e => e.Update());
         }

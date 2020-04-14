@@ -146,6 +146,7 @@
     <Compile Include="src\GameEngine\Graphics\Sprite.cs" />
     <Compile Include="src\GameEngine\Levels\Sector.cs" />
     <Compile Include="src\GameEngine\Levels\Tile.cs" />
+    <Compile Include="src\GameEngine\Sounds\Sound.cs" />
     <Compile Include="src\GameEngine\Utilities\AStar.cs" />
     <Compile Include="src\GameEngine\Utilities\Coordinate.cs" />
     <Compile Include="src\GameEngine\Utilities\Node.cs" />
@@ -169,6 +170,7 @@
     <Content Include="resources\planned_levels\test_map.png" />
     <Content Include="resources\planned_levels\test_map_2.png" />
     <Content Include="resources\planned_levels\test_sectors.txt" />
+    <Content Include="resources\sounds\test.mp3" />
     <Content Include="resources\spritesheets\mobs_sheet_data.txt" />
     <Content Include="resources\spritesheets\mobs_sprites.png" />
     <Content Include="resources\spritesheets\player_sheet_data.txt" />
