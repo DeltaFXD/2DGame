@@ -50,3 +50,5 @@
 -Implement basic sound system
 #2020.04.20
 -Procedural Generation 50%
+#2020.04.21
+-Procedural Generation 75% (Fixed filtering and added Sector generation)

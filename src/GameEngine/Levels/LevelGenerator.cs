@@ -85,7 +85,7 @@ namespace GameEngine.Levels
                 int y = random.Next(size);
                 int w = NextGaussian(20, 10);
                 int h = NextGaussian(20, 10);
-
+                if (w < 0 || h < 0) continue;
                 if ((x + w) < size && (y + h) < size)
                 {
                     Room room = new Room(x, y, w, h);
@@ -104,12 +104,18 @@ namespace GameEngine.Levels
             //Create map
             CreateMap(rooms, size);
             Debug.WriteLine("Map created");
+
+            //Generate sectors
+            map.AddSector(new Sector(0, 0, 0, size, size, null, null, null, null));
+            CreateSectors(rooms);
+            Debug.WriteLine("Sectors created");
         }
 
         void FilterRooms(List<Room> rooms)
         {
             //Start from 1 because 0(start room) prevented adding ones that would overlap
             int i = 1;
+            int removed = 0;
             while (true)
             {
                 if (i < rooms.Count)
@@ -125,11 +131,13 @@ namespace GameEngine.Levels
                                 if ((r.Width * r.Height) > (room.Height * room.Width))
                                 {
                                     temp.Add(room);
+                                    removed++;
                                 }
                                 else
                                 {
                                     temp.Add(r);
                                     i--;
+                                    removed++;
                                     break;
                                 }
                             }
@@ -143,6 +151,10 @@ namespace GameEngine.Levels
                     Debug.WriteLine("Filtering stopped after: " + i + " iteration");
                     break;
                 }
+            }
+            if (removed != 0)
+            {
+                FilterRooms(rooms);
             }
         }
 
@@ -171,9 +183,33 @@ namespace GameEngine.Levels
             });
 
             map = new Map(size, size, floor);
+        }
 
-            //Generate sectors
-            map.AddSector(new Sector(0, 0, 0, size, size, null, null, null, null));
+        void CreateSectors(List<Room> rooms)
+        {
+            rooms.ForEach(room =>
+            {
+                int[] hor = new int[(room.Width + 1)];
+                int[] ver = new int[(room.Height + 1)];
+
+                for (int i = 0; i <= room.Width;i++)
+                {
+                    hor[i] = 3;
+                }
+                for (int i = 0; i <= room.Height;i++)
+                {
+                    ver[i] = 4;
+                }
+
+                map.AddSector(new Sector(room.X, room.Y, 0, room.Width, 0, null, null, hor, null));
+                map.AddSector(new Sector(room.X, room.Y, 1, room.Width, 0, null, null, hor, null));
+
+                map.AddSector(new Sector(room.X, room.Y, 0, 0, room.Height, null, null, null, ver));
+                map.AddSector(new Sector(room.X, room.Y, 1, 0, room.Height, null, null, null, ver));
+
+                map.AddSector(new Sector(room.X, room.Y, 0, room.Width, room.Height, null, null, hor, ver));
+                map.AddSector(new Sector(room.X, room.Y, 1, room.Width, room.Height, null, null, hor, ver));
+            });
         }
     }
 }
