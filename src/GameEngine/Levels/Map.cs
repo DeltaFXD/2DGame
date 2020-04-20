@@ -39,6 +39,20 @@ namespace GameEngine.Levels
             Sector.SetMap(this);
         }
 
+        public Map(int width, int height, int[,] floor)
+        {
+            _width = width;
+            _height = height;
+            _floor = floor;
+
+            Sector.SetMap(this);
+        }
+
+        public void AddSector(Sector sector)
+        {
+            sectors.Add(sector);
+        }
+
         void LoadSectors(string sector_data)
         {
             sectors.Add(new Sector(0, 0, 0, 11, 8, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0 }, new int[] { 4, 4, 4, 4, 4, 4, 4, 0 }, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 0, 0, 4, 4, 4, 4 }));

@@ -33,11 +33,11 @@ namespace GameEngine.Entities.Mobs
 			if (yChange > 0) direction = 2;
 			if (yChange < 0) direction = 0;
 
-			if (!Collision(xChange, yChange))
-			{
+			//if (!Collision(xChange, yChange))
+			//{
 				position.X += xChange;
 				position.Y += yChange;
-			}
+			//}
 		}
 
 		public int GetHP()

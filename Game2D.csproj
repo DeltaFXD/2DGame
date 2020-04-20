@@ -141,6 +141,7 @@
     <Compile Include="src\GameEngine\Interfaces\IRenderable.cs" />
     <Compile Include="src\GameEngine\Interfaces\IUpdateable.cs" />
     <Compile Include="src\GameEngine\Levels\Level.cs" />
+    <Compile Include="src\GameEngine\Levels\LevelGenerator.cs" />
     <Compile Include="src\GameEngine\Levels\Map.cs" />
     <Compile Include="src\GameEngine\Levels\PlannedLevel.cs" />
     <Compile Include="src\GameEngine\Graphics\Sprite.cs" />

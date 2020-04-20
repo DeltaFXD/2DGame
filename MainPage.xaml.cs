@@ -58,7 +58,8 @@ namespace Game2D
             screen = new Screen(1366, 768);
 
             //Create level
-            level = new PlannedLevel(@"\resources\planned_levels\test_map_2.png", @"\resources\planned_levels\test_sectors.txt");
+            //level = new PlannedLevel(@"\resources\planned_levels\test_map_2.png", @"\resources\planned_levels\test_sectors.txt");
+            level = new LevelGenerator(1000, 500);
 
             //Create KeyBoard instance
             key = new KeyBoard();
