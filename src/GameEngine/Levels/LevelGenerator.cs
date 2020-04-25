@@ -79,7 +79,7 @@ namespace GameEngine.Levels
             rooms.Add(start);
 
             //Generate overlapping random rooms
-            for (int i = 0; i < (size * size / 20); i++)
+            /*for (int i = 0; i < (size * size / 20); i++)
             {
                 int x = random.Next(size);
                 int y = random.Next(size);
@@ -91,7 +91,7 @@ namespace GameEngine.Levels
                     Room room = new Room(x, y, w, h);
                     if (!start.IsInside(room)) rooms.Add(room);
                 }
-            }
+            }*/
             Debug.WriteLine("Generated overlapping rooms");
 
             //Filter out overlapping rooms based on size
@@ -106,7 +106,9 @@ namespace GameEngine.Levels
             Debug.WriteLine("Map created");
 
             //Generate sectors
-            map.AddSector(new Sector(0, 0, 0, size, size, null, null, null, null));
+            /*Sector sector = new Sector(0, 0, size, size);
+            sector.Finalise();
+            map.AddSector(sector);*/
             CreateSectors(rooms);
             Debug.WriteLine("Sectors created");
         }
@@ -148,7 +150,7 @@ namespace GameEngine.Levels
                 }
                 else
                 {
-                    Debug.WriteLine("Filtering stopped after: " + i + " iteration");
+                    Debug.WriteLine("Filtering stopped after: " + i + " iteration, removed: " + removed + " rooms");
                     break;
                 }
             }
@@ -177,7 +179,9 @@ namespace GameEngine.Levels
                 {
                     for (int x = room.X; x< (room.X+room.Width);x++)
                     {
-                        floor[x, y] = 10197916;
+                        int r = random.Next(100);
+                        if (r < 80) floor[x, y] = 10197916;
+                        else floor[x, y] = 3618616;
                     }
                 }
             });
@@ -200,15 +204,23 @@ namespace GameEngine.Levels
                 {
                     ver[i] = 4;
                 }
+                Sector sector = new Sector(room.X, room.Y, room.Width, room.Height);
 
-                map.AddSector(new Sector(room.X, room.Y, 0, room.Width, 0, null, null, hor, null));
-                map.AddSector(new Sector(room.X, room.Y, 1, room.Width, 0, null, null, hor, null));
+                sector.AddWall(new Wall(0.0f, 0.0f, 0, room.Width, hor, WallOrientation.Horizontal));
+                sector.AddWall(new Wall(0.0f, 0.0f, 1, room.Width, hor, WallOrientation.Horizontal));
 
-                map.AddSector(new Sector(room.X, room.Y, 0, 0, room.Height, null, null, null, ver));
-                map.AddSector(new Sector(room.X, room.Y, 1, 0, room.Height, null, null, null, ver));
+                sector.AddWall(new Wall(0.0f, 0.0f, 0, room.Height, ver, WallOrientation.Vertical));
+                sector.AddWall(new Wall(0.0f, 0.0f, 1, room.Height, ver, WallOrientation.Vertical));
 
-                map.AddSector(new Sector(room.X, room.Y, 0, room.Width, room.Height, null, null, hor, ver));
-                map.AddSector(new Sector(room.X, room.Y, 1, room.Width, room.Height, null, null, hor, ver));
+                sector.AddWall(new Wall(0.0f, room.Height, 0, room.Width, hor, WallOrientation.Horizontal));
+                sector.AddWall(new Wall(0.0f, room.Height, 1, room.Width, hor, WallOrientation.Horizontal));
+
+                sector.AddWall(new Wall(room.Width, 0.0f, 0, room.Height, ver, WallOrientation.Vertical));
+                sector.AddWall(new Wall(room.Width, 0.0f, 1, room.Height, ver, WallOrientation.Vertical));
+
+                sector.Finalise();
+
+                map.AddSector(sector);
             });
         }
     }

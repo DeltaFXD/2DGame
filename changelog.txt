@@ -52,3 +52,5 @@
 -Procedural Generation 50%
 #2020.04.21
 -Procedural Generation 75% (Fixed filtering and added Sector generation)
+#2020.04.25
+-Major overhaul for sectors for better functionality

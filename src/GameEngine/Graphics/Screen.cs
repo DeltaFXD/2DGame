@@ -8,16 +8,52 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
+using GameEngine.Utilities;
+
 namespace GameEngine.Graphics
 {
+    public enum RenderMode
+    {
+        Normal,
+        Normal2X,
+        Isometric,
+        VerticalIso,
+        HorizontalIso
+    }
     class Screen
     {
+        /* 
+         * 
+         */
+        static Matrix3x2 horizontalIso = new Matrix3x2(2 * Coordinate.root2, Coordinate.root2, 0.0f, -2 * Coordinate.root2, 0.0f, 0.0f);
+        /* 
+         *
+         */
+        static Matrix3x2 verzicalIso = new Matrix3x2(0.0f, -2 * Coordinate.root2, -2 * Coordinate.root2, Coordinate.root2, 0.0f, 0.0f);
+        /*  Isometric Transformation matrix
+         *  2*sqrt(2)   -2*sqrt(2)  0
+         *  sqrt(2)     sqrt(2)     0
+         */
+        static Matrix3x2 iso = new Matrix3x2(2 * Coordinate.root2, Coordinate.root2, -2 * Coordinate.root2, Coordinate.root2, 0.0f, 0.0f);
+        /*  
+         *  2   0   0
+         *  0   2   0
+         */
+        static Matrix3x2 normal2x = new Matrix3x2(2.0f, 0.0f, 0.0f, 2.0f, 0.0f, 0.0f);
+        /*  
+         *  1   0   0
+         *  0   1   0
+         */
+        static Matrix3x2 normal = new Matrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+
         int width, height;
         float xOffset, yOffset;
         int drawWidth = 480;
         int drawHeightAbs = 288;
         static Rect sprite_base = new Rect(0, 0, 32, 32);
         CanvasDrawingSession cds = null;
+
+        public RenderMode Mode { get; private set; }
 
         public Screen(int width, int height)
         {
@@ -27,10 +63,28 @@ namespace GameEngine.Graphics
             yOffset = 0;
         }
 
-        public void SetRenderMode(Matrix3x2 mode)
+        public void SetRenderMode(RenderMode mode)
         {
             if (cds == null) return;
-            cds.Transform = mode;
+            switch (mode)
+            {
+                case RenderMode.Normal:
+                    cds.Transform = normal;
+                    break;
+                case RenderMode.Normal2X:
+                    cds.Transform = normal2x;
+                    break;
+                case RenderMode.Isometric:
+                    cds.Transform = iso;
+                    break;
+                case RenderMode.VerticalIso:
+                    cds.Transform = verzicalIso;
+                    break;
+                case RenderMode.HorizontalIso:
+                    cds.Transform = horizontalIso;
+                    break;
+            }
+            Mode = mode;
         }
 
         public void SetCDS(CanvasDrawingSession cds)

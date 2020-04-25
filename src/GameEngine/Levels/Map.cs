@@ -17,11 +17,6 @@ namespace GameEngine.Levels
 {
     class Map
     {
-        /*  Transformation matrix
-         *  2*sqrt(2)   -2*sqrt(2)  0
-         *  sqrt(2)     sqrt(2)     0
-         */
-        static Matrix3x2 iso = new Matrix3x2(2 * Coordinate.root2, Coordinate.root2, -2 * Coordinate.root2, Coordinate.root2, 0.0f, 0.0f);
         public static readonly int tileSize = 32;
         readonly int _width;
         readonly int _height;
@@ -55,7 +50,7 @@ namespace GameEngine.Levels
 
         void LoadSectors(string sector_data)
         {
-            sectors.Add(new Sector(0, 0, 0, 11, 8, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0 }, new int[] { 4, 4, 4, 4, 4, 4, 4, 0 }, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 0, 0, 4, 4, 4, 4 }));
+            /*sectors.Add(new Sector(0, 0, 0, 11, 8, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0 }, new int[] { 4, 4, 4, 4, 4, 4, 4, 0 }, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 0, 0, 4, 4, 4, 4 }));
             sectors.Add(new Sector(0, 0, 1, 11, 8, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0 }, new int[] { 4, 4, 4, 4, 4, 4, 4, 0 }, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 0, 0, 4, 4, 4, 4 }));
 
             sectors.Add(new Sector(11, 0, 0, 13, 8, new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0 }, null, new int[] { 3, 3, 3, 3, 0, 0, 0, 3, 3, 3, 3, 3, 3 }, new int[] { 4, 4, 4, 4, 4, 4, 4, 4 }));
@@ -128,7 +123,7 @@ namespace GameEngine.Levels
             sectors.Add(new Sector(17, 26, 1, 2, 1, null, null, null, new int[] { 4 }));
 
             sectors.Add(new Sector(24, 37, 0, 2, 1, null, null, null, new int[] { 4 }));
-            sectors.Add(new Sector(24, 37, 1, 2, 1, null, null, null, new int[] { 4 }));
+            sectors.Add(new Sector(24, 37, 1, 2, 1, null, null, null, new int[] { 4 }));*/
         }
 
         public int GetWidth()
@@ -158,10 +153,9 @@ namespace GameEngine.Levels
 
             //Set offset
             screen.SetOffset(xScroll, yScroll);
-            //screen.SetOffset(0, 0);
 
             //Setting render mode to isometric
-            screen.SetRenderMode(iso);
+            screen.SetRenderMode(RenderMode.Isometric);
 
             //Render tiles
             Sprite sprite;
