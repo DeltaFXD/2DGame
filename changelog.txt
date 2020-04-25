@@ -56,3 +56,4 @@
 -Major overhaul for sectors for better functionality
 #2020.04.26
 -Fix entity sorting, fix projectile and particle collision detection
+-Fix wall transparency

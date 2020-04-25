@@ -53,7 +53,7 @@ namespace GameEngine.Levels
                     opacity = 1.0f;
                     float isoX = X + i;
                     float isoY = Y - 1;
-                    if (playerXY.X / Map.tileSize > (isoX - 3) && playerXY.X / Map.tileSize < (isoX + 3) && playerXY.Y / Map.tileSize > (isoY - 3) && playerXY.Y / Map.tileSize < (isoY + 3)) opacity = 0.5f;
+                    if (playerXY.X / Map.tileSize > (isoX - 3) && playerXY.X / Map.tileSize < (isoX + 3) && playerXY.Y / Map.tileSize > (isoY - 3) && playerXY.Y / Map.tileSize < isoY) opacity = 0.5f;
                     screen.RenderRectangle((i + X - Y) * Map.tileSize + offset.Y, (-Y + Z) * Map.tileSize + 2 * offset.Y, Map.tileSize, Sprite.GetSprite(Data[i]).GetBitmap(), opacity);
                 }
             }
@@ -67,7 +67,7 @@ namespace GameEngine.Levels
                     opacity = 1.0f;
                     float isoX = X - 1;
                     float isoY = Y + i;
-                    if (playerXY.X / Map.tileSize > (isoX - 3) && playerXY.X / Map.tileSize < (isoX + 3) && playerXY.Y / Map.tileSize > (isoY - 3) && playerXY.Y / Map.tileSize < (isoY + 3)) opacity = 0.5f;
+                    if (playerXY.X / Map.tileSize > (isoX - 3) && playerXY.X / Map.tileSize < isoX && playerXY.Y / Map.tileSize > (isoY - 3) && playerXY.Y / Map.tileSize < (isoY + 3)) opacity = 0.5f;
                     screen.RenderRectangleSpecialBounds((-X + Z) * Map.tileSize + 2 * offset.X, (Y + i - X) * Map.tileSize + offset.X, Map.tileSize, Sprite.GetSprite(Data[i]).GetBitmap(), opacity);
                 }
             }
