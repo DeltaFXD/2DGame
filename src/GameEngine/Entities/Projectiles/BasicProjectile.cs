@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 using GameEngine.Entities.Spawners;
 using GameEngine.Utilities;
+using System.Diagnostics;
+using GameEngine.Inputs;
 
 namespace GameEngine.Entities.Projectiles
 {
@@ -19,7 +21,6 @@ namespace GameEngine.Entities.Projectiles
         static readonly int particleAmount = 30;
         static readonly int xOffsetSize = 8;
         static readonly int yOffsetSize = 8;
-        static readonly int projectileSize = 16;
         static Sprite sprite = Sprite.GetSprite(Sprite.GetSpriteID("basic_projectile"));
 
         static readonly HitBox hitBox = new HitBox(16, 16, 4, 0);
@@ -45,10 +46,10 @@ namespace GameEngine.Entities.Projectiles
 
         protected override void Move()
         {
-            if (level.TilePenetration(position + changeXY, projectileSize, xOffsetSize, yOffsetSize))
+            if (level.TilePenetration(position +changeXY))
             {
                 position += changeXY;
-            } 
+            }
             else
             {
                 if (changeXY.X < 0 && changeXY.Y < 0)
@@ -79,6 +80,8 @@ namespace GameEngine.Entities.Projectiles
         public override void Render(Screen screen)
         {
             Vector2 vec2 = Coordinate.VirtualZAxisReduction(position, _z);
+            vec2.X -= xOffsetSize;
+            vec2.Y -= yOffsetSize;
             screen.RenderProjectile(vec2.X, vec2.Y, sprite, _angle);
         }
     }

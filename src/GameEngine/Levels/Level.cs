@@ -52,67 +52,60 @@ namespace GameEngine.Levels
             AStar.Initialize(graph_map, map.GetWidth(), map.GetHeight());
         }
 
-        public bool TilePenetration(Vector2 xy, int projectileSize, int xOffsetSize, int yOffsetSize)
+        public bool TilePenetration(Vector2 xy)
         {
             bool penetrateable = false;
             if (map == null) return penetrateable;
-            for (int i = 0; i < 4; i++)
+            int xFuture = (int)xy.X;
+            int yFuture = (int)xy.Y;
+            if (0 > xFuture && xFuture > -Map.tileSize)
             {
-                // i % 2 and i >> 1 creates all 4 corners of a tile (0,0) (0,1) (1,0) (1,1)
-                int xFuture = (int)(xy.X + (i % 2) * projectileSize + xOffsetSize);
-                int yFuture = (int)(xy.Y + (i >> 1) * projectileSize + yOffsetSize);
-                if (0 > xFuture && xFuture > -Map.tileSize)
-                {
-                    xFuture = -1;
-                }
-                else
-                {
-                    xFuture /= Map.tileSize;
-                }
-                if (0 > yFuture && yFuture > -Map.tileSize)
-                {
-                    yFuture = -1;
-                }
-                else
-                {
-                    yFuture /= Map.tileSize;
-                }
-                Tile tile = map.GetTile(xFuture, yFuture);
-                if (tile == null) penetrateable = false;
-                else if (tile.IsPenetrateable()) penetrateable = true;
+                xFuture = -1;
             }
+            else
+            {
+                xFuture /= Map.tileSize;
+            }
+            if (0 > yFuture && yFuture > -Map.tileSize)
+            {
+                yFuture = -1;
+            }
+            else
+            {
+                yFuture /= Map.tileSize;
+            }
+            Tile tile = map.GetTile(xFuture, yFuture);
+            if (tile == null) penetrateable = false;
+            else if (tile.IsPenetrateable()) penetrateable = true;
+            
             return penetrateable;
         }
 
-        public bool TileCollisionForParticles(double x, double y, int width, int height)
+        public bool TileCollisionForParticles(double x, double y)
         {
             bool penetrateable = false;
             if (map == null) return penetrateable;
-            for (int i = 0; i < 4; i++)
+            int xFuture = (int)x;
+            int yFuture = (int)y;
+            if (0 > xFuture && xFuture > -Map.tileSize)
             {
-                // i % 2 and i >> 1 creates all 4 corners of a tile (0,0) (0,1) (1,0) (1,1)
-                int xFuture = (int)(x + (i % 2) * width);
-                int yFuture = (int)(y + (i >> 1) * height);
-                if (0 > xFuture && xFuture > -Map.tileSize)
-                {
-                    xFuture = -1;
-                }
-                else
-                {
-                    xFuture /= Map.tileSize;
-                }
-                if (0 > yFuture && yFuture > -Map.tileSize)
-                {
-                    yFuture = -1;
-                }
-                else
-                {
-                    yFuture /= Map.tileSize;
-                }
-                Tile tile = map.GetTile(xFuture, yFuture);
-                if (tile == null) penetrateable = false;
-                else if (tile.IsPenetrateable()) penetrateable = true;
+                xFuture = -1;
             }
+            else
+            {
+                xFuture /= Map.tileSize;
+            }
+            if (0 > yFuture && yFuture > -Map.tileSize)
+            {
+                yFuture = -1;
+            }
+            else
+            {
+                yFuture /= Map.tileSize;
+            }
+            Tile tile = map.GetTile(xFuture, yFuture);
+            if (tile == null) penetrateable = false;
+            else if (tile.IsPenetrateable()) penetrateable = true;
             return penetrateable;
         }
 

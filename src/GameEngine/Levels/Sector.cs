@@ -41,7 +41,7 @@ namespace GameEngine.Levels
             entity_offset += Coordinate.NormalToIso(playerXY) / 2;
 
             //Sort entities
-            entities.Sort();
+            entities.Sort(Entity.CompareByDistance);
             
             int w = 0;
             int e = 0;
@@ -144,7 +144,7 @@ namespace GameEngine.Levels
         }
 
         public void AddEntity(Entity entity)
-        {
+        { 
             if (entities.Contains(entity)) return;
 
             entities.Add(entity);

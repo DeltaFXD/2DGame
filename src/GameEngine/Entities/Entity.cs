@@ -11,7 +11,7 @@ using GameEngine.Graphics;
 
 namespace GameEngine.Entities
 {
-    abstract class Entity : IRenderable , IUpdateable, IComparable<Entity>
+    abstract class Entity : IRenderable , IUpdateable
     {
         protected Vector2 position;
         protected Level level;
@@ -50,18 +50,39 @@ namespace GameEngine.Entities
         public abstract void Render(Screen screen);
         public abstract void Update();
 
-        public int CompareTo(Entity other)
+        public static int CompareByDistance(Entity x, Entity y)
         {
-            if (other == null) return -1;
-            double mine = position.X * position.X + position.Y * position.Y;
-            double others = other.position.X * other.position.X + other.position.Y * other.position.Y;
-            if (mine > others)
+            if (x == null)
             {
-                return 1;
-            }
+                if (y == null)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return -1;
+                }
+            } 
             else
             {
-                return -1;
+                if (y == null)
+                {
+                    return 1;
+                }
+                else
+                {
+                    int distX = (int)(x.position.X * x.position.X + x.position.Y * x.position.Y);
+                    int distY = (int)(y.position.X * y.position.X + y.position.Y * y.position.Y);
+                    if (distX == distY) return 0;
+                    if (distX > distY)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
             }
         }
     }

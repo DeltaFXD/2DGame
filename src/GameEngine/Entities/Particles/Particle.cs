@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using GameEngine.Utilities;
+using System.Numerics;
 
 namespace GameEngine.Entities.Particles
 {
@@ -50,11 +51,11 @@ namespace GameEngine.Entities.Particles
 
         void Move()
         {
-            if (level.TileCollisionForParticles(position.X + xChange, position.Y , sprite.GetWidth(), sprite.GetHeight()))
+            if (level.TileCollisionForParticles(position.X + xChange, position.Y))
             {
                 xChange *= -1;
             }
-            if (level.TileCollisionForParticles(position.X, position.Y + yChange, sprite.GetWidth(), sprite.GetHeight()))
+            if (level.TileCollisionForParticles(position.X, position.Y + yChange))
             {
                 yChange *= -1;
             }
@@ -66,7 +67,10 @@ namespace GameEngine.Entities.Particles
 
         public override void Render(Screen screen)
         {
-            screen.RenderParticle(Coordinate.VirtualZAxisReduction(position, _z), sprite);
+            Vector2 vec2 = Coordinate.VirtualZAxisReduction(position, _z);
+            vec2.X -= sprite.GetWidth() / 2;
+            vec2.Y -= sprite.GetHeight() / 2;
+            screen.RenderParticle(vec2, sprite);
         }
     }
 }
