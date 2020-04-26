@@ -12,7 +12,9 @@ namespace GameEngine.Levels
     public enum WallOrientation
     {
         Horizontal,
-        Vertical
+        Vertical,
+        HorizontalTop,
+        VerticalTop
     }
     class Wall : IEquatable<Wall> , IComparable<Wall>
     {
@@ -70,6 +72,34 @@ namespace GameEngine.Levels
                     if (playerXY.X / Map.tileSize > (isoX - 3) && playerXY.X / Map.tileSize < isoX && playerXY.Y / Map.tileSize > (isoY - 3) && playerXY.Y / Map.tileSize < (isoY + 3)) opacity = 0.5f;
                     screen.RenderRectangleSpecialBounds((-X + Z) * Map.tileSize + 2 * offset.X, (Y + i - X) * Map.tileSize + offset.X, Map.tileSize, Sprite.GetSprite(Data[i]).GetBitmap(), opacity);
                 }
+            } 
+            else if (Orientation == WallOrientation.HorizontalTop)
+            {
+                float opacity;
+                screen.SetRenderMode(RenderMode.Isometric);
+                for (int i = 0; i < Length; i++)
+                {
+                    if (Data[i] == 0) continue;
+                    opacity = 1.0f;
+                    float isoX = X + i;
+                    float isoY = Y - 1;
+                    if (playerXY.X / Map.tileSize > (isoX - 3) && playerXY.X / Map.tileSize < (isoX + 3) && playerXY.Y / Map.tileSize > (isoY - 3) && playerXY.Y / Map.tileSize < isoY) opacity = 0.5f;
+                    screen.RenderRectangle((i + X - Z) * Map.tileSize, (Y - Z) * Map.tileSize, Map.tileSize, Sprite.GetSprite(Data[i]).GetBitmap(), opacity);
+                }
+            }
+            else if (Orientation == WallOrientation.VerticalTop)
+            {
+                float opacity;
+                screen.SetRenderMode(RenderMode.Isometric);
+                for (int i = 0; i < Length; i++)
+                {
+                    if (Data[i] == 0) continue;
+                    opacity = 1.0f;
+                    float isoX = X - 1;
+                    float isoY = Y + i;
+                    if (playerXY.X / Map.tileSize > (isoX - 3) && playerXY.X / Map.tileSize < isoX && playerXY.Y / Map.tileSize > (isoY - 3) && playerXY.Y / Map.tileSize < (isoY + 3)) opacity = 0.5f;
+                    screen.RenderRectangle((X - Z) * Map.tileSize, (Y + i - Z) * Map.tileSize, Map.tileSize, Sprite.GetSprite(Data[i]).GetBitmap(), opacity);
+                }
             }
         }
 
@@ -122,9 +152,23 @@ namespace GameEngine.Levels
                         return -1;
                     }
                 }
-                else
+                else if (Orientation == WallOrientation.Vertical)
                 {
                     if ((X - Z) > (other.X - other.Z))
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+                else
+                {
+                    int dist = (int)(X * X + Y * Y);
+                    int distOther = (int)(other.X * other.X + other.Y * other.Y);
+                    if (dist == distOther) return 0;
+                    if (dist > distOther)
                     {
                         return 1;
                     }
@@ -147,9 +191,21 @@ namespace GameEngine.Levels
                         return -1;
                     }
                 }
-                else
+                else if (Orientation == WallOrientation.Vertical)
                 {
                     if ((X - Z) > (other.Y - other.Z))
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+                else
+                {
+                    if (Z == other.Z) return 0;
+                    if (Z > other.Z)
                     {
                         return 1;
                     }

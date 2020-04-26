@@ -19,6 +19,7 @@ using GameEngine.Sounds;
 using Windows.UI.Xaml.Input;
 using Windows.Devices.Input;
 using System.Threading.Tasks;
+using Microsoft.Graphics.Canvas;
 
 namespace Game2D
 {
@@ -192,6 +193,7 @@ namespace Game2D
             if (!assests_ready) return;
             if (!animated_assests_ready) return;
             if (!animated_assests_ready2) return;
+            args.DrawingSession.Antialiasing = CanvasAntialiasing.Aliased;
             screen.SetCDS(args.DrawingSession);
             level.Render(player.GetXY(), screen);
         }

@@ -79,7 +79,7 @@ namespace GameEngine.Levels
             rooms.Add(start);
 
             //Generate overlapping random rooms
-            /*for (int i = 0; i < (size * size / 20); i++)
+            for (int i = 0; i < (size * size / 20); i++)
             {
                 int x = random.Next(size);
                 int y = random.Next(size);
@@ -91,7 +91,7 @@ namespace GameEngine.Levels
                     Room room = new Room(x, y, w, h);
                     if (!start.IsInside(room)) rooms.Add(room);
                 }
-            }*/
+            }
             Debug.WriteLine("Generated overlapping rooms");
 
             //Filter out overlapping rooms based on size
@@ -106,9 +106,9 @@ namespace GameEngine.Levels
             Debug.WriteLine("Map created");
 
             //Generate sectors
-            /*Sector sector = new Sector(0, 0, size, size);
+            Sector sector = new Sector(0, 0, size, size);
             sector.Finalise();
-            map.AddSector(sector);*/
+            map.AddSector(sector);
             CreateSectors(rooms);
             Debug.WriteLine("Sectors created");
         }
@@ -180,8 +180,8 @@ namespace GameEngine.Levels
                     for (int x = room.X; x< (room.X+room.Width);x++)
                     {
                         int r = random.Next(100);
-                        if (r < 80) floor[x, y] = 10197916;
-                        else floor[x, y] = 3618616;
+                        if (r < 80) floor[x, y] = 2;
+                        else floor[x, y] = 6;
                     }
                 }
             });
@@ -193,30 +193,62 @@ namespace GameEngine.Levels
         {
             rooms.ForEach(room =>
             {
-                int[] hor = new int[(room.Width + 1)];
-                int[] ver = new int[(room.Height + 1)];
+                int[] hor = new int[room.Width];
+                int[] hor_2 = new int[(room.Width + 2)];
+                int[] hor_NT = new int[(room.Width + 2)];
+                int[] hor_ST = new int[(room.Width + 2)];
+                int[] ver = new int[room.Height];
+                int[] ver_WT = new int[room.Height];
+                int[] ver_ET = new int[room.Height];
+                int[] ver_2 = new int[(room.Height + 2)];
 
-                for (int i = 0; i <= room.Width;i++)
+                hor_NT[0] = 18;
+                hor_ST[0] = 16;
+                hor_2[0] = 7;
+                for (int i = 1; i < (room.Width + 1); i++)
+                {
+                    hor_NT[i] = 11;
+                    hor_ST[i] = 15;
+                    hor_2[i] = 3;
+                }
+                hor_NT[room.Width + 1] = 12;
+                hor_ST[room.Width + 1] = 14;
+                hor_2[room.Width + 1] = 9;
+                for (int i = 0; i < room.Width;i++)
                 {
                     hor[i] = 3;
+                    
                 }
-                for (int i = 0; i <= room.Height;i++)
+                for (int i = 0; i < room.Height;i++)
                 {
                     ver[i] = 4;
+                    ver_WT[i] = 17;
+                    ver_ET[i] = 13;
                 }
+                ver_2[0] = 10;
+                for (int i = 1; i < (room.Height + 1); i++)
+                {
+                    ver_2[i] = 4;
+                }
+                ver_2[room.Height + 1] = 8;
+
                 Sector sector = new Sector(room.X, room.Y, room.Width, room.Height);
 
                 sector.AddWall(new Wall(0.0f, 0.0f, 0, room.Width, hor, WallOrientation.Horizontal));
                 sector.AddWall(new Wall(0.0f, 0.0f, 1, room.Width, hor, WallOrientation.Horizontal));
+                sector.AddWall(new Wall(-1.0f, -1.0f, 2, room.Width + 2, hor_NT, WallOrientation.HorizontalTop));
 
                 sector.AddWall(new Wall(0.0f, 0.0f, 0, room.Height, ver, WallOrientation.Vertical));
                 sector.AddWall(new Wall(0.0f, 0.0f, 1, room.Height, ver, WallOrientation.Vertical));
+                sector.AddWall(new Wall(-1.0f, 0.0f, 2, room.Height, ver_WT, WallOrientation.VerticalTop));
 
-                sector.AddWall(new Wall(0.0f, room.Height, 0, room.Width, hor, WallOrientation.Horizontal));
-                sector.AddWall(new Wall(0.0f, room.Height, 1, room.Width, hor, WallOrientation.Horizontal));
+                sector.AddWall(new Wall(-1.0f, room.Height + 0.5f, 0, room.Width + 2, hor_2, WallOrientation.Horizontal));
+                sector.AddWall(new Wall(-1.0f, room.Height + 0.5f, 1, room.Width + 2, hor_2, WallOrientation.Horizontal));
+                sector.AddWall(new Wall(-1.0f, room.Height, 2, room.Width + 2, hor_ST, WallOrientation.HorizontalTop));
 
-                sector.AddWall(new Wall(room.Width, 0.0f, 0, room.Height, ver, WallOrientation.Vertical));
-                sector.AddWall(new Wall(room.Width, 0.0f, 1, room.Height, ver, WallOrientation.Vertical));
+                sector.AddWall(new Wall(room.Width + 0.5f, -1.0f, 0, room.Height + 2, ver_2, WallOrientation.Vertical));
+                sector.AddWall(new Wall(room.Width + 0.5f, -1.0f, 1, room.Height + 2, ver_2, WallOrientation.Vertical));
+                sector.AddWall(new Wall(room.Width, 0.0f, 2, room.Height, ver_ET, WallOrientation.VerticalTop));
 
                 sector.Finalise();
 
