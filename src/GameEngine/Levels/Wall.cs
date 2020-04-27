@@ -138,82 +138,29 @@ namespace GameEngine.Levels
         public int CompareTo(Wall other)
         {
             if (other == null) return 1;
-            // return 1 ha előtte van -1 ha mögötte
-            if (Orientation == other.Orientation)
+            
+            if (Z == other.Z)
             {
-                if (Orientation == WallOrientation.Horizontal)
+                int dist = (int)(X * X + Y * Y);
+                int distOther = (int)(other.X * other.X + other.Y * other.Y);
+
+                if (dist == distOther) return 0;
+                if (dist > distOther)
                 {
-                    if ((Y-Z) > (other.Y - other.Z))
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return -1;
-                    }
-                }
-                else if (Orientation == WallOrientation.Vertical)
-                {
-                    if ((X - Z) > (other.X - other.Z))
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return -1;
-                    }
+                    return 1;
                 }
                 else
                 {
-                    int dist = (int)(X * X + Y * Y);
-                    int distOther = (int)(other.X * other.X + other.Y * other.Y);
-                    if (dist == distOther) return 0;
-                    if (dist > distOther)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return -1;
-                    }
+                    return -1;
                 }
+            }
+            if (Z > other.Z)
+            {
+                return 1;
             }
             else
             {
-                if (Orientation == WallOrientation.Horizontal)
-                {
-                    if ((Y - Z) > (other.X - other.Z))
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return -1;
-                    }
-                }
-                else if (Orientation == WallOrientation.Vertical)
-                {
-                    if ((X - Z) > (other.Y - other.Z))
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return -1;
-                    }
-                }
-                else
-                {
-                    if (Z == other.Z) return 0;
-                    if (Z > other.Z)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return -1;
-                    }
-                }
+                return -1;
             }
         }
     }

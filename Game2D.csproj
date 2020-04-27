@@ -140,11 +140,13 @@
     <Compile Include="src\GameEngine\Inputs\Mouse.cs" />
     <Compile Include="src\GameEngine\Interfaces\IRenderable.cs" />
     <Compile Include="src\GameEngine\Interfaces\IUpdateable.cs" />
+    <Compile Include="src\GameEngine\Levels\Hallway.cs" />
     <Compile Include="src\GameEngine\Levels\Level.cs" />
     <Compile Include="src\GameEngine\Levels\LevelGenerator.cs" />
     <Compile Include="src\GameEngine\Levels\Map.cs" />
     <Compile Include="src\GameEngine\Levels\PlannedLevel.cs" />
     <Compile Include="src\GameEngine\Graphics\Sprite.cs" />
+    <Compile Include="src\GameEngine\Levels\Room.cs" />
     <Compile Include="src\GameEngine\Levels\Sector.cs" />
     <Compile Include="src\GameEngine\Levels\Tile.cs" />
     <Compile Include="src\GameEngine\Levels\Wall.cs" />

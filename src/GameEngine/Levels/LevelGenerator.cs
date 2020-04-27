@@ -11,45 +11,6 @@ namespace GameEngine.Levels
     {
 
         Random random;
-
-        struct Room
-        {
-            static int next = 0;
-            public int Id { get; }
-            public int X { set; get; }
-            public int Y { set; get; }
-            public int Width { get; }
-            public int Height { get; }
-
-            public Room(int x, int y, int width, int height)
-            {
-                X = x;
-                Y = y;
-                Width = width;
-                Height = height;
-                Id = next;
-                next++;
-            }
-
-            public bool IsInside(Room other)
-            {
-                int wt = other.X + other.Width;
-                int ht = other.Y + other.Height;
-
-                int tw = X + Width;
-                int th = Y + Height;
-
-                if (((X <= other.X && other.X <= tw) || (X <= wt && wt <= tw)) && ((Y <= other.Y && other.Y <= th) || (Y <= ht && ht <= th)))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-
         public LevelGenerator(int seed, int size)
         {
             random = new Random(seed);
@@ -85,7 +46,7 @@ namespace GameEngine.Levels
                 int y = random.Next(size);
                 int w = NextGaussian(20, 10);
                 int h = NextGaussian(20, 10);
-                if (w < 0 || h < 0) continue;
+                if (w < 10 || h < 10) continue;
                 if ((x + w) < size && (y + h) < size)
                 {
                     Room room = new Room(x, y, w, h);
