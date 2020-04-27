@@ -60,3 +60,4 @@
 -Implement Wall Tops
 #2020.04.27
 -Fix wall render order sorting & Rework Map Generation 25%
+-Rework Map Generation 50% (+Hallway section test)

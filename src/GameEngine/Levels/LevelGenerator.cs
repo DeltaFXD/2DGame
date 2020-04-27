@@ -28,6 +28,7 @@ namespace GameEngine.Levels
         void Generate(int size)
         {
             List<Room> rooms = new List<Room>();
+            List<Hallway> hallways = new List<Hallway>();
 
             //Start position
             int s = random.Next(4);
@@ -55,6 +56,10 @@ namespace GameEngine.Levels
             }
             Debug.WriteLine("Generated overlapping rooms");
 
+            hallways.Add(new Hallway(18, 4, 5, 3, HallWayOrientation.Horizontal));
+
+            hallways.Add(new Hallway(18, 10, 3, 5, HallWayOrientation.Vertical));
+
             //Filter out overlapping rooms based on size
             int c = rooms.Count;
             Debug.WriteLine("Generated: " + c + " rooms");
@@ -63,7 +68,7 @@ namespace GameEngine.Levels
             Debug.WriteLine("Filtered out: " + c + " rooms");
 
             //Create map
-            CreateMap(rooms, size);
+            CreateMap(rooms, hallways, size);
             Debug.WriteLine("Map created");
 
             //Generate sectors
@@ -71,6 +76,8 @@ namespace GameEngine.Levels
             sector.Finalise();
             map.AddSector(sector);
             CreateSectors(rooms);
+
+            CreateHallwaySectors(hallways);
             Debug.WriteLine("Sectors created");
         }
 
@@ -121,7 +128,7 @@ namespace GameEngine.Levels
             }
         }
 
-        void CreateMap(List<Room> rooms, int size)
+        void CreateMap(List<Room> rooms, List<Hallway> hallways, int size)
         {
             int[,] floor = new int[size, size];
 
@@ -133,7 +140,7 @@ namespace GameEngine.Levels
                 }
             }
 
-            //Fill floor with tiles
+            //Fill floor with room tiles
             rooms.ForEach(room =>
             {
                 for (int y = room.Y;y < (room.Y+room.Height); y++)
@@ -147,7 +154,101 @@ namespace GameEngine.Levels
                 }
             });
 
+            //Fill floor with hallway tiles
+            hallways.ForEach(hallway =>
+            {
+                for (int y = hallway.Y; y < (hallway.Y + hallway.Height); y++)
+                {
+                    for (int x = hallway.X; x < (hallway.X + hallway.Width); x++)
+                    {
+                        int r = random.Next(100);
+                        if (r < 80) floor[x, y] = 2;
+                        else floor[x, y] = 6;
+                    }
+                }
+            });
+
             map = new Map(size, size, floor);
+        }
+
+        void CreateHallwaySectors(List<Hallway> hallways)
+        {
+            hallways.ForEach(hallway =>
+            {
+                if (hallway.Orientation == HallWayOrientation.Horizontal)
+                {
+                    int[] hor = new int[hallway.Width];
+                    int[] hor_2 = new int[(hallway.Width + 2)];
+                    int[] hor_NT = new int[(hallway.Width + 2)];
+                    int[] hor_ST = new int[(hallway.Width + 2)];
+
+                    hor_NT[0] = 18;
+                    hor_ST[0] = 16;
+                    hor_2[0] = 7;
+                    for (int i = 1; i < (hallway.Width + 1); i++)
+                    {
+                        hor_NT[i] = 11;
+                        hor_ST[i] = 15;
+                        hor_2[i] = 3;
+                    }
+                    hor_NT[hallway.Width + 1] = 12;
+                    hor_ST[hallway.Width + 1] = 14;
+                    hor_2[hallway.Width + 1] = 9;
+                    for (int i = 0; i < hallway.Width; i++)
+                    {
+                        hor[i] = 3;
+
+                    }
+
+                    Sector sector = new Sector(hallway.X, hallway.Y, hallway.Width, hallway.Height);
+
+                    sector.AddWall(new Wall(0.0f, 0.0f, 0, hallway.Width, hor, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(0.0f, 0.0f, 1, hallway.Width, hor, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(-1.0f, -1.0f, 2, hallway.Width + 2, hor_NT, WallOrientation.HorizontalTop));
+
+                    sector.AddWall(new Wall(-1.0f, hallway.Height + 0.5f, 0, hallway.Width + 2, hor_2, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(-1.0f, hallway.Height + 0.5f, 1, hallway.Width + 2, hor_2, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(-1.0f, hallway.Height, 2, hallway.Width + 2, hor_ST, WallOrientation.HorizontalTop));
+
+                    sector.Finalise();
+
+                    map.AddSector(sector);
+                }
+                else
+                {
+                    int[] ver = new int[hallway.Height];
+                    int[] ver_WT = new int[hallway.Height];
+                    int[] ver_ET = new int[hallway.Height];
+                    int[] ver_2 = new int[(hallway.Height + 2)];
+
+                    for (int i = 0; i < hallway.Height; i++)
+                    {
+                        ver[i] = 4;
+                        ver_WT[i] = 17;
+                        ver_ET[i] = 13;
+                    }
+                    ver_2[0] = 10;
+                    for (int i = 1; i < (hallway.Height + 1); i++)
+                    {
+                        ver_2[i] = 4;
+                    }
+                    ver_2[hallway.Height + 1] = 8;
+
+                    Sector sector = new Sector(hallway.X, hallway.Y, hallway.Width, hallway.Height);
+
+                    sector.AddWall(new Wall(0.0f, 0.0f, 0, hallway.Height, ver, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(0.0f, 0.0f, 1, hallway.Height, ver, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(-1.0f, 0.0f, 2, hallway.Height, ver_WT, WallOrientation.VerticalTop));
+
+                    sector.AddWall(new Wall(hallway.Width + 0.5f, -1.0f, 0, hallway.Height + 2, ver_2, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(hallway.Width + 0.5f, -1.0f, 1, hallway.Height + 2, ver_2, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(hallway.Width, 0.0f, 2, hallway.Height, ver_ET, WallOrientation.VerticalTop));
+
+                    sector.Finalise();
+
+                    map.AddSector(sector);
+                }
+            });
         }
 
         void CreateSectors(List<Room> rooms)
