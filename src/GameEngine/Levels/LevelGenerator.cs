@@ -31,17 +31,53 @@ namespace GameEngine.Levels
             List<Hallway> hallways = new List<Hallway>();
 
             //Start position
-            int s = random.Next(4);
+            /*int s = random.Next(4);
 
             int sx = s % 2 * (size - 16);
-            int sy = (s >> 1) * (size - 16);
+            int sy = (s >> 1) * (size - 16);*/
 
-            Room start = new Room(sx, sy, 16, 16);
+            Room start = new Room(0, 0, 16, 16);
 
             rooms.Add(start);
 
+            Room room = start;
+
+            while (true)
+            {
+                int width = random.Next(2, 4);
+                int height = random.Next(3, 5);
+                if ((room.Y+room.Height+height) < size)
+                {
+                    int x = random.Next(room.X, room.CenterX - width / 2);
+                    int y = room.Y + room.Height + height;
+                    int w = NextGaussian(20, 10);
+                    int h = NextGaussian(20, 10);
+                    if (w < 10 || h < 10) continue;
+                    if ((x + w) < size && (y + h) < size)
+                    {
+                        Hallway hallway = new Hallway(room.CenterX - width / 2, room.Y + room.Height, width, height, HallWayOrientation.Vertical);
+                        Room new_room = new Room(x, y, w, h, room);
+                        bool good = true;
+                        rooms.ForEach(r =>
+                        {
+                            if (r.IsInside(new_room)) good = false;
+                        });
+                        if (good)
+                        {
+                            rooms.Add(new_room);
+                            hallways.Add(hallway);
+                            room = new_room;
+                        }
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+
             //Generate overlapping random rooms
-            for (int i = 0; i < (size * size / 20); i++)
+            /*for (int i = 0; i < (size * size / 20); i++)
             {
                 int x = random.Next(size);
                 int y = random.Next(size);
@@ -54,18 +90,18 @@ namespace GameEngine.Levels
                     if (!start.IsInside(room)) rooms.Add(room);
                 }
             }
-            Debug.WriteLine("Generated overlapping rooms");
+            Debug.WriteLine("Generated overlapping rooms");*/
 
-            hallways.Add(new Hallway(18, 4, 5, 3, HallWayOrientation.Horizontal));
+            //hallways.Add(new Hallway(18, 4, 5, 3, HallWayOrientation.Horizontal));
 
-            hallways.Add(new Hallway(18, 10, 3, 5, HallWayOrientation.Vertical));
+            //hallways.Add(new Hallway(18, 10, 3, 5, HallWayOrientation.Vertical));
 
             //Filter out overlapping rooms based on size
-            int c = rooms.Count;
+            /*int c = rooms.Count;
             Debug.WriteLine("Generated: " + c + " rooms");
             FilterRooms(rooms);
             c -= rooms.Count;
-            Debug.WriteLine("Filtered out: " + c + " rooms");
+            Debug.WriteLine("Filtered out: " + c + " rooms");*/
 
             //Create map
             CreateMap(rooms, hallways, size);

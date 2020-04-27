@@ -10,11 +10,14 @@ namespace GameEngine.Levels
     {
         static int next = 0;
         public int Id { get; }
-        public int X { get; private set; }
-        public int Y { get; private set; }
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-        public Room(int x, int y, int width, int height)
+        public int X { get; }
+        public int Y { get; }
+        public int Width { get; }
+        public int Height { get; }
+        public int CenterX { get; }
+        public int CenterY { get; }
+        public Room Parent { get; }
+        public Room(int x, int y, int width, int height, Room parent = null)
         {
             X = x;
             Y = y;
@@ -22,6 +25,9 @@ namespace GameEngine.Levels
             Height = height;
             Id = next;
             next++;
+            Parent = parent;
+            CenterX = x + width / 2;
+            CenterY = y + height / 2;
         }
 
         public bool IsInside(Room other)

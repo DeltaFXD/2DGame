@@ -61,3 +61,5 @@
 #2020.04.27
 -Fix wall render order sorting & Rework Map Generation 25%
 -Rework Map Generation 50% (+Hallway section test)
+#2020.04.28
+-Rework Map Generation 70% (Generated rooms connected by hallway)
