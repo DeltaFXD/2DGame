@@ -63,3 +63,4 @@
 -Rework Map Generation 50% (+Hallway section test)
 #2020.04.28
 -Rework Map Generation 70% (Generated rooms connected by hallway)
+-Finished Procedural Generation (Requires fine tunning)
