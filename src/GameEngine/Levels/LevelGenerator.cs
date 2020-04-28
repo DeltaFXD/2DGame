@@ -46,7 +46,7 @@ namespace GameEngine.Levels
 
             int rn = 0;
             int hn = 0;
-            int depth = random.Next(5, 10);
+            int depth = 100; //First branch extra long
             int again = 10;
             while (room != null)
             {
@@ -60,7 +60,7 @@ namespace GameEngine.Levels
                     }
                     if (room != null)
                     {
-                        depth = random.Next(1, 10);
+                        depth = random.Next(5, 10);
                         Debug.WriteLine("Starting new branch");
                     }
                     else
@@ -81,12 +81,22 @@ namespace GameEngine.Levels
                 int y;
                 int w = NextGaussian(20, 10);
                 int h = NextGaussian(20, 10);
+                if (w < 10 || h < 10) continue;
+                if (again == 3)
+                {
+                    w = 20;
+                    h = 10;
+                }
+                if (again == 2)
+                {
+                    w = 10;
+                    h = 20;
+                }
                 if (again == 1)
                 {
                     w = 10;
                     h = 10;
                 }
-                if (w < 10 || h < 10) continue;
                 if (room.IsOpen(BranchDir.West) || room.IsOpen(BranchDir.East))
                 {
                     width = random.Next(4, 6);
@@ -97,7 +107,7 @@ namespace GameEngine.Levels
                         {
                             x = room.X + room.Width + width;
                             y = random.Next(room.CenterY - h / 2, room.CenterY - width / 2);
-                            if (y < 0) y = 0;
+                            if (y < 0) y = room.Y;
                             if ((x + w) < size && (y + h) < size)
                             {
                                 Hallway hallway = new Hallway(room.X + room.Width, room.CenterY - height / 2, width, height, HallWayOrientation.Horizontal);
@@ -112,6 +122,7 @@ namespace GameEngine.Levels
                                     rooms.Add(new_room);
                                     hallways.Add(hallway);
                                     new_room.Allocate(BranchDir.West, hallway);
+                                    room.Allocate(BranchDir.East, hallway);
                                     int b;
                                     if (depth >= 3) b = random.Next(2, 3); else b = random.Next(1, 3);
                                     if (depth == 1) b = 0;
@@ -131,6 +142,7 @@ namespace GameEngine.Levels
                                     if (again == 0)
                                     {
                                         room.Close(BranchDir.East);
+                                        Debug.WriteLine("10 retry was not enough east");
                                         again = 10;
                                     }
                                     again--;
@@ -152,7 +164,7 @@ namespace GameEngine.Levels
                         {
                             x = room.X - width - w;
                             y = random.Next(room.CenterY - h / 2, room.CenterY - width / 2);
-                            if (y < 0) y = 0;
+                            if (y < 0) y = room.Y;
                             if ((x + w) < size && (y + h) < size)
                             {
                                 Hallway hallway = new Hallway(room.X - width, room.CenterY - height / 2, width, height, HallWayOrientation.Horizontal);
@@ -167,6 +179,7 @@ namespace GameEngine.Levels
                                     rooms.Add(new_room);
                                     hallways.Add(hallway);
                                     new_room.Allocate(BranchDir.East, hallway);
+                                    room.Allocate(BranchDir.West, hallway);
                                     int b;
                                     if (depth >= 3) b = random.Next(2, 3); else b = random.Next(1, 3);
                                     if (depth == 1) b = 0;
@@ -186,6 +199,7 @@ namespace GameEngine.Levels
                                     if (again == 0)
                                     {
                                         room.Close(BranchDir.West);
+                                        Debug.WriteLine("10 retry was not enough on west");
                                         again = 10;
                                     }
                                     again--;
@@ -211,7 +225,7 @@ namespace GameEngine.Levels
                         if ((room.Y + room.Height + height + h) < size)
                         {
                             x = random.Next(room.CenterX - w / 2, room.CenterX - width / 2);
-                            if (x < 0) x = 0;
+                            if (x < 0) x = room.X;
                             y = room.Y + room.Height + height;
                             if ((x + w) < size && (y + h) < size)
                             {
@@ -227,6 +241,7 @@ namespace GameEngine.Levels
                                     rooms.Add(new_room);
                                     hallways.Add(hallway);
                                     new_room.Allocate(BranchDir.North, hallway);
+                                    room.Allocate(BranchDir.South, hallway);
                                     int b;
                                     if (depth >= 3) b = random.Next(2, 3); else b = random.Next(1, 3);
                                     if (depth == 1) b = 0;
@@ -246,6 +261,7 @@ namespace GameEngine.Levels
                                     if (again == 0)
                                     {
                                         room.Close(BranchDir.South);
+                                        Debug.WriteLine("10 retry was not enough on south");
                                         again = 10;
                                     }
                                     again--;
@@ -266,7 +282,7 @@ namespace GameEngine.Levels
                         if ((room.Y - height - h) > 0)
                         {
                             x = random.Next(room.CenterX - w / 2, room.CenterX - width / 2);
-                            if (x < 0) x = 0;
+                            if (x < 0) x = room.X;
                             y = room.Y - height - h;
                             if ((x + w) < size && (y + h) < size)
                             {
@@ -282,6 +298,7 @@ namespace GameEngine.Levels
                                     rooms.Add(new_room);
                                     hallways.Add(hallway);
                                     new_room.Allocate(BranchDir.South, hallway);
+                                    room.Allocate(BranchDir.North, hallway);
                                     int b;
                                     if (depth >= 3) b = random.Next(2, 3); else b = random.Next(1, 3);
                                     if (depth == 1) b = 0;
@@ -301,6 +318,7 @@ namespace GameEngine.Levels
                                     if (again == 0)
                                     {
                                         room.Close(BranchDir.North);
+                                        Debug.WriteLine("10 retry was not enough on north");
                                         again = 10;
                                     }
                                     again--;
@@ -317,7 +335,7 @@ namespace GameEngine.Levels
                         }
                     }
                 }
-            }    
+            }
             Debug.WriteLine("Generated: " + rn + " rooms and " + hn + " hallways");
 
             //Create map
@@ -332,6 +350,7 @@ namespace GameEngine.Levels
 
             CreateHallwaySectors(hallways);
             Debug.WriteLine("Sectors created");
+            map.Finalise();
         }
 
         void FilterRooms(List<Room> rooms)
@@ -432,35 +451,36 @@ namespace GameEngine.Levels
                 {
                     int[] hor = new int[hallway.Width];
                     int[] hor_2 = new int[hallway.Width];
-                    int[] hor_NT = new int[(hallway.Width + 2)];
-                    int[] hor_ST = new int[(hallway.Width + 2)];
+                    int[] hor_NT = new int[hallway.Width];
+                    int[] hor_ST = new int[hallway.Width];
 
                     hor_NT[0] = 18;
                     hor_ST[0] = 16;
-                    for (int i = 1; i < (hallway.Width + 1); i++)
+                    for (int i = 1; i < hallway.Width; i++)
                     {
                         hor_NT[i] = 11;
                         hor_ST[i] = 15;
                     }
-                    hor_NT[hallway.Width + 1] = 12;
-                    hor_ST[hallway.Width + 1] = 14;
-                    //hor_2[hallway.Width + 1] = 9;
-                    for (int i = 0; i < hallway.Width; i++)
+                    hor_NT[hallway.Width - 1] = 12;
+                    hor_ST[hallway.Width - 1] = 14;
+                    hor_2[0] = 7;
+                    hor[0] = 3;
+                    for (int i = 1; i < hallway.Width; i++)
                     {
                         hor[i] = 3;
                         hor_2[i] = 3;
                     }
-                    hor_2[0] = 7;
+                    hor_2[hallway.Width - 1] = 9;
 
                     Sector sector = new Sector(hallway.X, hallway.Y, hallway.Width, hallway.Height);
 
                     sector.AddWall(new Wall(0.0f, 0.0f, 0, hallway.Width, hor, WallOrientation.Horizontal));
                     sector.AddWall(new Wall(0.0f, 0.0f, 1, hallway.Width, hor, WallOrientation.Horizontal));
-                    sector.AddWall(new Wall(-1.0f, -1.0f, 2, hallway.Width + 2, hor_NT, WallOrientation.HorizontalTop));
+                    sector.AddWall(new Wall(0.0f, -1.0f, 2, hallway.Width, hor_NT, WallOrientation.HorizontalTop));
 
                     sector.AddWall(new Wall(0.0f, hallway.Height + 0.5f, 0, hallway.Width, hor_2, WallOrientation.Horizontal));
                     sector.AddWall(new Wall(0.0f, hallway.Height + 0.5f, 1, hallway.Width, hor_2, WallOrientation.Horizontal));
-                    sector.AddWall(new Wall(-1.0f, hallway.Height, 2, hallway.Width + 2, hor_ST, WallOrientation.HorizontalTop));
+                    sector.AddWall(new Wall(0.0f, hallway.Height, 2, hallway.Width, hor_ST, WallOrientation.HorizontalTop));
 
                     sector.Finalise();
 
@@ -471,20 +491,17 @@ namespace GameEngine.Levels
                     int[] ver = new int[hallway.Height];
                     int[] ver_WT = new int[hallway.Height];
                     int[] ver_ET = new int[hallway.Height];
-                    int[] ver_2 = new int[(hallway.Height + 2)];
+                    int[] ver_2 = new int[hallway.Height];
 
                     for (int i = 0; i < hallway.Height; i++)
                     {
                         ver[i] = 4;
                         ver_WT[i] = 17;
                         ver_ET[i] = 13;
-                    }
-                    ver_2[0] = 10;
-                    for (int i = 1; i < (hallway.Height + 1); i++)
-                    {
                         ver_2[i] = 4;
                     }
-                    ver_2[hallway.Height + 1] = 8;
+                    ver_2[0] = 10;
+                    ver_2[hallway.Height - 1] = 8;
 
                     Sector sector = new Sector(hallway.X, hallway.Y, hallway.Width, hallway.Height);
 
@@ -492,8 +509,8 @@ namespace GameEngine.Levels
                     sector.AddWall(new Wall(0.0f, 0.0f, 1, hallway.Height, ver, WallOrientation.Vertical));
                     sector.AddWall(new Wall(-1.0f, 0.0f, 2, hallway.Height, ver_WT, WallOrientation.VerticalTop));
 
-                    sector.AddWall(new Wall(hallway.Width + 0.5f, -1.0f, 0, hallway.Height + 2, ver_2, WallOrientation.Vertical));
-                    sector.AddWall(new Wall(hallway.Width + 0.5f, -1.0f, 1, hallway.Height + 2, ver_2, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(hallway.Width + 0.5f, 0.0f, 0, hallway.Height, ver_2, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(hallway.Width + 0.5f, 0.0f, 1, hallway.Height, ver_2, WallOrientation.Vertical));
                     sector.AddWall(new Wall(hallway.Width, 0.0f, 2, hallway.Height, ver_ET, WallOrientation.VerticalTop));
 
                     sector.Finalise();
@@ -507,63 +524,236 @@ namespace GameEngine.Levels
         {
             rooms.ForEach(room =>
             {
-                int[] hor = new int[room.Width];
-                int[] hor_2 = new int[(room.Width + 2)];
-                int[] hor_NT = new int[(room.Width + 2)];
-                int[] hor_ST = new int[(room.Width + 2)];
-                int[] ver = new int[room.Height];
-                int[] ver_WT = new int[room.Height];
-                int[] ver_ET = new int[room.Height];
-                int[] ver_2 = new int[(room.Height + 2)];
-
-                hor_NT[0] = 18;
-                hor_ST[0] = 16;
-                hor_2[0] = 7;
-                for (int i = 1; i < (room.Width + 1); i++)
-                {
-                    hor_NT[i] = 11;
-                    hor_ST[i] = 15;
-                    hor_2[i] = 3;
-                }
-                hor_NT[room.Width + 1] = 12;
-                hor_ST[room.Width + 1] = 14;
-                hor_2[room.Width + 1] = 9;
-                for (int i = 0; i < room.Width;i++)
-                {
-                    hor[i] = 3;
-                    
-                }
-                for (int i = 0; i < room.Height;i++)
-                {
-                    ver[i] = 4;
-                    ver_WT[i] = 17;
-                    ver_ET[i] = 13;
-                }
-                ver_2[0] = 10;
-                for (int i = 1; i < (room.Height + 1); i++)
-                {
-                    ver_2[i] = 4;
-                }
-                ver_2[room.Height + 1] = 8;
-
                 Sector sector = new Sector(room.X, room.Y, room.Width, room.Height);
+                
+                if (room.IsAllocated(BranchDir.North))
+                {
+                    Hallway hallway = room.GetHallway(BranchDir.North);
 
-                sector.AddWall(new Wall(0.0f, 0.0f, 0, room.Width, hor, WallOrientation.Horizontal));
-                sector.AddWall(new Wall(0.0f, 0.0f, 1, room.Width, hor, WallOrientation.Horizontal));
-                sector.AddWall(new Wall(-1.0f, -1.0f, 2, room.Width + 2, hor_NT, WallOrientation.HorizontalTop));
+                    int h_l_length = hallway.X - room.X;
+                    int[] hor_l = new int[h_l_length];
+                    int[] hor_NT_l = new int[h_l_length + 1];
 
-                sector.AddWall(new Wall(0.0f, 0.0f, 0, room.Height, ver, WallOrientation.Vertical));
-                sector.AddWall(new Wall(0.0f, 0.0f, 1, room.Height, ver, WallOrientation.Vertical));
-                sector.AddWall(new Wall(-1.0f, 0.0f, 2, room.Height, ver_WT, WallOrientation.VerticalTop));
+                    int h_r_length = room.Width - (hallway.X + hallway.Width - room.X);
+                    int[] hor_r = new int[h_r_length];
+                    int[] hor_NT_r = new int[h_r_length + 1];
 
-                sector.AddWall(new Wall(-1.0f, room.Height + 0.5f, 0, room.Width + 2, hor_2, WallOrientation.Horizontal));
-                sector.AddWall(new Wall(-1.0f, room.Height + 0.5f, 1, room.Width + 2, hor_2, WallOrientation.Horizontal));
-                sector.AddWall(new Wall(-1.0f, room.Height, 2, room.Width + 2, hor_ST, WallOrientation.HorizontalTop));
+                    hor_NT_l[0] = 18;
+                    hor_l[0] = 3;
+                    hor_NT_r[0] = 18;
+                    hor_r[0] = 3;
+                    for (int i = 1; i < h_l_length; i++)
+                    {
+                        hor_NT_l[i] = 11;
+                        hor_l[i] = 3;
+                    }
+                    hor_NT_l[h_l_length] = 12;
+                    hor_l[h_l_length - 1] = 3;
+                    for (int i = 1; i < h_r_length; i++)
+                    {
+                        hor_NT_r[i] = 11;
+                        hor_r[i] = 3;
+                    }
+                    hor_NT_r[h_r_length] = 12;
+                    hor_r[h_r_length - 1] = 3;
 
-                sector.AddWall(new Wall(room.Width + 0.5f, -1.0f, 0, room.Height + 2, ver_2, WallOrientation.Vertical));
-                sector.AddWall(new Wall(room.Width + 0.5f, -1.0f, 1, room.Height + 2, ver_2, WallOrientation.Vertical));
-                sector.AddWall(new Wall(room.Width, 0.0f, 2, room.Height, ver_ET, WallOrientation.VerticalTop));
+                    sector.AddWall(new Wall(0.0f, 0.0f, 0, h_l_length, hor_l, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(0.0f, 0.0f, 1, h_l_length, hor_l, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(-1.0f, -1.0f, 2, h_l_length + 1, hor_NT_l, WallOrientation.HorizontalTop));
 
+                    sector.AddWall(new Wall(hallway.X + hallway.Width - room.X, 0.0f, 0, h_r_length, hor_r, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(hallway.X + hallway.Width - room.X, 0.0f, 1, h_r_length, hor_r, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(hallway.X + hallway.Width - room.X, -1.0f, 2, h_r_length + 1, hor_NT_r, WallOrientation.HorizontalTop));
+                }
+                else
+                {
+                    int[] hor = new int[room.Width];
+                    int[] hor_NT = new int[(room.Width + 2)];
+
+                    hor_NT[0] = 18;
+                    for (int i = 1; i < (room.Width + 1); i++)
+                    {
+                        hor_NT[i] = 11;
+                    }
+                    hor_NT[room.Width + 1] = 12;
+                    for (int i = 0; i < room.Width; i++)
+                    {
+                        hor[i] = 3;
+
+                    }
+
+                    sector.AddWall(new Wall(0.0f, 0.0f, 0, room.Width, hor, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(0.0f, 0.0f, 1, room.Width, hor, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(-1.0f, -1.0f, 2, room.Width + 2, hor_NT, WallOrientation.HorizontalTop));
+                }
+
+                if (room.IsAllocated(BranchDir.South))
+                {
+                    Hallway hallway = room.GetHallway(BranchDir.South);
+
+                    int h2_l_length = hallway.X - room.X + 1;
+                    int[] hor_2_l = new int[h2_l_length];
+                    int[] hor_ST_l = new int[h2_l_length];
+
+                    int h2_r_length = room.Width - (hallway.X + hallway.Width - room.X) + 1;
+                    int[] hor_2_r = new int[h2_r_length];
+                    int[] hor_ST_r = new int[h2_r_length];
+
+                    hor_ST_l[0] = 16;
+                    hor_2_l[0] = 7;
+                    hor_ST_r[0] = 16;
+                    hor_2_r[0] = 7;
+                    for (int i = 1; i < h2_l_length;i++)
+                    {
+                        hor_ST_l[i] = 15;
+                        hor_2_l[i] = 3;
+                    }
+                    hor_ST_l[h2_l_length - 1] = 14;
+                    hor_2_l[h2_l_length - 1] = 9;
+                    for (int i = 1; i < h2_r_length;i++)
+                    {
+                        hor_ST_r[i] = 15;
+                        hor_2_r[i] = 3;
+                    }
+                    hor_ST_r[h2_r_length - 1] = 14;
+                    hor_2_r[h2_r_length - 1] = 9;
+
+                    sector.AddWall(new Wall(-1.0f, room.Height + 0.5f, 0, h2_l_length, hor_2_l, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(-1.0f, room.Height + 0.5f, 1, h2_l_length, hor_2_l, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(-1.0f, room.Height, 2, h2_l_length, hor_ST_l, WallOrientation.HorizontalTop));
+
+                    sector.AddWall(new Wall(hallway.X + hallway.Width - room.X, room.Height + 0.5f, 0, h2_r_length, hor_2_r, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(hallway.X + hallway.Width - room.X, room.Height + 0.5f, 1, h2_r_length, hor_2_r, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(hallway.X + hallway.Width - room.X, room.Height, 2, h2_r_length, hor_ST_r, WallOrientation.HorizontalTop));
+                }
+                else
+                {
+                    int[] hor_2 = new int[(room.Width + 2)];
+                    int[] hor_ST = new int[(room.Width + 2)];
+
+                    hor_ST[0] = 16;
+                    hor_2[0] = 7;
+                    for (int i = 1; i < (room.Width + 1); i++)
+                    {
+
+                        hor_ST[i] = 15;
+                        hor_2[i] = 3;
+                    }
+                    hor_ST[room.Width + 1] = 14;
+                    hor_2[room.Width + 1] = 9;
+
+                    sector.AddWall(new Wall(-1.0f, room.Height + 0.5f, 0, room.Width + 2, hor_2, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(-1.0f, room.Height + 0.5f, 1, room.Width + 2, hor_2, WallOrientation.Horizontal));
+                    sector.AddWall(new Wall(-1.0f, room.Height, 2, room.Width + 2, hor_ST, WallOrientation.HorizontalTop));
+                }
+
+                if (room.IsAllocated(BranchDir.West))
+                {
+                    Hallway hallway = room.GetHallway(BranchDir.West);
+
+                    int v_r_length = hallway.Y - room.Y;
+                    int[] ver_r = new int[v_r_length];
+                    int[] ver_WT_r = new int[v_r_length];
+
+                    int v_l_length = room.Height - (hallway.Y + hallway.Height - room.Y);
+                    int[] ver_l = new int[v_l_length];
+                    int[] ver_WT_l = new int[v_l_length];
+
+                    for (int i = 0; i < v_r_length; i++)
+                    {
+                        ver_r[i] = 4;
+                        ver_WT_r[i] = 17;
+                    }
+                    for (int i = 0; i < v_l_length; i++)
+                    {
+                        ver_l[i] = 4;
+                        ver_WT_l[i] = 17;
+                    }
+
+                    sector.AddWall(new Wall(0.0f, 0.0f, 0, v_r_length, ver_r, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(0.0f, 0.0f, 1, v_r_length, ver_r, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(-1.0f, 0.0f, 2, v_r_length, ver_WT_r, WallOrientation.VerticalTop));
+ 
+                    sector.AddWall(new Wall(0.0f, hallway.Y + hallway.Height - room.Y, 0, v_l_length, ver_l, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(0.0f, hallway.Y + hallway.Height - room.Y, 1, v_l_length, ver_l, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(-1.0f, hallway.Y + hallway.Height - room.Y, 2, v_l_length, ver_WT_l, WallOrientation.VerticalTop));
+                }
+                else
+                {
+                    int[] ver = new int[room.Height];
+                    int[] ver_WT = new int[room.Height];
+
+                    for (int i = 0; i < room.Height; i++)
+                    {
+                        ver[i] = 4;
+                        ver_WT[i] = 17;
+                    }
+
+                    sector.AddWall(new Wall(0.0f, 0.0f, 0, room.Height, ver, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(0.0f, 0.0f, 1, room.Height, ver, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(-1.0f, 0.0f, 2, room.Height, ver_WT, WallOrientation.VerticalTop));
+                }
+
+                if (room.IsAllocated(BranchDir.East))
+                {
+                    Hallway hallway = room.GetHallway(BranchDir.East);
+
+                    int v2_r_length = hallway.Y - room.Y;
+                    int[] ver_2_r = new int[v2_r_length + 1];
+                    int[] ver_ET_r = new int[v2_r_length];
+
+                    int v2_l_length = room.Height - (hallway.Y + hallway.Height - room.Y) + 1;
+                    int[] ver_2_l = new int[v2_l_length];
+                    int[] ver_ET_l = new int[v2_l_length];
+
+                    ver_2_r[0] = 10;
+                    ver_ET_r[0] = 13;
+                    for (int i = 1; i < v2_r_length; i++)
+                    {
+                        ver_ET_r[i] = 13;
+                        ver_2_r[i] = 4;
+                    }
+                    ver_2_r[v2_r_length] = 8;
+                    ver_2_l[0] = 10;
+                    for (int i = 0; i < (v2_l_length - 1);i++)
+                    {
+                        ver_ET_l[i] = 13;
+                    }
+                    for (int i = 1; i < v2_l_length; i++)
+                    {
+                        ver_2_l[i] = 4;
+                    }
+                    ver_2_l[v2_l_length - 1] = 8;
+
+                    sector.AddWall(new Wall(room.Width + 0.5f, -1.0f, 0, v2_r_length + 1, ver_2_r, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(room.Width + 0.5f, -1.0f, 1, v2_r_length + 1, ver_2_r, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(room.Width, 0.0f, 2, v2_r_length, ver_ET_r, WallOrientation.VerticalTop));
+
+                    sector.AddWall(new Wall(room.Width + 0.5f, hallway.Y + hallway.Height - room.Y, 0, v2_l_length, ver_2_l, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(room.Width + 0.5f, hallway.Y + hallway.Height - room.Y, 1, v2_l_length, ver_2_l, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(room.Width, hallway.Y + hallway.Height - room.Y, 2, v2_l_length - 1, ver_ET_l, WallOrientation.VerticalTop));
+                }
+                else
+                {
+                    int[] ver_2 = new int[(room.Height + 2)];
+                    int[] ver_ET = new int[room.Height];
+
+                    for (int i = 0; i < room.Height; i++)
+                    {
+                        ver_ET[i] = 13;
+                    }
+                    ver_2[0] = 10;
+                    for (int i = 1; i < (room.Height + 1); i++)
+                    {
+                        ver_2[i] = 4;
+                    }
+                    ver_2[room.Height + 1] = 8;
+
+                    sector.AddWall(new Wall(room.Width + 0.5f, -1.0f, 0, room.Height + 2, ver_2, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(room.Width + 0.5f, -1.0f, 1, room.Height + 2, ver_2, WallOrientation.Vertical));
+                    sector.AddWall(new Wall(room.Width, 0.0f, 2, room.Height, ver_ET, WallOrientation.VerticalTop));
+                }
+                
                 sector.Finalise();
 
                 map.AddSector(sector);

@@ -69,6 +69,11 @@ namespace GameEngine.Levels
             return Tile.GetTile(_floor[x, y]);
         }
 
+        public void Finalise()
+        {
+            sectors.Sort();
+        }
+
         public void Render(Vector2 playerXY, Screen screen)
         {
             //Offset to center screen

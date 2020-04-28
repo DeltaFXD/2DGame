@@ -10,7 +10,7 @@ using System;
 
 namespace GameEngine.Levels
 {
-    class Sector
+    class Sector : IEquatable<Sector>, IComparable<Sector>
     {
         static Map _map;
 
@@ -178,6 +178,30 @@ namespace GameEngine.Levels
         public static void SetMap(Map map)
         {
             _map = map;
+        }
+
+        public bool Equals(Sector other)
+        {
+            if (other == null) return false;
+            return other._x == _x && other._y == _y;
+        }
+
+        public int CompareTo(Sector other)
+        {
+            if (other == null) return 1;
+
+            int dist = _x * _x + _y * _y;
+            int distOther = other._x * other._x + other._y * other._y;
+
+            if (dist == distOther) return 0;
+            if (dist > distOther)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
         }
     }
 }

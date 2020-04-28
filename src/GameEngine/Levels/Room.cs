@@ -84,27 +84,68 @@ namespace GameEngine.Levels
             }
         }
 
+        public Hallway GetHallway(BranchDir dir) {
+            switch (dir)
+            {
+                case BranchDir.North:
+                    if (north == State.Allocated) return northHallway;
+                    return null;
+                case BranchDir.East:
+                    if (east == State.Allocated) return eastHallway;
+                    return null;
+                case BranchDir.South:
+                    if (south == State.Allocated) return southHallway;
+                    return null;
+                case BranchDir.West:
+                    if (west == State.Allocated) return westHallway;
+                    return null;
+                default:
+                    return null;
+            }
+        }
+
+        public bool IsAllocated(BranchDir dir)
+        {
+            switch (dir)
+            {
+                case BranchDir.North:
+                    if (north == State.Allocated) return true;
+                    return false;
+                case BranchDir.East:
+                    if (east == State.Allocated) return true;
+                    return false;
+                case BranchDir.South:
+                    if (south == State.Allocated) return true;
+                    return false;
+                case BranchDir.West:
+                    if (west == State.Allocated) return true;
+                    return false;
+                default:
+                    return false;
+            }
+        }
+
         public bool Allocate(BranchDir dir, Hallway hallway)
         {
             switch (dir)
             {
                 case BranchDir.North:
-                    if (north != State.Allocated) return false;
+                    if (north == State.Allocated) return false;
                     north = State.Allocated;
                     northHallway = hallway;
                     return true;
                 case BranchDir.East:
-                    if (east != State.Allocated) return false;
+                    if (east == State.Allocated) return false;
                     east = State.Allocated;
                     eastHallway = hallway;
                     return true;
                 case BranchDir.South:
-                    if (south != State.Allocated) return false;
+                    if (south == State.Allocated) return false;
                     south = State.Allocated;
                     southHallway = hallway;
                     return true;
                 case BranchDir.West:
-                    if (west != State.Allocated) return false;
+                    if (west == State.Allocated) return false;
                     west = State.Allocated;
                     westHallway = hallway;
                     return true;

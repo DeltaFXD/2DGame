@@ -60,7 +60,8 @@ namespace Game2D
 
             //Create level
             //level = new PlannedLevel(@"\resources\planned_levels\test_map_2.png", @"\resources\planned_levels\test_sectors.txt");
-            level = new LevelGenerator(1000, 500);
+            Random random = new Random();
+            level = new LevelGenerator(random.Next(100000000), 500);
 
             //Create KeyBoard instance
             key = new KeyBoard();
