@@ -33,6 +33,8 @@ namespace GameEngine.Levels
         {
             if (!final) return;
 
+            if (!DoRender(playerXY)) return;
+
             //Store old offset
             Vector2 old_offset = screen.GetOffset();
 
@@ -125,6 +127,25 @@ namespace GameEngine.Levels
 
             //Set old offset
             screen.SetOffset(old_offset);
+        }
+
+        bool DoRender(Vector2 player)
+        {
+            int xTL = (int)(player.X - 20 * Map.tileSize);
+            int yTL = (int)(player.Y - 20 * Map.tileSize);
+            int xBR = (int)(player.X + 20 * Map.tileSize);
+            int yBR = (int)(player.Y + 20 * Map.tileSize);
+
+            int oX = _x * Map.tileSize;
+            int oY = _y * Map.tileSize;
+            int oXBR = (_x + _width) * Map.tileSize;
+            int oYBR = (_y + _height) * Map.tileSize;
+
+            if (xTL > oXBR || yTL > oYBR) return false;
+
+            if (xBR < oX || yBR < oY) return false;
+
+            return true;
         }
 
         public void AddWall(Wall wall)
