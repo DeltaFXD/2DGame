@@ -30,8 +30,8 @@ namespace GameEngine.Entities.Projectiles
             _range = 320;
             _speed = 2;
             _damage = 10;
-            changeXY.X = (float)(_speed * Math.Cos(angle));
-            changeXY.Y = (float)(_speed * Math.Sin(angle));
+            changeXY.X = 0.0f;// (float)(_speed * Math.Cos(angle));
+            changeXY.Y = 0.0f;// (float)(_speed * Math.Sin(angle));
         }
 
         public static int GetRateOfFire()
@@ -46,10 +46,28 @@ namespace GameEngine.Entities.Projectiles
 
         protected override void Move()
         {
+            /*//TEST CODE
+            if (KeyBoard.upArrow)
+            {
+                changeXY.Y -=0.5f;
+            }
+            if (KeyBoard.downArrow)
+            {
+                changeXY.Y += 0.5f;
+            }
+            if (KeyBoard.leftArrow)
+            {
+                changeXY.X -= 0.5f;
+            }
+            if (KeyBoard.rightArrow)
+            {
+                changeXY.X += 0.5f;
+            }
+            //TEST CODE*/
             if (level.TilePenetration(position +changeXY))
             {
                 position += changeXY;
-            }
+            }/*
             else
             {
                 if (changeXY.X < 0 && changeXY.Y < 0)
@@ -75,14 +93,18 @@ namespace GameEngine.Entities.Projectiles
             {
                 Remove();
                 level.AddEntity(new ParticleSpawner(position.X, position.Y, _z, particleLife, particleAmount, "particle_red"));
-            }
+            }*/
         }
         public override void Render(Screen screen)
         {
             Vector2 vec2 = Coordinate.VirtualZAxisReduction(position, _z);
             vec2.X -= xOffsetSize;
             vec2.Y -= yOffsetSize;
-            screen.RenderProjectile(vec2.X, vec2.Y, sprite, _angle);
+            Matrix4x4 matrix = new Matrix4x4(1.0f, 0.0f, 0.0f, 0.0f,
+                                             0.0f, 1.0f, 0.0f, 0.0f,
+                                             0.0f, 0.0f, 1.0f, 0.0f,
+                                             -vec2.X, -vec2.Y, 0.0f, 1.0f);
+            screen.RenderProjectile(vec2.X, vec2.Y, sprite, matrix);
         }
     }
 }

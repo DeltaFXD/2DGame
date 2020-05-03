@@ -170,7 +170,7 @@ namespace GameEngine.Graphics
                     }
                 }
 
-                CanvasBitmap bitmap = CanvasBitmap.CreateFromBytes(canvas, bitmap_bytes, w, h, DirectXPixelFormat.R8G8B8A8UIntNormalized);
+                CanvasBitmap bitmap = CanvasBitmap.CreateFromBytes(canvas, bitmap_bytes, w, h, DirectXPixelFormat.B8G8R8A8UIntNormalized);
 
                 if (bitmap == null) return false;
 
