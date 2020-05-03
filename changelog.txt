@@ -69,3 +69,5 @@
 -Add render condition to sectors for better performance
 #2020.05.03
 -Trying to fix projectiles
+#2020.05.04
+-Fixed projectiles

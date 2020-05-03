@@ -108,7 +108,7 @@ namespace GameEngine.Graphics
             if (0 > (xPos - xOffset + sprite.GetWidth()) || drawWidth < (xPos - xOffset - sprite.GetWidth()) || -drawHeightAbs > (yPos - yOffset + sprite.GetHeight()) || drawHeightAbs < (yPos - yOffset)) return;
             Rect rect = new Rect(0, 0, sprite.GetWidth(), sprite.GetHeight());
             //Draw
-            cds.DrawImage(sprite.GetBitmap(), xPos - xOffset, yPos - yOffset, rect, opacity, CanvasImageInterpolation.NearestNeighbor, angle);
+            cds.DrawImage(sprite.GetBitmap(), 0, 0, rect, opacity, CanvasImageInterpolation.NearestNeighbor, angle);
         }
 
         public void RenderParticle(Vector2 pos, Sprite sprite, float opacity = 1.0f)
