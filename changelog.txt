@@ -71,3 +71,4 @@
 -Trying to fix projectiles
 #2020.05.04
 -Fixed projectiles
+-Minimap 50%

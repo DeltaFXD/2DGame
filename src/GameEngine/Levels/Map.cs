@@ -4,23 +4,39 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Graphics.Canvas;
+using System.Diagnostics;
 
 using GameEngine.Graphics;
 using GameEngine.Utilities;
 using GameEngine.Inputs;
-using Microsoft.Graphics.Canvas;
-using System.Diagnostics;
-
 using GameEngine.Entities;
+using GameEngine.Interfaces;
+
 
 namespace GameEngine.Levels
 {
-    class Map
+    public enum MapState
+    {
+        WALL,
+        WALL_HIDEN,
+        FLOOR,
+        FLOOR_HIDEN,
+        VOID
+    }
+    class Map : IUpdateable
     {
         public static readonly int tileSize = 32;
         readonly int _width;
         readonly int _height;
         readonly int[,] _floor;
+        MapState[,] minimap = null;
+        bool render_minimap = false;
+        bool prev_state = KeyBoard.tab;
+        bool player_moved = false;
+        CanvasBitmap minimapImage = null;
+        int playerX;
+        int playerY;
 
         List<Sector> sectors = new List<Sector>();
 
@@ -48,6 +64,12 @@ namespace GameEngine.Levels
             sectors.Add(sector);
         }
 
+        public void SetMinimapData(MapState[,] data)
+        {
+            if (minimap == null) minimap = data;
+            else throw new ArgumentException("Minimap already set");
+        }
+
         void LoadSectors(string sector_data)
         {
             //TODO
@@ -72,6 +94,50 @@ namespace GameEngine.Levels
         public void Finalise()
         {
             sectors.Sort();
+        }
+
+        public void Update()
+        {
+            bool now = KeyBoard.tab;
+            //Toggle logc for Tab key
+            if (now & !prev_state)
+            {
+                render_minimap = !render_minimap;
+            } 
+            prev_state = now;
+
+            //Updating minimap data
+            if (player_moved & minimap != null)
+            {
+                int lx = playerX - 5;
+                int ly = playerY - 5;
+                int ux = playerX + 5;
+                int uy = playerY + 5;
+                if (lx < 0) lx = 0;
+                if (ly < 0) ly = 0;
+                if (ux > (_width + 2)) ux = _width + 2;
+                if (uy > (_height + 2)) uy = _height + 2;
+
+                for (int y = ly; y < uy;y++)
+                {
+                    for (int x = lx; x < ux; x++)
+                    {
+                        if (((playerX - x) * (playerX - x) + (playerY - y) * (playerY - y)) <= 25)
+                        {
+                            if (minimap[x, y] == MapState.FLOOR_HIDEN) minimap[x, y] = MapState.FLOOR;
+                            if (minimap[x, y] == MapState.WALL_HIDEN) minimap[x, y] = MapState.WALL;
+                        }
+                    }
+                }
+
+                //If we are rendering minimap we also make new bitmap for it
+                if (render_minimap) CreateNewMinimap();
+            }
+        }
+
+        void CreateNewMinimap()
+        {
+
         }
 
         public void Render(Vector2 playerXY, Screen screen)
@@ -106,6 +172,21 @@ namespace GameEngine.Levels
 
             //Render sectors
             sectors.ForEach(sector => sector.Render(playerXY, screen));
+
+            //Render minimap
+            if (render_minimap & minimapImage != null)
+            {
+                screen.SetRenderMode(RenderMode.Normal2X);
+
+
+
+            }
+            int px = (int)playerXY.X / Map.tileSize;
+            int py = (int)playerXY.Y / Map.tileSize;
+            if (playerX != px || playerY != py) player_moved = true;
+            else player_moved = false;
+            playerX = px;
+            playerY = py;
         }
 
         public void AddEntity(Entity entity)

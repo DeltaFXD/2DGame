@@ -155,7 +155,11 @@ namespace GameEngine.Levels
             entities.ForEach(entity => entity.Update());
 
             //Update map after entities
-            if (map != null) map.UpdateSectors(entities);
+            if (map != null)
+            {
+                map.Update();
+                map.UpdateSectors(entities);
+            }
         }
 
         public bool TileCollision(int xChange, int yChange, int width, int height)
