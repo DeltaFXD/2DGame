@@ -343,7 +343,7 @@ namespace GameEngine.Levels
             Debug.WriteLine("Map created");
 
             //Generate sectors
-            Sector sector = new Sector(0, 0, size, size);
+            Sector sector = new Sector(0, 0, size, size); //Temp
             sector.Finalise();
             map.AddSector(sector);
             CreateSectors(rooms);
@@ -351,6 +351,10 @@ namespace GameEngine.Levels
             CreateHallwaySectors(hallways);
             Debug.WriteLine("Sectors created");
             map.Finalise();
+
+            //Make minimap
+            CreateMinimapData(rooms, hallways, size + 2);
+            Debug.Write("Minimap data created");
         }
 
         void FilterRooms(List<Room> rooms)
@@ -758,6 +762,75 @@ namespace GameEngine.Levels
 
                 map.AddSector(sector);
             });
+        }
+
+        void CreateMinimapData(List<Room> rooms, List<Hallway> hallways, int size)
+        {
+            MapState[,] data = new MapState[size, size];
+
+            for (int y = 0;y < size;y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    data[x, y] = MapState.VOID;
+                }
+            }
+
+            rooms.ForEach(room =>
+            {
+                //Fill room floor
+                for (int y = room.Y + 1; y < (room.Y + 1 + room.Height); y++)
+                {
+                    for (int x = room.X + 1; x < (room.X + 1 + room.Width); x++)
+                    {
+                        data[x, y] = MapState.FLOOR_HIDEN;
+                    }
+                }
+
+                //Fill room walls
+                for (int i = room.X; i < (room.X + 2 + room.Width);i++)
+                {
+                    data[i, room.Y] = MapState.WALL_HIDEN;
+                    data[i, room.Y + 1 + room.Height] = MapState.WALL_HIDEN;
+                }
+                for (int i = room.Y + 1; i < (room.Y + room.Height); i++)
+                {
+                    data[room.X, i] = MapState.WALL_HIDEN;
+                    data[room.X + 1 + room.Width, i] = MapState.WALL_HIDEN;
+                }
+            });
+
+            hallways.ForEach(hallway =>
+            {
+                //Fill hallway floor
+                for (int y = hallway.Y + 1; y < (hallway.Y + 1 + hallway.Height); y++)
+                {
+                    for (int x = hallway.X + 1; x < (hallway.X + 1 + hallway.Width); x++)
+                    {
+                        data[x, y] = MapState.FLOOR_HIDEN;
+                    }
+                }
+
+                //Fill hallway walls
+                if (hallway.Orientation == HallWayOrientation.Horizontal)
+                {
+                    for (int i = hallway.X + 1; i < (hallway.X + hallway.Width); i++)
+                    {
+                        data[i, hallway.Y] = MapState.WALL_HIDEN;
+                        data[i, hallway.Y + 1 + hallway.Height] = MapState.WALL_HIDEN;
+                    }
+                }
+                else
+                {
+                    for (int i = hallway.Y + 1; i < (hallway.Y + hallway.Height); i++)
+                    {
+                        data[hallway.X, i] = MapState.WALL_HIDEN;
+                        data[hallway.X + 1 + hallway.Width, i] = MapState.WALL_HIDEN;
+                    }
+                }
+            });
+
+            map.SetMinimapData(data);
         }
     }
 }

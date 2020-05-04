@@ -72,3 +72,5 @@
 #2020.05.04
 -Fixed projectiles
 -Minimap 50%
+#2020.05.05
+-Minimap 90%
