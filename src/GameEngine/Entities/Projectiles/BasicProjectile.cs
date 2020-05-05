@@ -30,7 +30,7 @@ namespace GameEngine.Entities.Projectiles
         public BasicProjectile(Vector2 origin,float z, double angle, Mob owner) : base(origin, z, angle, owner)
         {
             _range = 320;
-            _speed = 2;
+            _speed = 3;
             _damage = 10;
             changeXY.X = (float)(_speed * Math.Cos(angle));
             changeXY.Y = (float)(_speed * Math.Sin(angle));
@@ -90,7 +90,7 @@ namespace GameEngine.Entities.Projectiles
                                              -sinA, cosA, 0.0f, 0.0f,
                                              0.0f, 0.0f, 1.0f, 0.0f,
                                              vec2.X - screen.GetOffset().X, vec2.Y - screen.GetOffset().Y, 0.0f, 1.0f);
-            screen.RenderProjectile(vec2.X, vec2.Y, sprite, matrix);
+            screen.RenderProjectile(vec2.X, vec2.Y, sprite, matrix, xOffsetSize, yOffsetSize);
         }
     }
 }

@@ -101,14 +101,15 @@ namespace GameEngine.Graphics
             cds.DrawImage(sprite, xPos - xOffset, yPos - yOffset, sprite_base, opacity, CanvasImageInterpolation.NearestNeighbor);
         }
 
-        public void RenderProjectile(float xPos, float yPos, Sprite sprite, Matrix4x4 angle,float opacity = 1.0f)
+        public void RenderProjectile(float xPos, float yPos, Sprite sprite, Matrix4x4 angle,int xOff, int yOff ,float opacity = 1.0f)
         {
             if (cds == null) return;
             //Boundary check
             if (0 > (xPos - xOffset + sprite.GetWidth()) || drawWidth < (xPos - xOffset - sprite.GetWidth()) || -drawHeightAbs > (yPos - yOffset + sprite.GetHeight()) || drawHeightAbs < (yPos - yOffset)) return;
+
             Rect rect = new Rect(0, 0, sprite.GetWidth(), sprite.GetHeight());
             //Draw
-            cds.DrawImage(sprite.GetBitmap(), 0, 0, rect, opacity, CanvasImageInterpolation.NearestNeighbor, angle);
+            cds.DrawImage(sprite.GetBitmap(), -xOff, -yOff, rect, opacity, CanvasImageInterpolation.NearestNeighbor, angle);
         }
 
         public void RenderMinimap(float xPos, float yPos, Rect window, CanvasBitmap minimap)

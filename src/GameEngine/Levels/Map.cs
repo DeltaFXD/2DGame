@@ -227,8 +227,8 @@ namespace GameEngine.Levels
             {
                 screen.SetRenderMode(RenderMode.Normal2X);
 
-                int x = (int)playerXY.X / Map.tileSize - 125;
-                int y = (int)playerXY.Y / Map.tileSize - 125;
+                int x = (int)playerXY.X / tileSize - 125;
+                int y = (int)playerXY.Y / tileSize - 125;
                 int ux = 250;
                 int uy = 250;
                 if (x < 0)
@@ -250,8 +250,8 @@ namespace GameEngine.Levels
                 Rect window = new Rect(x, y, ux, uy);
                 screen.RenderMinimap(screen.GetWidth() / 4 - 250 / 2, screen.GetHeight() / 4 - 250 / 2, window, minimapImage);
             }
-            int px = (int)playerXY.X / Map.tileSize;
-            int py = (int)playerXY.Y / Map.tileSize;
+            int px = (int)playerXY.X / tileSize;
+            int py = (int)playerXY.Y / tileSize;
             if (playerX != px || playerY != py) player_moved = true;
             else player_moved = false;
             playerX = px;

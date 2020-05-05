@@ -343,9 +343,9 @@ namespace GameEngine.Levels
             Debug.WriteLine("Map created");
 
             //Generate sectors
-            Sector sector = new Sector(0, 0, size, size); //Temp
-            sector.Finalise();
-            map.AddSector(sector);
+            //Sector sector = new Sector(0, 0, size, size); //Temp
+            //sector.Finalise();
+            //map.AddSector(sector);
             CreateSectors(rooms);
 
             CreateHallwaySectors(hallways);
