@@ -12,7 +12,7 @@ using GameEngine.Utilities;
 using GameEngine.Inputs;
 using GameEngine.Entities;
 using GameEngine.Interfaces;
-
+using Windows.Foundation;
 
 namespace GameEngine.Levels
 {
@@ -22,7 +22,8 @@ namespace GameEngine.Levels
         WALL_HIDEN,
         FLOOR,
         FLOOR_HIDEN,
-        VOID
+        VOID,
+        PLAYER
     }
     class Map : IUpdateable
     {
@@ -106,6 +107,9 @@ namespace GameEngine.Levels
             } 
             prev_state = now;
 
+            //If the minimap doesn't exists yet try to create one
+            if (minimapImage == null && minimap != null) CreateNewMinimap();
+
             //Updating minimap data
             if (player_moved & minimap != null)
             {
@@ -126,8 +130,13 @@ namespace GameEngine.Levels
                         {
                             if (minimap[x, y] == MapState.FLOOR_HIDEN) minimap[x, y] = MapState.FLOOR;
                             if (minimap[x, y] == MapState.WALL_HIDEN) minimap[x, y] = MapState.WALL;
+                            if (minimap[x, y] == MapState.PLAYER) minimap[x, y] = MapState.FLOOR; //In normal circumstances the player never leaves the floor
                         }
                     }
+                }
+                if (playerX >= 0 && playerX <= _width && playerY >= 0 && playerY <= _height)
+                {
+                    minimap[playerX + 1, playerY + 1] = MapState.PLAYER;
                 }
 
                 //If we are rendering minimap we also make new bitmap for it
@@ -137,7 +146,46 @@ namespace GameEngine.Levels
 
         void CreateNewMinimap()
         {
-
+            int width = _width + 2;
+            int height = _height + 2;
+            byte[] bitmap_bytes = new byte[width * height * 4];
+            byte red = 0x00;
+            byte green = 0x00;
+            byte blue = 0x00;
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++) //Increase by 4 because each color is 4 byte
+                {
+                    if (minimap[x,y] == MapState.FLOOR_HIDEN || minimap[x,y] == MapState.WALL_HIDEN || minimap[x,y] == MapState.VOID)
+                    {
+                        red = 0x80;
+                        green = 0x80;
+                        blue = 0x80;
+                    } 
+                    else if (minimap[x,y] == MapState.FLOOR) {
+                        red = 0xA0;
+                        green = 0xA0;
+                        blue = 0xA0;
+                    }
+                    else if (minimap[x, y] == MapState.WALL)
+                    {
+                        red = 0x60;
+                        green = 0x60;
+                        blue = 0x60;
+                    }
+                    else if (minimap[x, y] == MapState.PLAYER)
+                    {
+                        red = 0xFF;
+                        green = 0x00;
+                        blue = 0x00;
+                    }
+                    bitmap_bytes[x * 4 + 0 + y * width * 4] = red;
+                    bitmap_bytes[x * 4 + 1 + y * width * 4] = green;
+                    bitmap_bytes[x * 4 + 2 + y * width * 4] = blue;
+                    bitmap_bytes[x * 4 + 3 + y * width * 4] = 0x80; //Alpha
+                }
+            }
+            minimapImage = Sprite.CreateBitmapFromBytes(bitmap_bytes, width, height);
         }
 
         public void Render(Vector2 playerXY, Screen screen)
@@ -173,13 +221,34 @@ namespace GameEngine.Levels
             //Render sectors
             sectors.ForEach(sector => sector.Render(playerXY, screen));
 
+            
             //Render minimap
             if (render_minimap & minimapImage != null)
             {
                 screen.SetRenderMode(RenderMode.Normal2X);
 
-
-
+                int x = (int)playerXY.X / Map.tileSize - 125;
+                int y = (int)playerXY.Y / Map.tileSize - 125;
+                int ux = 250;
+                int uy = 250;
+                if (x < 0)
+                {
+                    x = 0;
+                }
+                if (y < 0)
+                {
+                    y = 0;
+                }
+                if (x + 125 > _width + 2)
+                {
+                    x = _width + 2 - 250;
+                }
+                if (y + 125 > _height + 2)
+                {
+                    y = _height + 2 - 250;
+                }
+                Rect window = new Rect(x, y, ux, uy);
+                screen.RenderMinimap(screen.GetWidth() / 4 - 250 / 2, screen.GetHeight() / 4 - 250 / 2, window, minimapImage);
             }
             int px = (int)playerXY.X / Map.tileSize;
             int py = (int)playerXY.Y / Map.tileSize;

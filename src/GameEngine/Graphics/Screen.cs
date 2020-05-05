@@ -111,6 +111,13 @@ namespace GameEngine.Graphics
             cds.DrawImage(sprite.GetBitmap(), 0, 0, rect, opacity, CanvasImageInterpolation.NearestNeighbor, angle);
         }
 
+        public void RenderMinimap(float xPos, float yPos, Rect window, CanvasBitmap minimap)
+        {
+            if (xPos < 0 || xPos > width || yPos < 0 || yPos > height) return;
+
+            cds.DrawImage(minimap, xPos, yPos, window, 1.0f, CanvasImageInterpolation.NearestNeighbor);
+        }
+
         public void RenderParticle(Vector2 pos, Sprite sprite, float opacity = 1.0f)
         {
             if (cds == null) return;

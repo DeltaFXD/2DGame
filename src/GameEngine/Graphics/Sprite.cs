@@ -70,6 +70,13 @@ namespace GameEngine.Graphics
             return id;        
         }
 
+        public static CanvasBitmap CreateBitmapFromBytes(byte[] data, int width, int height)
+        {
+            if (canvas == null) return null;
+
+            return CanvasBitmap.CreateFromBytes(canvas, data, width, height, DirectXPixelFormat.R8G8B8A8UIntNormalized);
+        }
+
         public static bool CreateSpriteFromColor(string name,int id,int width, int height, byte red, byte green, byte blue)
         {
             if (canvas == null) return false;
