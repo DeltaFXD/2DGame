@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameEngine.Networking
 {
-    enum Codes
+    enum Code
     {
 
     }
