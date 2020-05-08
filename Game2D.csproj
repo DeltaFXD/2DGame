@@ -150,6 +150,8 @@
     <Compile Include="src\GameEngine\Levels\Sector.cs" />
     <Compile Include="src\GameEngine\Levels\Tile.cs" />
     <Compile Include="src\GameEngine\Levels\Wall.cs" />
+    <Compile Include="src\GameEngine\Networking\Client.cs" />
+    <Compile Include="src\GameEngine\Networking\Server.cs" />
     <Compile Include="src\GameEngine\Sounds\Sound.cs" />
     <Compile Include="src\GameEngine\Utilities\AStar.cs" />
     <Compile Include="src\GameEngine\Utilities\Coordinate.cs" />
