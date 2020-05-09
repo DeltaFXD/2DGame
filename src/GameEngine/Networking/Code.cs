@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace GameEngine.Networking
 {
-    enum Code
+    enum Code : int
     {
-
+        Ping = 1,
+        Pong = 2
     }
 }
