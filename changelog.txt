@@ -81,3 +81,4 @@
 -Setup basic networking
 #2020.05.09
 -Implement basic networking (Requires testing after main menu)
+-Added new pages for main menu

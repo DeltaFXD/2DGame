@@ -26,7 +26,7 @@ namespace Game2D
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class GamePage : Page
     {
         Stopwatch watch = new Stopwatch();
         Level level;
@@ -42,7 +42,7 @@ namespace Game2D
         Mouse mouse;
         bool test = false;
 
-        public MainPage()
+        public GamePage()
         {
             InitializeComponent();
 
