@@ -24,7 +24,15 @@ namespace Game2D
     {
         public SettingsPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+        }
+
+        private void BackButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
         }
     }
 }

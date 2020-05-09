@@ -21,6 +21,7 @@ namespace GameEngine.Networking
         List<Packet> send_buffer = new List<Packet>();
         List<Packet> receive_buffer = new List<Packet>();
         DatagramSocket socket;
+        HostName hostName;
 
         public Client(string ip, string port)
         {
@@ -41,7 +42,7 @@ namespace GameEngine.Networking
                     socket.MessageReceived += MessageReceived;
 
                     // The server hostname that we will be establishing a connection to.
-                    var hostName = new HostName(IP);
+                    hostName = new HostName(IP);
 
                     Debug.WriteLine("Client is about to bind...");
 
@@ -49,20 +50,6 @@ namespace GameEngine.Networking
 
                     Debug.WriteLine("Client is bound to port number " + Port);
                     running = true;
-
-                    // Send a request to the echo server.
-                    string request = "Hello, World!";
-                    using (var serverDatagramSocket = new DatagramSocket())
-                    {
-                        using (Stream outputStream = (await serverDatagramSocket.GetOutputStreamAsync(hostName, Port)).AsStreamForWrite())
-                        {
-                            using (var streamWriter = new StreamWriter(outputStream))
-                            {
-                                await streamWriter.WriteLineAsync(request);
-                                await streamWriter.FlushAsync();
-                            }
-                        }
-                    }
                 }
                 catch (Exception e)
                 {
@@ -120,7 +107,7 @@ namespace GameEngine.Networking
         {
             if (running && send_buffer.Count != 0)
             {
-                using (Stream output = (await socket.GetOutputStreamAsync(socket.Information.RemoteAddress, Port)).AsStreamForWrite())
+                using (Stream output = (await socket.GetOutputStreamAsync(hostName, Port)).AsStreamForWrite())
                 {
                     using (var writer = new StreamWriter(output))
                     {

@@ -7,3 +7,4 @@ BundleArtifacts/
 
 #Files
 *.user
+*.pfx

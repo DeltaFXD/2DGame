@@ -9,6 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <Button Content="Back" Margin="125,109,0,0" VerticalAlignment="Top" Height="87" Width="213" Click="BackButtonClick"/>
 
     </Grid>
 </Page>

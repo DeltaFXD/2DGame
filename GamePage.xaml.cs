@@ -20,6 +20,9 @@ using Windows.UI.Xaml.Input;
 using Windows.Devices.Input;
 using System.Threading.Tasks;
 using Microsoft.Graphics.Canvas;
+using Windows.UI.Xaml.Navigation;
+using GameEngine.Networking;
+using GameEngine.Networking.Packets;
 
 namespace Game2D
 {
@@ -41,12 +44,35 @@ namespace Game2D
         KeyBoard key;
         Mouse mouse;
         bool test = false;
+        GameType type;
+
+        Server server = null;
+        Client client = null;
+
+        enum GameType
+        {
+            Single,
+            Host,
+            Client
+        }
 
         public GamePage()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            string param = (string)e.Parameter;
+
+            if (param == "single") type = GameType.Single;
+            else if (param == "host") type = GameType.Host;
+            else if (param == "client") type = GameType.Client;
+            else type = GameType.Client;
 
             Init();
+
+            base.OnNavigatedTo(e);
         }
 
         void Init()
@@ -83,6 +109,17 @@ namespace Game2D
             level.Init();
 
             Task.Run(async () => await Sound.InitSound());
+
+            if (type == GameType.Client)
+            {
+                client = new Client("92.249.194.58", "25000");
+                client.StartClient();
+            }
+            else if (type == GameType.Host)
+            {
+                server = new Server("25000");
+                server.StartServer();
+            }
         }
 
         void Page_Loaded(object sender, RoutedEventArgs e)
@@ -212,6 +249,10 @@ namespace Game2D
                 Debug.WriteLine("UPS: " + upCount + " , FPS: " + frameCount);
                 upCount = 0;
                 frameCount = 0;
+                if (type == GameType.Client)
+                {
+                    client.Send(new Ping(lastTime));        
+                }
             }
             mouse.SetOffset(screen.GetOffset());
             level.Update();
@@ -233,6 +274,33 @@ namespace Game2D
 
             if (animated_assests_ready && animated_assests_ready2)
                 AnimatedSprite.GetUpdateables().ForEach(e => e.Update());
+
+            if (type == GameType.Client)
+            {
+                client.Update();
+                Packet p = client.GetNextReceived();
+                if (p != null)
+                {
+                    if (p.Code == Code.Pong)
+                    {
+                        Pong po = (Pong)p;
+                        Debug.WriteLine("Last ping: " + (lastTime - po.GetTime()) + " ms");
+                    }
+                }
+            }
+            else if (type == GameType.Host)
+            {
+                Packet p = server.GetNextReceived();
+                if (p != null)
+                {
+                    if (p.Code == Code.Ping)
+                    {
+                        Ping po = (Ping)p;
+                        server.Send(new Pong(po.GetTime()));
+                    }
+                }
+                server.Update();
+            }
         }
 
         void Page_Unloaded(object sender, RoutedEventArgs e)

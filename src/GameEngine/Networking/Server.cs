@@ -9,6 +9,7 @@ using System.Diagnostics;
 
 using GameEngine.Networking.Packets;
 using System.IO;
+using Windows.UI.Xaml.Documents;
 
 namespace GameEngine.Networking
 {
@@ -77,6 +78,7 @@ namespace GameEngine.Networking
 
         void MessageReceived(DatagramSocket sender, DatagramSocketMessageReceivedEventArgs args)
         {
+            Debug.WriteLine("kaptam packetet");
             using (DataReader dataReader = args.GetDataReader())
             {
                 while (dataReader.UnconsumedBufferLength != 0)

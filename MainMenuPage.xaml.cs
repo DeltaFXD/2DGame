@@ -24,7 +24,27 @@ namespace Game2D
     {
         public MainMenuPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+        }
+
+        private void SinglePlayerButtonClick(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(GamePage), "single");
+        }
+
+        private void MultiPlayerButtonClick(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(MultiplayerPage));
+        }
+
+        private void SettingsButtonClick(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingsPage));
+        }
+
+        private void ExitButtonClick(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Exit();
         }
     }
 }

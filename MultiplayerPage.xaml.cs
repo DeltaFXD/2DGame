@@ -24,7 +24,27 @@ namespace Game2D
     {
         public MultiplayerPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+        }
+
+        private void BackButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
+        }
+
+        private void HostGameButtonClick(object sender, RoutedEventArgs e)
+        {
+            //TODO: add server starting
+            Frame.Navigate(typeof(GamePage), "host");
+        }
+
+        private void ConnectButtonClick(object sender, RoutedEventArgs e)
+        {
+            //TODO: add client starting
+            Frame.Navigate(typeof(GamePage), "client");
         }
     }
 }

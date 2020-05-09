@@ -9,7 +9,10 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Button Content="Button" Margin="206,138,0,0" VerticalAlignment="Top" Height="153" Width="360"/>
+        <Button Content="Single Player" Margin="84,56,0,0" VerticalAlignment="Top" Height="153" Width="360" Click="SinglePlayerButtonClick"/>
+        <Button Content="Multi Player" Margin="84,230,0,0" VerticalAlignment="Top" Height="132" Width="360" Click="MultiPlayerButtonClick"/>
+        <Button Content="Settings" Margin="84,407,0,0" VerticalAlignment="Top" Height="133" Width="360" Click="SettingsButtonClick"/>
+        <Button Content="Exit" Margin="84,602,0,0" VerticalAlignment="Top" Height="147" Width="360" Click="ExitButtonClick"/>
 
     </Grid>
 </Page>
