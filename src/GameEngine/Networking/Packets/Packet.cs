@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace GameEngine.Networking.Packets
             Code = code;
         }
 
-        public abstract string GetData();
+        public abstract void WriteData(BinaryWriter dataWriter);
 
         public abstract void ConstructPacket(DataReader dataReader);
     }

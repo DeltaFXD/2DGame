@@ -18,15 +18,18 @@ namespace GameEngine.Networking
         string IP { get; set; }
         string Port { get; set; }
         bool running = false;
+        public bool Connected { get; private set; }
         List<Packet> send_buffer = new List<Packet>();
         List<Packet> receive_buffer = new List<Packet>();
         DatagramSocket socket;
         HostName hostName;
+        BinaryWriter writer;
 
         public Client(string ip, string port)
         {
             IP = ip;
             Port = port;
+            Connected = false;
         }
 
         public async void StartClient()
@@ -37,6 +40,12 @@ namespace GameEngine.Networking
                 {
                     //Create the DatagramSocket and establish a connection to the server.
                     socket = new DatagramSocket();
+
+                    //Set Low Latency mode for the socket
+                    socket.Control.QualityOfService = SocketQualityOfService.LowLatency;
+
+                    //Set don't fragment
+                    socket.Control.DontFragment = true;
 
                     //The ConnectionReceived event is raised when connections are received.
                     socket.MessageReceived += MessageReceived;
@@ -49,6 +58,21 @@ namespace GameEngine.Networking
                     await socket.BindServiceNameAsync(Port);
 
                     Debug.WriteLine("Client is bound to port number " + Port);
+
+                    try
+                    {
+                        Stream output = (await socket.GetOutputStreamAsync(hostName, Port)).AsStreamForWrite();
+                        writer = new BinaryWriter(output);
+
+                        new Connecting().WriteData(writer);
+                        //await writer.FlushAsync();
+                        writer.Flush();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.Message);
+                    }
+
                     running = true;
                 }
                 catch (Exception e)
@@ -67,12 +91,19 @@ namespace GameEngine.Networking
         {
             using (DataReader dataReader = args.GetDataReader())
             {
+                dataReader.ByteOrder = ByteOrder.LittleEndian;
                 while (dataReader.UnconsumedBufferLength != 0)
                 {
                     Code code = (Code)dataReader.ReadInt32();
                     Packet p;
                     switch (code)
                     {
+                        case Code.Connected:
+                            {
+                                Connected = true;
+                                p = null;
+                                break;
+                            }
                         case Code.Ping:
                             {
                                 p = new Ping();
@@ -99,26 +130,26 @@ namespace GameEngine.Networking
                     }
                 }
             }
-
-            sender.Dispose();
         }
 
-        public async void Update()
+        public void Update()
         {
             if (running && send_buffer.Count != 0)
             {
-                using (Stream output = (await socket.GetOutputStreamAsync(hostName, Port)).AsStreamForWrite())
+                /*using (Stream output = (await socket.GetOutputStreamAsync(hostName, Port)).AsStreamForWrite())
                 {
-                    using (var writer = new StreamWriter(output))
-                    {
+                    using (var writer = new BinaryWriter(output))
+                    {*/
                         while (send_buffer.Count != 0)
                         {
-                            await writer.WriteLineAsync(send_buffer[0].Code + send_buffer[0].GetData());
+                            send_buffer[0].WriteData(writer);
                             send_buffer.RemoveAt(0);
                         }
-                        await writer.FlushAsync();
-                    }
-                }
+                        //await writer.FlushAsync();
+                        writer.Flush();
+                    /*}
+                    //await output.FlushAsync();
+                }*/
             }
         }
 

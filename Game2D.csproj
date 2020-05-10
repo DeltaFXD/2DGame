@@ -140,6 +140,7 @@
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\GameEngine\Config.cs" />
     <Compile Include="src\GameEngine\Entities\Entity.cs" />
     <Compile Include="src\GameEngine\Entities\HitBox.cs" />
     <Compile Include="src\GameEngine\Entities\Mobs\Dummy.cs" />
@@ -169,6 +170,8 @@
     <Compile Include="src\GameEngine\Levels\Wall.cs" />
     <Compile Include="src\GameEngine\Networking\Client.cs" />
     <Compile Include="src\GameEngine\Networking\Code.cs" />
+    <Compile Include="src\GameEngine\Networking\Packets\Connected.cs" />
+    <Compile Include="src\GameEngine\Networking\Packets\Connecting.cs" />
     <Compile Include="src\GameEngine\Networking\Packets\Packet.cs" />
     <Compile Include="src\GameEngine\Networking\Packets\Ping.cs" />
     <Compile Include="src\GameEngine\Networking\Packets\Pong.cs" />

@@ -15,7 +15,7 @@ namespace GameEngine.Sounds
         static AudioDeviceOutputNode output;
         static Dictionary<string, AudioFileInputNode> inputs = new Dictionary<string, AudioFileInputNode>();
         static bool initialized = false;
-
+        //Check: https://docs.microsoft.com/en-us/windows/uwp/gaming/working-with-audio-in-your-directx-game
         public static async Task InitSound()
         {
             AudioGraphSettings settings = new AudioGraphSettings(AudioRenderCategory.Media);

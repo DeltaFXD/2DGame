@@ -84,3 +84,4 @@
 -Added new pages for main menu
 #2020.05.10
 -Add networking test code
+-Basic networking DONE (Tested)

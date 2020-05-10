@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameEngine;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -45,6 +46,11 @@ namespace Game2D
         {
             //TODO: add client starting
             Frame.Navigate(typeof(GamePage), "client");
+        }
+
+        private void TextBoxChanged(object sender, TextChangedEventArgs e)
+        {
+            Config.IP = (sender as TextBox).Text;
         }
     }
 }

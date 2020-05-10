@@ -1,40 +1,29 @@
-﻿using System;
+﻿using GameEngine.Networking;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
 
 namespace GameEngine.Networking.Packets
 {
-    class Ping : Packet
+    class Connecting : Packet
     {
-        long _time;
-        public Ping(long time) : base(Code.Ping)
+        public Connecting() : base(Code.Connecting)
         {
-            _time = time;
+            
         }
 
-        public Ping() : base(Code.Ping)
-        {
-            _time = 0;
-        }
-
-        public long GetTime()
-        {
-            return _time;
-        }
         public override void ConstructPacket(DataReader dataReader)
         {
-            _time = dataReader.ReadInt64();
+            
         }
 
         public override void WriteData(BinaryWriter writer)
         {
             writer.Write((int)Code);
-            writer.Write(_time);
         }
     }
 }

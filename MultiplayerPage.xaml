@@ -12,6 +12,7 @@
         <Button Content="Back" Margin="125,109,0,0" VerticalAlignment="Top" Height="87" Width="213" Click="BackButtonClick"/>
         <Button Content="Host Game" Margin="200,327,0,0" VerticalAlignment="Top" Height="125" Width="248" Click="HostGameButtonClick"/>
         <Button Content="Connect" Margin="577,327,0,0" VerticalAlignment="Top" Height="125" Width="213" Click="ConnectButtonClick"/>
+        <TextBox HorizontalAlignment="Left" Margin="542,228,0,0" Text="write IP" TextWrapping="Wrap" VerticalAlignment="Top" Width="248" Height="51" TextChanged="TextBoxChanged"/>
 
     </Grid>
 </Page>

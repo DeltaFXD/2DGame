@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameEngine.Networking
+namespace GameEngine
 {
-    enum Code : int
+    static class Config
     {
-        Connecting = 1,
-        Connected = 2,
-        Ping = 3,
-        Pong = 4
+        public static string IP { get; set; }
     }
 }

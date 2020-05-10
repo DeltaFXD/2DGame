@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,9 +30,10 @@ namespace GameEngine.Networking.Packets
             _time = dataReader.ReadInt64();
         }
 
-        public override string GetData()
+        public override void WriteData(BinaryWriter writer)
         {
-            return "" + Code + _time;
+            writer.Write((int)Code);
+            writer.Write(_time);
         }
     }
 }

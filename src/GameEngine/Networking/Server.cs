@@ -10,16 +10,24 @@ using System.Diagnostics;
 using GameEngine.Networking.Packets;
 using System.IO;
 using Windows.UI.Xaml.Documents;
+using Windows.Networking;
 
 namespace GameEngine.Networking
 {
     class Server
     {
+        //Check later: https://docs.microsoft.com/en-us/archive/msdn-magazine/2005/august/get-closer-to-the-wire-with-high-performance-sockets-in-net
+        //and : https://www.codeproject.com/Articles/22918/How-To-Use-the-SocketAsyncEventArgs-Class
+        //and : https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.socket.receivefromasync?view=netcore-3.1
+        //and : https://csharp.hotexamples.com/examples/-/SocketAsyncEventArgs/-/php-socketasynceventargs-class-examples.html
         string Port { get; set; }
         bool running = false;
+        bool connected = false;
         List<Packet> send_buffer = new List<Packet>();
         List<Packet> receive_buffer = new List<Packet>();
         DatagramSocket socket;
+        HostName hostName = null;
+        BinaryWriter writer;
 
         public Server(string port)
         {
@@ -33,6 +41,12 @@ namespace GameEngine.Networking
                 try
                 {
                     socket = new DatagramSocket();
+
+                    //Set Low Latency mode for the socket
+                    socket.Control.QualityOfService = SocketQualityOfService.LowLatency;
+
+                    //Set don't fragment
+                    socket.Control.DontFragment = true;
 
                     //The ConnectionReceived event is raised when connections are received.
                     socket.MessageReceived += MessageReceived;
@@ -59,33 +73,54 @@ namespace GameEngine.Networking
 
         public async void Update()
         {
-            if (running && send_buffer.Count != 0)
+            if (running && connected && send_buffer.Count != 0)
             {
-                using (Stream output = (await socket.GetOutputStreamAsync(socket.Information.RemoteAddress, Port)).AsStreamForWrite())
+                /*using (Stream output = (await socket.GetOutputStreamAsync(hostName, Port)).AsStreamForWrite())
                 {
-                    using (var writer = new StreamWriter(output))
-                    {
+                    using (var writer = new BinaryWriter(output))
+                    {*/
                         while (send_buffer.Count != 0)
                         {
-                            await writer.WriteLineAsync(send_buffer[0].Code + send_buffer[0].GetData());
+                            send_buffer[0].WriteData(writer);
                             send_buffer.RemoveAt(0);
                         }
-                        await writer.FlushAsync();
-                    }
-                }
+                        //await writer.FlushAsync();
+                        writer.Flush();
+                   /* }
+                }*/
             }
         }
 
-        void MessageReceived(DatagramSocket sender, DatagramSocketMessageReceivedEventArgs args)
+        async void MessageReceived(DatagramSocket sender, DatagramSocketMessageReceivedEventArgs args)
         {
             Debug.WriteLine("kaptam packetet");
             using (DataReader dataReader = args.GetDataReader())
             {
+                dataReader.ByteOrder = ByteOrder.LittleEndian;
+                Debug.WriteLine("buffer lntgh: " + dataReader.UnconsumedBufferLength);
                 while (dataReader.UnconsumedBufferLength != 0)
                 {
                     Code code = (Code)dataReader.ReadInt32();
                     Packet p;
                     switch (code) {
+                        case Code.Connecting:
+                            {
+                                connected = true;
+                                hostName = args.RemoteAddress;
+                                Debug.WriteLine("Connected to: " + hostName);
+                                try
+                                {
+                                    Stream output = (await socket.GetOutputStreamAsync(hostName, Port)).AsStreamForWrite();
+                                    writer = new BinaryWriter(output);
+                                }
+                                catch (Exception e)
+                                {
+                                    Debug.WriteLine(e.Message);
+                                }
+                                send_buffer.Add(new Connected());
+                                p = null;
+                                break;
+                            }
                         case Code.Ping:
                             {
                                 p = new Ping();
@@ -112,8 +147,6 @@ namespace GameEngine.Networking
                     }
                 }
             }
-
-            sender.Dispose();
         }
 
         public void Send(Packet packet)

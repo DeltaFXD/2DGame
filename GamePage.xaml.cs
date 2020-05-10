@@ -23,6 +23,7 @@ using Microsoft.Graphics.Canvas;
 using Windows.UI.Xaml.Navigation;
 using GameEngine.Networking;
 using GameEngine.Networking.Packets;
+using GameEngine;
 
 namespace Game2D
 {
@@ -44,6 +45,7 @@ namespace Game2D
         KeyBoard key;
         Mouse mouse;
         bool test = false;
+        bool gotpong = true;
         GameType type;
 
         Server server = null;
@@ -112,7 +114,8 @@ namespace Game2D
 
             if (type == GameType.Client)
             {
-                client = new Client("92.249.194.58", "25000");
+                Debug.WriteLine(Config.IP);
+                client = new Client(Config.IP, "25000");
                 client.StartClient();
             }
             else if (type == GameType.Host)
@@ -251,7 +254,20 @@ namespace Game2D
                 frameCount = 0;
                 if (type == GameType.Client)
                 {
-                    client.Send(new Ping(lastTime));        
+                    if (!client.Connected)
+                    {
+                        Debug.WriteLine("Sending connecting");
+                        client.Send(new Connecting());
+                    }
+                    else
+                    {
+                        if (gotpong)
+                        {
+                            Debug.WriteLine("Sending ping");
+                            client.Send(new Ping(lastTime));
+                            gotpong = false;
+                        }
+                    }
                 }
             }
             mouse.SetOffset(screen.GetOffset());
@@ -283,8 +299,9 @@ namespace Game2D
                 {
                     if (p.Code == Code.Pong)
                     {
+                        gotpong = true;
                         Pong po = (Pong)p;
-                        Debug.WriteLine("Last ping: " + (lastTime - po.GetTime()) + " ms");
+                        Debug.WriteLine("Last ping: " + (watch.ElapsedMilliseconds - po.GetTime()) + " ms");
                     }
                 }
             }
