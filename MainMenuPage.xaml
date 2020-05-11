@@ -9,10 +9,14 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Button Content="Single Player" Margin="84,56,0,0" VerticalAlignment="Top" Height="153" Width="360" Click="SinglePlayerButtonClick"/>
-        <Button Content="Multi Player" Margin="84,230,0,0" VerticalAlignment="Top" Height="132" Width="360" Click="MultiPlayerButtonClick"/>
-        <Button Content="Settings" Margin="84,407,0,0" VerticalAlignment="Top" Height="133" Width="360" Click="SettingsButtonClick"/>
-        <Button Content="Exit" Margin="84,602,0,0" VerticalAlignment="Top" Height="147" Width="360" Click="ExitButtonClick"/>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="6*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="1" Content="Single Player" Margin="0,100,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Height="150" Width="300" Click="SinglePlayerButtonClick"/>
+        <Button Grid.Column="1" Content="Multi Player" Margin="0,260,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Height="150" Width="300" Click="MultiPlayerButtonClick"/>
+        <Button Grid.Column="1" Content="Settings" Margin="0,420,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Height="150" Width="300" Click="SettingsButtonClick"/>
+        <Button Grid.Column="1" Content="Exit" Margin="0,580,0,0" VerticalAlignment="Top" HorizontalAlignment="Center"  Height="150" Width="300" Click="ExitButtonClick"/>
     </Grid>
 </Page>

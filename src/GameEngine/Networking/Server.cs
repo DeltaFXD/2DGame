@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 using System.Diagnostics;
 
 using GameEngine.Networking.Packets;
 using System.IO;
-using Windows.UI.Xaml.Documents;
 using Windows.Networking;
 
 namespace GameEngine.Networking
@@ -71,7 +67,7 @@ namespace GameEngine.Networking
             }
         }
 
-        public async void Update()
+        public void Update()
         {
             if (running && connected && send_buffer.Count != 0)
             {
@@ -123,14 +119,17 @@ namespace GameEngine.Networking
                             }
                         case Code.Ping:
                             {
-                                p = new Ping();
-                                p.ConstructPacket(dataReader);
+                                p = Ping.ConstructPacket(dataReader);
                                 break;
                             }
                         case Code.Pong:
                             {
-                                p = new Pong();
-                                p.ConstructPacket(dataReader);
+                                p = Pong.ConstructPacket(dataReader);
+                                break;
+                            }
+                        case Code.Acknowledge:
+                            {
+                                p = Acknowledge.ConstructPacket(dataReader);
                                 break;
                             }
                         default: p = null; break;

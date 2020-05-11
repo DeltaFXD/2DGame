@@ -1,14 +1,19 @@
-﻿using Windows.Foundation;
+﻿using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.UI;
+using Microsoft.Graphics.Canvas.UI.Xaml;
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Windows.Devices.Input;
+using Windows.Foundation;
+using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Microsoft.Graphics.Canvas.UI.Xaml;
-using Microsoft.Graphics.Canvas.UI;
-using System.Numerics;
-using Windows.UI.ViewManagement;
-using System.Diagnostics;
-using Windows.UI.Core;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Navigation;
 using Windows.System;
-using System;
 
 using GameEngine.Levels;
 using GameEngine.Graphics;
@@ -16,11 +21,6 @@ using GameEngine.Inputs;
 using GameEngine.Utilities;
 using GameEngine.Entities.Mobs;
 using GameEngine.Sounds;
-using Windows.UI.Xaml.Input;
-using Windows.Devices.Input;
-using System.Threading.Tasks;
-using Microsoft.Graphics.Canvas;
-using Windows.UI.Xaml.Navigation;
 using GameEngine.Networking;
 using GameEngine.Networking.Packets;
 using GameEngine;
@@ -47,6 +47,7 @@ namespace Game2D
         bool test = false;
         bool gotpong = true;
         GameType type;
+        int seed;
 
         Server server = null;
         Client client = null;
@@ -87,9 +88,10 @@ namespace Game2D
             screen = new Screen(1366, 768);
 
             //Create level
-            //level = new PlannedLevel(@"\resources\planned_levels\test_map_2.png", @"\resources\planned_levels\test_sectors.txt");
             Random random = new Random();
-            level = new LevelGenerator(random.Next(100000000), 500);
+            seed = random.Next(100000000);
+
+            level = new LevelGenerator(seed, 500);
 
             //Create KeyBoard instance
             key = new KeyBoard();
@@ -301,7 +303,7 @@ namespace Game2D
                     {
                         gotpong = true;
                         Pong po = (Pong)p;
-                        Debug.WriteLine("Last ping: " + (watch.ElapsedMilliseconds - po.GetTime()) + " ms");
+                        Debug.WriteLine("Last ping: " + (watch.ElapsedMilliseconds - po.Time) + " ms");
                     }
                 }
             }
@@ -313,7 +315,7 @@ namespace Game2D
                     if (p.Code == Code.Ping)
                     {
                         Ping po = (Ping)p;
-                        server.Send(new Pong(po.GetTime()));
+                        server.Send(new Pong(po.Time));
                     }
                 }
                 server.Update();

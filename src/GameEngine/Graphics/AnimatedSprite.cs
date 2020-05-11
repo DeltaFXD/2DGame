@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
 using Windows.Storage;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Windows.Graphics.DirectX;
 using System.Collections.Generic;

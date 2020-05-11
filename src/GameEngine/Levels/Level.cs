@@ -1,6 +1,4 @@
-﻿using Microsoft.Graphics.Canvas;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
 
@@ -8,7 +6,6 @@ using GameEngine.Interfaces;
 using GameEngine.Entities;
 using GameEngine.Graphics;
 using GameEngine.Utilities;
-using System.Threading;
 using GameEngine.Entities.Mobs;
 
 namespace GameEngine.Levels

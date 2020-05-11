@@ -85,3 +85,5 @@
 #2020.05.10
 -Add networking test code
 -Basic networking DONE (Tested)
+#2020.05.11
+-UI fixes and miscellaneous changes

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Windows.System;
+﻿using Windows.System;
 
 namespace GameEngine.Inputs
 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Storage.Streams;
+﻿using System.IO;
 
 namespace GameEngine.Networking.Packets
 {
@@ -18,7 +12,5 @@ namespace GameEngine.Networking.Packets
         }
 
         public abstract void WriteData(BinaryWriter dataWriter);
-
-        public abstract void ConstructPacket(DataReader dataReader);
     }
 }

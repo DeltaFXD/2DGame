@@ -1,39 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Windows.Storage.Streams;
 
 namespace GameEngine.Networking.Packets
 {
     class Pong : Packet
     {
-        long _time;
+        public long Time { get; private set; }
         public Pong(long time) : base(Code.Pong)
         {
-            _time = time;
+            Time = time;
         }
 
-        public Pong() : base(Code.Pong)
+        public static Packet ConstructPacket(DataReader dataReader)
         {
-            _time = 0;
-        }
-
-        public long GetTime()
-        {
-            return _time;
-        }
-        public override void ConstructPacket(DataReader dataReader)
-        {
-            _time = dataReader.ReadInt64();
+            return new Pong(dataReader.ReadInt64());
         }
 
         public override void WriteData(BinaryWriter writer)
         {
             writer.Write((int)Code);
-            writer.Write(_time);
+            writer.Write(Time);
         }
     }
 }

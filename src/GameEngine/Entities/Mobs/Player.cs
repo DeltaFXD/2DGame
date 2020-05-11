@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using GameEngine.Inputs;
 using GameEngine.Graphics;
 using GameEngine.Utilities;
 using GameEngine.Entities.Projectiles;
 using System.Numerics;
-using System.Diagnostics;
 
 namespace GameEngine.Entities.Mobs
 {

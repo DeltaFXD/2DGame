@@ -1,16 +1,10 @@
 ﻿using GameEngine.Entities.Mobs;
 using GameEngine.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 using GameEngine.Entities.Spawners;
 using GameEngine.Utilities;
-using System.Diagnostics;
-using GameEngine.Inputs;
 
 namespace GameEngine.Entities.Projectiles
 {
