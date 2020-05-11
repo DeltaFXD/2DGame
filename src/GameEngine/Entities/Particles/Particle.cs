@@ -14,7 +14,7 @@ namespace GameEngine.Entities.Particles
         int _lifeTime;
         Sprite sprite;
 
-        public Particle(float x, float y, float z, int lifeTime, string sprite_name)
+        public Particle(float x, float y, float z, int lifeTime, string sprite_name) : base()
         {
             position.X = x;
             position.Y = y;

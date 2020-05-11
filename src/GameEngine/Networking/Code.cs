@@ -7,6 +7,8 @@
         Ping = 3,
         Pong = 4,
         LevelGenerationData = 5,
-        Acknowledge = 6
+        Acknowledge = 6,
+        OtherPlayerCreationData = 7,
+        OtherPlayerID = 8
     }
 }

@@ -13,7 +13,7 @@
         protected int _amount;
         Type _type;
 
-        public Spawner(float x, float y,float z, int amount, Type type)
+        public Spawner(float x, float y,float z, int amount, Type type) : base()
         {
             position.X = x;
             position.Y = y;

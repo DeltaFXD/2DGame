@@ -16,7 +16,7 @@ namespace GameEngine.Entities.Projectiles
 		protected Mob _owner;
 		protected float _z;
 
-		public Projectile(Vector2 origin,float z, double angle, Mob owner)
+		public Projectile(Vector2 origin,float z, double angle, Mob owner) : base()
 		{
 			position = origin;
 			_owner = owner;

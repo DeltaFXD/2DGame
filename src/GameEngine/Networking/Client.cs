@@ -122,6 +122,11 @@ namespace GameEngine.Networking
                                 p = Acknowledge.ConstructPacket(dataReader);
                                 break;
                             }
+                        case Code.OtherPlayerID:
+                            {
+                                p = OtherPlayerID.ConstructPacket(dataReader);
+                                break;
+                            }
                         default: p = null; break;
                     }
 
@@ -140,22 +145,15 @@ namespace GameEngine.Networking
 
         public void Update()
         {
-            if (running && send_buffer.Count != 0)
+            if (running && writer != null && send_buffer.Count != 0)
             {
-                /*using (Stream output = (await socket.GetOutputStreamAsync(hostName, Port)).AsStreamForWrite())
+                while (send_buffer.Count != 0)
                 {
-                    using (var writer = new BinaryWriter(output))
-                    {*/
-                        while (send_buffer.Count != 0)
-                        {
-                            send_buffer[0].WriteData(writer);
-                            send_buffer.RemoveAt(0);
-                        }
-                        //await writer.FlushAsync();
-                        writer.Flush();
-                    /*}
-                    //await output.FlushAsync();
-                }*/
+                    send_buffer[0].WriteData(writer);
+                    send_buffer.RemoveAt(0);
+                }
+
+                writer.Flush();
             }
         }
 

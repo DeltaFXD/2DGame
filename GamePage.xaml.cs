@@ -24,6 +24,8 @@ using GameEngine.Sounds;
 using GameEngine.Networking;
 using GameEngine.Networking.Packets;
 using GameEngine;
+using System.Threading;
+using GameEngine.Entities;
 
 namespace Game2D
 {
@@ -33,7 +35,7 @@ namespace Game2D
     public sealed partial class GamePage : Page
     {
         Stopwatch watch = new Stopwatch();
-        Level level;
+        Level level = null;
         Screen screen;
         long lastTime;
         int upCount = 0;
@@ -51,12 +53,26 @@ namespace Game2D
 
         Server server = null;
         Client client = null;
+        ClientState clientState = ClientState.CONNECTING;
+        ServerState serverState = ServerState.WAITING;
 
         enum GameType
         {
             Single,
             Host,
             Client
+        }
+
+        enum ClientState
+        {
+            CONNECTING,
+            READY
+        }
+
+        enum ServerState
+        {
+            WAITING,
+            READY
         }
 
         public GamePage()
@@ -87,43 +103,55 @@ namespace Game2D
             //Create screen
             screen = new Screen(1366, 768);
 
-            //Create level
-            Random random = new Random();
-            seed = random.Next(100000000);
-
-            level = new LevelGenerator(seed, 500);
-
             //Create KeyBoard instance
             key = new KeyBoard();
 
             //Create Mouse instance
             mouse = new Mouse();
 
-            //Create Player
-            player = new Player(0, 0, key);
-
-            //Add Player
-            level.AddEntity(player);
-
-            //Ido meres
-            watch.Start();
-            lastTime = watch.ElapsedMilliseconds;
-
-            //Init level
-            level.Init();
-
+            //Init sounds
             Task.Run(async () => await Sound.InitSound());
 
-            if (type == GameType.Client)
+            if (type != GameType.Client)
             {
+                //Create level
+                Random random = new Random();
+                seed = random.Next(100000000);
+
+                level = new LevelGenerator(seed, 500);
+
+                Entity.GenID = true;
+
+                //Create Player
+                player = new Player(0, 0, key);
+
+                //Add Player
+                level.AddEntity(player);
+
+                //Init level
+                level.Init();
+
+                //Ido meres
+                watch.Start();
+                lastTime = watch.ElapsedMilliseconds;
+
+                if (type == GameType.Host)
+                {
+                    server = new Server("25000");
+                    server.StartServer();
+                }
+            } 
+            else
+            {
+                //Ido meres
+                watch.Start();
+                lastTime = watch.ElapsedMilliseconds;
+
                 Debug.WriteLine(Config.IP);
                 client = new Client(Config.IP, "25000");
                 client.StartClient();
-            }
-            else if (type == GameType.Host)
-            {
-                server = new Server("25000");
-                server.StartServer();
+
+                Entity.GenID = false;
             }
         }
 
@@ -238,16 +266,17 @@ namespace Game2D
             if (!animated_assests_ready2) return;
             args.DrawingSession.Antialiasing = CanvasAntialiasing.Aliased;
             screen.SetCDS(args.DrawingSession);
-            level.Render(player.GetXY(), screen);
+            //In client state can be null
+            if (level != null) level.Render(player.GetXY(), screen);
         }
 
         private void Canvas_Update(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)
         {
-            if (assests_ready && !AStar.IsInitialized())
+            upCount++;
+            if (assests_ready && !AStar.IsInitialized() && level != null)
             {
                 level.InitAStar();
             }
-            upCount++;
             if ((watch.ElapsedMilliseconds - lastTime) > 1000)
             {
                 lastTime = watch.ElapsedMilliseconds;
@@ -256,29 +285,27 @@ namespace Game2D
                 frameCount = 0;
                 if (type == GameType.Client)
                 {
-                    if (!client.Connected)
+                    if (gotpong && clientState == ClientState.READY)
                     {
-                        Debug.WriteLine("Sending connecting");
-                        client.Send(new Connecting());
-                    }
-                    else
-                    {
-                        if (gotpong)
-                        {
-                            Debug.WriteLine("Sending ping");
-                            client.Send(new Ping(lastTime));
-                            gotpong = false;
-                        }
+                        Debug.WriteLine("Sending ping");
+                        client.Send(new Ping(lastTime));
+                        gotpong = false;
                     }
                 }
             }
+            //If server of client make special update calls
+            if (type == GameType.Client) ClientUpdate();
+            else if (type == GameType.Host) ServerUpdate();
+
             mouse.SetOffset(screen.GetOffset());
-            level.Update();
+            //Can be null in case of Client
+            if (level != null) level.Update();
+
             if (Mouse.GetButton() == Mouse.Button.Left)
             {
                 Vector2 vec2 = Mouse.GetIsoCoordinate();
                 //Debug.WriteLine("MouseX: " + vec2.X + " MouseY: " + vec2.Y);
-                Debug.WriteLine("MouseCordX: " + (int)vec2.X / 32 + " MouseCordY: " + (int)vec2.Y / 32);
+                //Debug.WriteLine("MouseCordX: " + (int)vec2.X / 32 + " MouseCordY: " + (int)vec2.Y / 32);
             }
             if (Mouse.GetButton() == Mouse.Button.Right)
             {
@@ -293,32 +320,127 @@ namespace Game2D
             if (animated_assests_ready && animated_assests_ready2)
                 AnimatedSprite.GetUpdateables().ForEach(e => e.Update());
 
-            if (type == GameType.Client)
+            if (type == GameType.Client) client.Update();
+
+            if (type == GameType.Host) server.Update();
+        }
+
+        void ClientUpdate()
+        {
+            Packet p = client.GetNextReceived();
+            switch (clientState)
             {
-                client.Update();
-                Packet p = client.GetNextReceived();
-                if (p != null)
-                {
-                    if (p.Code == Code.Pong)
+                case ClientState.CONNECTING:
                     {
-                        gotpong = true;
-                        Pong po = (Pong)p;
-                        Debug.WriteLine("Last ping: " + (watch.ElapsedMilliseconds - po.Time) + " ms");
+                        if (!client.Connected)
+                        {
+                            Debug.WriteLine("Sending connecting");
+                            client.Send(new Connecting());
+                        }
+                        else
+                        {
+                            if (p != null)
+                            {
+                                if (p.Code == Code.LevelGenerationData)
+                                {
+                                    LevelGenData data = (LevelGenData)p;
+                                    seed = data.Seed;
+
+                                    level = new LevelGenerator(seed, data.Size);
+
+                                    //Create Player
+                                    player = new Player(0, 0, key);
+
+                                    //Add Player
+                                    level.AddEntity(player);
+
+                                    //Init level
+                                    level.Init();
+
+                                    clientState = ClientState.READY;
+                                }
+                                else
+                                {
+                                    Debug.WriteLine("Failed connection!");
+                                    //Go back to menu
+                                    if (Frame.CanGoBack)
+                                    {
+                                        Frame.GoBack();
+                                    }
+                                }
+                            }
+                        }
+                        break;
                     }
-                }
-            }
-            else if (type == GameType.Host)
+                case ClientState.READY:
+                    {
+                        if (p != null)
+                        {
+                            if (p.Code == Code.Pong)
+                            {
+                                gotpong = true;
+                                Pong po = (Pong)p;
+                                Debug.WriteLine("Last ping: " + (watch.ElapsedMilliseconds - po.Time) + " ms");
+                            }
+                            else if (p.Code == Code.OtherPlayerID)
+                            {
+                                OtherPlayerID playerID = (OtherPlayerID)p;
+                                player.AddID(playerID.ID);
+                            }
+                        }
+                        break;
+                    }
+            } 
+        }
+
+        void ServerUpdate()
+        {
+            Packet p = server.GetNextReceived();
+            switch (serverState)
             {
-                Packet p = server.GetNextReceived();
-                if (p != null)
-                {
-                    if (p.Code == Code.Ping)
+                case ServerState.WAITING:
                     {
-                        Ping po = (Ping)p;
-                        server.Send(new Pong(po.Time));
+                        if (p != null)
+                        {
+                            if (p.Code == Code.Acknowledge)
+                            {
+                                Acknowledge ack = (Acknowledge)p;
+                                if (ack.Ack == Code.LevelGenerationData)
+                                {
+                                    serverState = ServerState.READY;
+                                    break;
+                                }
+                            }
+                        }
+                        if (server.Connected)
+                        {
+                            //Client connected send level data
+                            server.Send(new LevelGenData(seed, 500));
+                        }
+                        break;
                     }
-                }
-                server.Update();
+                case ServerState.READY:
+                    {
+                        if (p != null)
+                        {
+                            if (p.Code == Code.Ping)
+                            {
+                                Ping po = (Ping)p;
+                                server.Send(new Pong(po.Time));
+                            }
+                            else if (p.Code == Code.OtherPlayerCreationData) 
+                            {
+                                AddOtherPlayer otherPlayer = (AddOtherPlayer)p;
+
+                                OtherPlayer other = new OtherPlayer(otherPlayer.X, otherPlayer.Y);
+
+                                level.AddEntity(other);
+
+                                server.Send(new OtherPlayerID(other.ID));
+                            }
+                        }
+                        break;
+                    }
             }
         }
 

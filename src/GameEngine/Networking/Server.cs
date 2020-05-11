@@ -18,7 +18,7 @@ namespace GameEngine.Networking
         //and : https://csharp.hotexamples.com/examples/-/SocketAsyncEventArgs/-/php-socketasynceventargs-class-examples.html
         string Port { get; set; }
         bool running = false;
-        bool connected = false;
+        public bool Connected { get; private set; }
         List<Packet> send_buffer = new List<Packet>();
         List<Packet> receive_buffer = new List<Packet>();
         DatagramSocket socket;
@@ -28,6 +28,7 @@ namespace GameEngine.Networking
         public Server(string port)
         {
             Port = port;
+            Connected = false;
         }
 
         public async void StartServer()
@@ -69,27 +70,20 @@ namespace GameEngine.Networking
 
         public void Update()
         {
-            if (running && connected && send_buffer.Count != 0)
+            if (running && Connected && writer != null && send_buffer.Count != 0)
             {
-                /*using (Stream output = (await socket.GetOutputStreamAsync(hostName, Port)).AsStreamForWrite())
+                while (send_buffer.Count != 0)
                 {
-                    using (var writer = new BinaryWriter(output))
-                    {*/
-                        while (send_buffer.Count != 0)
-                        {
-                            send_buffer[0].WriteData(writer);
-                            send_buffer.RemoveAt(0);
-                        }
-                        //await writer.FlushAsync();
-                        writer.Flush();
-                   /* }
-                }*/
+                    send_buffer[0].WriteData(writer);
+                    send_buffer.RemoveAt(0);
+                }
+
+                writer.Flush();
             }
         }
 
         async void MessageReceived(DatagramSocket sender, DatagramSocketMessageReceivedEventArgs args)
         {
-            Debug.WriteLine("kaptam packetet");
             using (DataReader dataReader = args.GetDataReader())
             {
                 dataReader.ByteOrder = ByteOrder.LittleEndian;
@@ -101,7 +95,7 @@ namespace GameEngine.Networking
                     switch (code) {
                         case Code.Connecting:
                             {
-                                connected = true;
+                                Connected = true;
                                 hostName = args.RemoteAddress;
                                 Debug.WriteLine("Connected to: " + hostName);
                                 try
@@ -130,6 +124,12 @@ namespace GameEngine.Networking
                         case Code.Acknowledge:
                             {
                                 p = Acknowledge.ConstructPacket(dataReader);
+                                break;
+                            }
+                        case Code.OtherPlayerCreationData:
+                            {
+                                p = AddOtherPlayer.ConstructPacket(dataReader);
+                                send_buffer.Add(new Acknowledge(p.Code));
                                 break;
                             }
                         default: p = null; break;

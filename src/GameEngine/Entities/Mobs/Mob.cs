@@ -14,6 +14,11 @@ namespace GameEngine.Entities.Mobs
 
 		MobType killer = MobType.NONE;
 
+		protected Mob() : base()
+		{
+
+		}
+
         protected void Move(int xChange, int yChange)
         {
 			if (xChange != 0 && yChange != 0)

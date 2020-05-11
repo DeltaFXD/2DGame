@@ -19,7 +19,7 @@ namespace GameEngine.Entities.Mobs
         int _pathIndex = 0;
         Vector2 _prev_position;
 
-        public Dummy(float x, float y)
+        public Dummy(float x, float y) : base()
         {
             position.X = x;
             position.Y = y;

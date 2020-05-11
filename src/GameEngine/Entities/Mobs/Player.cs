@@ -15,7 +15,14 @@ namespace GameEngine.Entities.Mobs
 
         KeyBoard input;
         int fireRate;
-        public Player(float x , float y, KeyBoard input)
+
+        protected Player(float x, float y) : base()
+        {
+            position.X = x;
+            position.Y = y;
+            fireRate = 0;
+        }
+        public Player(float x , float y, KeyBoard input) : base()
         {
             position.X = x;
             position.Y = y;

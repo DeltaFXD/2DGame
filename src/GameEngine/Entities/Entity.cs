@@ -8,9 +8,30 @@ namespace GameEngine.Entities
 {
     abstract class Entity : IRenderable , IUpdateable
     {
+        static long next = 0;
+        public static bool GenID { get; set; }
+        public long ID { get; protected set; }
+
         protected Vector2 position;
         protected Level level;
         bool removed = false;
+
+        protected Entity()
+        {
+            if (GenID)
+            {
+                ID = next;
+                next++;
+            }
+        }
+
+        public void AddID(long id)
+        {
+            if (!GenID)
+            {
+                ID = id;
+            }
+        }
 
         public bool IsRemoved()
         {
