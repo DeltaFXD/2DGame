@@ -122,9 +122,24 @@ namespace GameEngine.Networking
                                 p = Acknowledge.ConstructPacket(dataReader);
                                 break;
                             }
+                        case Code.OtherPlayerCreationData:
+                            {
+                                p = AddOtherPlayer.ConstructPacket(dataReader);
+                                break;
+                            }
                         case Code.OtherPlayerID:
                             {
                                 p = OtherPlayerID.ConstructPacket(dataReader);
+                                break;
+                            }
+                        case Code.Input:
+                            {
+                                p = Input.ConstructPacket(dataReader);
+                                break;
+                            }
+                        case Code.EntityXYCorrection:
+                            {
+                                p = EntityCorrection.ConstructPacket(dataReader);
                                 break;
                             }
                         default: p = null; break;

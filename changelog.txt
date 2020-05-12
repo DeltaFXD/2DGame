@@ -89,3 +89,4 @@
 -UI fixes and miscellaneous changes
 #2020.05.12
 -Server client syncing
+-Entity syncing

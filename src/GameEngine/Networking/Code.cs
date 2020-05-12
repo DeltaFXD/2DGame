@@ -9,6 +9,8 @@
         LevelGenerationData = 5,
         Acknowledge = 6,
         OtherPlayerCreationData = 7,
-        OtherPlayerID = 8
+        OtherPlayerID = 8,
+        Input = 9,
+        EntityXYCorrection = 10
     }
 }

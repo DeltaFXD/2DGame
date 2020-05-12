@@ -7,6 +7,7 @@ using GameEngine.Entities;
 using GameEngine.Graphics;
 using GameEngine.Utilities;
 using GameEngine.Entities.Mobs;
+using GameEngine.Networking.Packets;
 
 namespace GameEngine.Levels
 {
@@ -15,6 +16,7 @@ namespace GameEngine.Levels
         Stopwatch watch = new Stopwatch();
         List<Entity> entities = new List<Entity>();
         List<Entity> tmp = new List<Entity>();
+        List<EntityCorrection> corrections = new List<EntityCorrection>();
         //protected Action mapLoading;
 
         protected Map map;
@@ -25,6 +27,11 @@ namespace GameEngine.Levels
         public void Init()
         {
             watch.Start();
+        }
+
+        public void AddCorrection(EntityCorrection correction)
+        {
+            corrections.Add(correction);
         }
 
         public void InitAStar()
@@ -135,6 +142,21 @@ namespace GameEngine.Levels
 
         public void Update()
         {
+            while (corrections.Count != 0)
+            {
+                EntityCorrection correction = corrections[0];
+
+                foreach (Entity entity in entities)
+                {
+                    if (entity.ID == correction.ID)
+                    {
+                        entity.Correct(correction.X, correction.Y);
+                        break;
+                    }
+                }
+                corrections.RemoveAt(0);
+            }
+
             entities.AddRange(tmp);
             tmp.Clear();
             //Remove entities from map first

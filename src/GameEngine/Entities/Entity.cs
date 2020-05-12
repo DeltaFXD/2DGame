@@ -33,6 +33,15 @@ namespace GameEngine.Entities
             }
         }
 
+        public void Correct(float x, float y)
+        {
+            if (!GenID)
+            {
+                position.X = x;
+                position.Y = y;
+            }
+        }
+
         public bool IsRemoved()
         {
             return removed;

@@ -14,7 +14,7 @@ namespace GameEngine.Entities.Mobs
         static HitBox _hitBox = new HitBox(20, 32, 12, 0);
 
         KeyBoard input;
-        int fireRate;
+        protected int fireRate;
 
         protected Player(float x, float y) : base()
         {

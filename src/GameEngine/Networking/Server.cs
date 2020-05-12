@@ -132,6 +132,16 @@ namespace GameEngine.Networking
                                 send_buffer.Add(new Acknowledge(p.Code));
                                 break;
                             }
+                        case Code.Input:
+                            {
+                                p = Input.ConstructPacket(dataReader);
+                                break;
+                            }
+                        case Code.EntityXYCorrection:
+                            {
+                                p = EntityCorrection.ConstructPacket(dataReader);
+                                break;
+                            }
                         default: p = null; break;
                     }
 

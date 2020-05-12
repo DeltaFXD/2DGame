@@ -45,6 +45,7 @@ namespace Game2D
         bool animated_assests_ready2 = false;
         Player player;
         KeyBoard key;
+        ArtificialInput artificial;
         Mouse mouse;
         bool test = false;
         bool gotpong = true;
@@ -66,12 +67,14 @@ namespace Game2D
         enum ClientState
         {
             CONNECTING,
+            ENTITY_EXCHANGE,
             READY
         }
 
         enum ServerState
         {
             WAITING,
+            ENTITY_EXCHANGE,
             READY
         }
 
@@ -137,6 +140,8 @@ namespace Game2D
 
                 if (type == GameType.Host)
                 {
+                    artificial = new ArtificialInput();
+
                     server = new Server("25000");
                     server.StartServer();
                 }
@@ -146,6 +151,8 @@ namespace Game2D
                 //Ido meres
                 watch.Start();
                 lastTime = watch.ElapsedMilliseconds;
+
+                artificial = new ArtificialInput();
 
                 Debug.WriteLine(Config.IP);
                 client = new Client(Config.IP, "25000");
@@ -357,7 +364,9 @@ namespace Game2D
                                     //Init level
                                     level.Init();
 
-                                    clientState = ClientState.READY;
+                                    client.Send(new AddOtherPlayer(player.GetX(), player.GetY()));
+
+                                    clientState = ClientState.ENTITY_EXCHANGE;
                                 }
                                 else
                                 {
@@ -372,9 +381,42 @@ namespace Game2D
                         }
                         break;
                     }
+                case ClientState.ENTITY_EXCHANGE:
+                    {
+                        while (p != null)
+                        {
+                            if (p.Code == Code.OtherPlayerCreationData)
+                            {
+                                AddOtherPlayer otherPlayer = (AddOtherPlayer)p;
+
+                                OtherPlayer other = new OtherPlayer(otherPlayer.X, otherPlayer.Y, artificial);
+
+                                level.AddEntity(other);
+
+                                p = client.GetNextReceived();
+                                if (p.Code != Code.OtherPlayerID)
+                                {
+                                    Debug.WriteLine("Something is extremely wrong");
+                                }
+                                else
+                                {
+                                    other.AddID(((OtherPlayerID)p).ID);
+                                }
+                            }
+                            else if (p.Code == Code.OtherPlayerID)
+                            {
+                                OtherPlayerID playerID = (OtherPlayerID)p;
+                                player.AddID(playerID.ID);
+
+                                clientState = ClientState.READY;
+                            }
+                            p = client.GetNextReceived();
+                        }
+                        break;
+                    }
                 case ClientState.READY:
                     {
-                        if (p != null)
+                        while (p != null)
                         {
                             if (p.Code == Code.Pong)
                             {
@@ -382,12 +424,17 @@ namespace Game2D
                                 Pong po = (Pong)p;
                                 Debug.WriteLine("Last ping: " + (watch.ElapsedMilliseconds - po.Time) + " ms");
                             }
-                            else if (p.Code == Code.OtherPlayerID)
+                            else if (p.Code == Code.EntityXYCorrection)
                             {
-                                OtherPlayerID playerID = (OtherPlayerID)p;
-                                player.AddID(playerID.ID);
+                                level.AddCorrection((EntityCorrection)p);
                             }
+                            else if (p.Code == Code.Input)
+                            {
+                                artificial.Update((Input)p);
+                            }
+                            p = client.GetNextReceived();
                         }
+                        client.Send(new Input(key.up, key.down, key.left, key.right));
                         break;
                     }
             } 
@@ -407,7 +454,10 @@ namespace Game2D
                                 Acknowledge ack = (Acknowledge)p;
                                 if (ack.Ack == Code.LevelGenerationData)
                                 {
-                                    serverState = ServerState.READY;
+                                    server.Send(new AddOtherPlayer(player.GetX(), player.GetY()));
+                                    server.Send(new OtherPlayerID(player.ID));
+
+                                    serverState = ServerState.ENTITY_EXCHANGE;
                                     break;
                                 }
                             }
@@ -419,26 +469,43 @@ namespace Game2D
                         }
                         break;
                     }
+                case ServerState.ENTITY_EXCHANGE:
+                    {
+                        while (p != null)
+                        {
+                            if (p.Code == Code.OtherPlayerCreationData)
+                            {
+                                AddOtherPlayer otherPlayer = (AddOtherPlayer)p;
+
+                                OtherPlayer other = new OtherPlayer(otherPlayer.X, otherPlayer.Y, artificial);
+
+                                level.AddEntity(other);
+
+                                server.Send(new OtherPlayerID(other.ID));
+
+                                serverState = ServerState.READY;
+                            }
+                            p = server.GetNextReceived();
+                        }
+                        break;
+                    }
                 case ServerState.READY:
                     {
-                        if (p != null)
+                        while (p != null)
                         {
                             if (p.Code == Code.Ping)
                             {
                                 Ping po = (Ping)p;
                                 server.Send(new Pong(po.Time));
                             }
-                            else if (p.Code == Code.OtherPlayerCreationData) 
+                            else if (p.Code == Code.Input)
                             {
-                                AddOtherPlayer otherPlayer = (AddOtherPlayer)p;
-
-                                OtherPlayer other = new OtherPlayer(otherPlayer.X, otherPlayer.Y);
-
-                                level.AddEntity(other);
-
-                                server.Send(new OtherPlayerID(other.ID));
+                                artificial.Update((Input)p);
                             }
+                            p = server.GetNextReceived();
                         }
+                        server.Send(new EntityCorrection(player.ID, player.GetX(), player.GetY()));
+                        server.Send(new Input(key.up, key.down, key.left, key.right));
                         break;
                     }
             }
