@@ -11,6 +11,7 @@ using System.Collections.Generic;
 
 using GameEngine.Interfaces;
 using Windows.Devices.Geolocation;
+using System.Diagnostics;
 
 namespace GameEngine.Graphics
 {
@@ -18,8 +19,6 @@ namespace GameEngine.Graphics
     {
         private static Dictionary<string, AnimatedSprite> _animatedSprites = new Dictionary<string, AnimatedSprite>();
         private static CanvasAnimatedControl _canvas = null;
-        private static int WDS = 32;
-        private static int HDS = 64;
         private static List<IUpdateable> _updateList = new List<IUpdateable>();
 
         CanvasBitmap[] _bitmaps;
@@ -47,6 +46,7 @@ namespace GameEngine.Graphics
 
         public void Update()
         {
+            if (_rate == 0) return;
             _time++;
             if (_time % _rate == 0)
             {
@@ -127,9 +127,11 @@ namespace GameEngine.Graphics
             string name;
             int rate, length;
             int x, y, xAbs, yAbs;
-            byte[] bitmap_bytes = new byte[WDS * HDS * 4];
-            //Sheet data proccesing
-            MatchCollection matches = Regex.Matches(data, @"(\w+) (\d) (\d+) (\d) (\d)");
+            byte[] bitmap_bytes;
+            int WDS;
+            int HDS;
+        //Sheet data proccesing
+        MatchCollection matches = Regex.Matches(data, @"(\w+) (\d+) (\d+) (\d+) (\d+) (\d+) (\d+)");
             foreach (Match match in matches)
             {
                 //AnimatedSprite data
@@ -140,18 +142,23 @@ namespace GameEngine.Graphics
                 x = int.Parse(match.Groups[4].Value);
                 y = int.Parse(match.Groups[5].Value);
 
+                WDS = int.Parse(match.Groups[6].Value);
+                HDS = int.Parse(match.Groups[7].Value);
+
+                bitmap_bytes = new byte[WDS * HDS * 4];
+
                 CanvasBitmap[] bitmaps = new CanvasBitmap[length];
 
                 int ySave = y;
                 for (int i = 0; i < length;i++)
                 {
-                    y = ySave + i;
+                    y = ySave + i * HDS;
                    //Out of bound check
-                    if (x * WDS > sheetWidth || y * HDS > sheetHeight || x < 0 || y < 0) continue;
+                    if ((x + WDS) > sheetWidth || (y + HDS) > sheetHeight || x < 0 || y < 0) continue;
 
                     for (int by = 0; by < HDS; by++)
                     {
-                        yAbs = by + y * HDS;
+                        yAbs = by + y;
                         for (int bx = 0; bx < WDS * 4; bx++)
                         {
                             xAbs = bx + x * WDS * 4;
@@ -160,7 +167,7 @@ namespace GameEngine.Graphics
                     }
                     CanvasBitmap bitmap = CanvasBitmap.CreateFromBytes(_canvas, bitmap_bytes, WDS, HDS, DirectXPixelFormat.R8G8B8A8UIntNormalized);
 
-                    if (bitmap == null) return false;
+                    if (bitmap == null) throw new Exception("Couldn't create bitmap: " + name);
 
                     bitmaps[i] = bitmap;
                 }

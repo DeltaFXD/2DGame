@@ -61,6 +61,7 @@ namespace GameEngine.Entities.Mobs
                 yChange--;
             }
 
+            prev_moving = moving;
             if (xChange == 0 && yChange == 0)
             {
                 moving = false;
@@ -72,6 +73,117 @@ namespace GameEngine.Entities.Mobs
                 Move(xChange, yChange);
             }
             UpdateShooting();
+            UpdateSprite();
+        }
+
+        void UpdateSprite()
+        {
+            if (previous_direction == direction && prev_moving == moving)
+            {
+                return;
+            }
+            else
+            {
+                switch (direction)
+                {
+                    case Direction.East:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            break;
+                        }
+                    case Direction.NorthEast:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            break;
+                        }
+                    case Direction.North:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            break;
+                        }
+                    case Direction.NorthWest:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            break;
+                        }
+                    case Direction.West:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            break;
+                        }
+                    case Direction.SouthWest:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            break;
+                        }
+                    case Direction.South:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            break;
+                        }
+                    case Direction.SouthEast:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("player");
+                            }
+                            break;
+                        }
+                }
+            }
         }
 
         private void UpdateShooting()
@@ -87,7 +199,8 @@ namespace GameEngine.Entities.Mobs
 
         public override void Render(Screen screen)
         {
-            screen.RenderEntity(Coordinate.NormalToIso(position) / 2, renderBox, AnimatedSprite.GetAnimatedSprite("player").GetSprite());
+            if (sprite == null) sprite = AnimatedSprite.GetAnimatedSprite("player");
+            screen.RenderEntity(Coordinate.NormalToIso(position) / 2, renderBox, sprite.GetSprite());
         }
 
         public bool IsWithin(Vector2 coord)

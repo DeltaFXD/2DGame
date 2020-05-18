@@ -1,16 +1,33 @@
 ﻿using System.Numerics;
 
 using GameEngine.Entities.Projectiles;
+using GameEngine.Graphics;
 
 namespace GameEngine.Entities.Mobs
 {
     abstract class Mob : Entity
     {
-        protected int direction = 2;
+		protected enum Direction
+		{
+			East,
+			NorthEast,
+			North,
+			NorthWest,
+			West,
+			SouthWest,
+			South,
+			SouthEast
+		}
+
+		protected Direction direction = Direction.SouthEast;
+		protected Direction previous_direction = Direction.SouthEast;
         protected int maxHP = 100;
         protected int currentHP = 100;
 
         protected bool moving = false;
+		protected bool prev_moving = false;
+
+		protected AnimatedSprite sprite;
 
 		MobType killer = MobType.NONE;
 
@@ -21,17 +38,15 @@ namespace GameEngine.Entities.Mobs
 
         protected void Move(int xChange, int yChange)
         {
-			if (xChange != 0 && yChange != 0)
-			{
-				Move(xChange, 0);
-				Move(0, yChange);
-				return;
-			}
-
-			if (xChange > 0) direction = 1;
-			if (xChange < 0) direction = 3;
-			if (yChange > 0) direction = 2;
-			if (yChange < 0) direction = 0;
+			previous_direction = direction;
+			if (xChange == 0 && yChange > 0) direction = Direction.South;
+			else if (xChange == 0 && yChange < 0) direction = Direction.North;
+			else if (xChange > 0 && yChange == 0) direction = Direction.East;
+			else if (xChange < 0 && yChange == 0) direction = Direction.West;
+			else if (xChange < 0 && yChange < 0) direction = Direction.NorthWest;
+			else if (xChange < 0 && yChange > 0) direction = Direction.SouthWest;
+			else if (xChange > 0 && yChange < 0) direction = Direction.NorthEast;
+			else if (xChange > 0 && yChange > 0) direction = Direction.SouthEast;
 
 			if (!Collision(xChange, yChange))
 			{
@@ -43,6 +58,11 @@ namespace GameEngine.Entities.Mobs
 		public int GetHP()
 		{
 			return currentHP;
+		}
+
+		public int GetMaxHP()
+		{
+			return maxHP;
 		}
 
 		public bool Damaged(int damage)

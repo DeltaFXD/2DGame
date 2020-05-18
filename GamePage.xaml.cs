@@ -26,6 +26,7 @@ using GameEngine.Networking.Packets;
 using GameEngine;
 using System.Threading;
 using GameEngine.Entities;
+using GameEngine.UI;
 
 namespace Game2D
 {
@@ -43,7 +44,9 @@ namespace Game2D
         bool assests_ready = false;
         bool animated_assests_ready = false;
         bool animated_assests_ready2 = false;
+        bool animated_assests_ready3 = false;
         Player player;
+        PlayerUI ui;
         KeyBoard key;
         ArtificialInput artificial;
         Mouse mouse;
@@ -127,6 +130,9 @@ namespace Game2D
 
                 //Create Player
                 player = new Player(0, 0, key);
+
+                //Create UI
+                ui = new PlayerUI(player);
 
                 //Add Player
                 level.AddEntity(player);
@@ -255,6 +261,7 @@ namespace Game2D
             //Load AnimatedSpriteSheets
             animated_assests_ready = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\player_sheet_data.txt", @"\resources\spritesheets\player_sprites.png");
             animated_assests_ready2 = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\mobs_sheet_data.txt", @"\resources\spritesheets\mobs_sprites.png");
+            animated_assests_ready3 = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\ui_sheet_data.txt", @"\resources\spritesheets\ui_sprites.png");
 
             //LoadSounds
             await Sound.LoadSound("test.mp3");
@@ -271,10 +278,12 @@ namespace Game2D
             if (!assests_ready) return;
             if (!animated_assests_ready) return;
             if (!animated_assests_ready2) return;
+            if (!animated_assests_ready3) return;
             args.DrawingSession.Antialiasing = CanvasAntialiasing.Aliased;
             screen.SetCDS(args.DrawingSession);
             //In client state can be null
             if (level != null) level.Render(player.GetXY(), screen);
+            if (ui != null) ui.Render(screen);
         }
 
         private void Canvas_Update(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)
@@ -307,6 +316,7 @@ namespace Game2D
             mouse.SetOffset(screen.GetOffset());
             //Can be null in case of Client
             if (level != null) level.Update();
+            if (ui != null) ui.Update();
 
             if (Mouse.GetButton() == Mouse.Button.Left)
             {
@@ -324,7 +334,7 @@ namespace Game2D
                 test = false;
             }
 
-            if (animated_assests_ready && animated_assests_ready2)
+            if (animated_assests_ready && animated_assests_ready2 && animated_assests_ready3)
                 AnimatedSprite.GetUpdateables().ForEach(e => e.Update());
 
             if (type == GameType.Client) client.Update();
@@ -357,6 +367,9 @@ namespace Game2D
 
                                     //Create Player
                                     player = new Player(0, 0, key);
+
+                                    //Create UI
+                                    ui = new PlayerUI(player);
 
                                     //Add Player
                                     level.AddEntity(player);

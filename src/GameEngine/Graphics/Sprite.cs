@@ -64,6 +64,13 @@ namespace GameEngine.Graphics
             return sprite;
         }
 
+        public static Sprite GetSprite(string name)
+        {
+            if (!table.TryGetValue(name, out int id)) throw new ArgumentException("Cannot find name: " + name);
+            if (!sprites.TryGetValue(id, out Sprite sprite)) throw new ArgumentException("Cannot find sprite with name: " + name + " and ID: " + id);
+            return sprite;
+        }
+
         public static int GetSpriteID(string name)
         {
             if (!table.TryGetValue(name, out int id)) throw new ArgumentException("Cannot find name: " + name);

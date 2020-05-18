@@ -185,6 +185,7 @@
     <Compile Include="src\GameEngine\Networking\Packets\Pong.cs" />
     <Compile Include="src\GameEngine\Networking\Server.cs" />
     <Compile Include="src\GameEngine\Sounds\Sound.cs" />
+    <Compile Include="src\GameEngine\UI\PlayerUI.cs" />
     <Compile Include="src\GameEngine\Utilities\AStar.cs" />
     <Compile Include="src\GameEngine\Utilities\Coordinate.cs" />
     <Compile Include="src\GameEngine\Utilities\Node.cs" />
@@ -215,6 +216,8 @@
     <Content Include="resources\spritesheets\player_sprites.png" />
     <Content Include="resources\spritesheets\tiles_sheet_data.txt" />
     <Content Include="resources\spritesheets\tiles.png" />
+    <Content Include="resources\spritesheets\ui_sheet_data.txt" />
+    <Content Include="resources\spritesheets\ui_sprites.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

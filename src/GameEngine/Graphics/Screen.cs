@@ -164,6 +164,26 @@ namespace GameEngine.Graphics
             RenderRectangle(pos.X, pos.Y, spriteSize, sprite);
         }
 
+        public void RenderSprite(float x, float y, Rect renderBox, CanvasBitmap sprite, bool offset)
+        {
+            if (cds == null) return;
+
+            if (offset)
+            {
+                //Bound check just in case
+                if ((x - xOffset) < 0 || (x - xOffset) > width || (y - yOffset) < 0 || (y - yOffset) > height) return;
+
+                cds.DrawImage(sprite, x - xOffset, y - yOffset, renderBox);
+            }
+            else
+            {
+                //Bound check just in case
+                if (x < 0 || x > width || y < 0 || y > height) return;
+
+                cds.DrawImage(sprite, x, y, renderBox);
+            }   
+        }
+
         public int GetWidth()
         {
             return width;

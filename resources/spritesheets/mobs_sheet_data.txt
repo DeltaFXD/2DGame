@@ -1,1 +1,1 @@
-testmob 4 20 0 0
+testmob 4 20 0 0 32 64

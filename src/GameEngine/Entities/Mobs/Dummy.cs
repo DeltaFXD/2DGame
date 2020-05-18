@@ -79,6 +79,7 @@ namespace GameEngine.Entities.Mobs
                 }
             }
 
+            prev_moving = moving;
             if (xChange == 0 && yChange == 0)
             {
                 moving = false;
@@ -89,10 +90,122 @@ namespace GameEngine.Entities.Mobs
                 moving = true;
                 Move(xChange, yChange);
             }
+            UpdateSprite();
+        }
+
+        void UpdateSprite()
+        {
+            if (previous_direction == direction && prev_moving == moving)
+            {
+                return;
+            }
+            else
+            {
+                switch (direction)
+                {
+                    case Direction.East:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            break;
+                        }
+                    case Direction.NorthEast:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            break;
+                        }
+                    case Direction.North:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            break;
+                        }
+                    case Direction.NorthWest:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            break;
+                        }
+                    case Direction.West:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            break;
+                        }
+                    case Direction.SouthWest:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            break;
+                        }
+                    case Direction.South:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            break;
+                        }
+                    case Direction.SouthEast:
+                        {
+                            if (moving)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            else
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                            }
+                            break;
+                        }
+                }
+            }
         }
         public override void Render(Screen screen)
         {
-            screen.RenderEntity(Coordinate.NormalToIso(position) / 2, renderBox, AnimatedSprite.GetAnimatedSprite("testmob").GetSprite());
+            if (sprite == null) sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+            screen.RenderEntity(Coordinate.NormalToIso(position) / 2, renderBox, sprite.GetSprite());
         }
 
         public override bool IsHit(float x, float y)
