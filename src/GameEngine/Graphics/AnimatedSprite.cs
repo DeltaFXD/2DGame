@@ -10,6 +10,7 @@ using Windows.Graphics.DirectX;
 using System.Collections.Generic;
 
 using GameEngine.Interfaces;
+using Windows.Devices.Geolocation;
 
 namespace GameEngine.Graphics
 {
@@ -17,7 +18,8 @@ namespace GameEngine.Graphics
     {
         private static Dictionary<string, AnimatedSprite> _animatedSprites = new Dictionary<string, AnimatedSprite>();
         private static CanvasAnimatedControl _canvas = null;
-        private static int DSS = 32;
+        private static int WDS = 32;
+        private static int HDS = 64;
         private static List<IUpdateable> _updateList = new List<IUpdateable>();
 
         CanvasBitmap[] _bitmaps;
@@ -125,7 +127,7 @@ namespace GameEngine.Graphics
             string name;
             int rate, length;
             int x, y, xAbs, yAbs;
-            byte[] bitmap_bytes = new byte[DSS * DSS * 4];
+            byte[] bitmap_bytes = new byte[WDS * HDS * 4];
             //Sheet data proccesing
             MatchCollection matches = Regex.Matches(data, @"(\w+) (\d) (\d+) (\d) (\d)");
             foreach (Match match in matches)
@@ -145,18 +147,18 @@ namespace GameEngine.Graphics
                 {
                     y = ySave + i;
                    //Out of bound check
-                    if (x * DSS > sheetWidth || y * DSS > sheetHeight || x < 0 || y < 0) continue;
+                    if (x * WDS > sheetWidth || y * HDS > sheetHeight || x < 0 || y < 0) continue;
 
-                    for (int by = 0; by < DSS; by++)
+                    for (int by = 0; by < HDS; by++)
                     {
-                        yAbs = by + y * DSS;
-                        for (int bx = 0; bx < DSS * 4; bx++)
+                        yAbs = by + y * HDS;
+                        for (int bx = 0; bx < WDS * 4; bx++)
                         {
-                            xAbs = bx + x * DSS * 4;
-                            bitmap_bytes[bx + by * DSS * 4] = bytes[xAbs + yAbs * sheetWidth * 4];
+                            xAbs = bx + x * WDS * 4;
+                            bitmap_bytes[bx + by * WDS * 4] = bytes[xAbs + yAbs * sheetWidth * 4];
                         }
                     }
-                    CanvasBitmap bitmap = CanvasBitmap.CreateFromBytes(_canvas, bitmap_bytes, DSS, DSS, DirectXPixelFormat.R8G8B8A8UIntNormalized);
+                    CanvasBitmap bitmap = CanvasBitmap.CreateFromBytes(_canvas, bitmap_bytes, WDS, HDS, DirectXPixelFormat.R8G8B8A8UIntNormalized);
 
                     if (bitmap == null) return false;
 

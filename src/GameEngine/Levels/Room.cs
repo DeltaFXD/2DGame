@@ -45,6 +45,11 @@ namespace GameEngine.Levels
             CenterY = y + height / 2;
         }
 
+        public int GetSize()
+        {
+            return Width * Height;
+        }
+
         public bool IsInside(Room other)
         {
             int xTL = X - 2;

@@ -1,4 +1,6 @@
-﻿namespace GameEngine.Entities
+﻿using System;
+
+namespace GameEngine.Entities
 {
     class HitBox
     {
@@ -7,6 +9,8 @@
         int _height;
         int _x;
         int _y;
+        int centerX;
+        int centerY;
 
         // Offset from x and y
         public HitBox(int width, int height, int xoffset, int yoffset)
@@ -15,11 +19,19 @@
             _height = height + yoffset;
             _x = xoffset;
             _y = yoffset;
+            centerX = (_width + _x) / 2;
+            centerY = (_height + _y) / 2;
         }
 
         public bool IsInside(float x, float y)
         {
-            if (_x < x && x < _width && _y < y && y < _height)
+            //Rotate point around rectangle
+            x -= centerX;
+            y -= centerY;
+            double xn = x * Math.Cos(Math.PI / 4) - y * Math.Sin(Math.PI / 4);
+            double yn = x * Math.Sin(Math.PI / 4) + y * Math.Cos(Math.PI / 4);
+
+            if (_x < xn && xn < _width && _y < yn && yn < _height)
             {
                 return true;
             }

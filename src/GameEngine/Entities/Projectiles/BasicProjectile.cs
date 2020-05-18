@@ -17,7 +17,7 @@ namespace GameEngine.Entities.Projectiles
         static readonly int yOffsetSize = 8;
         static Sprite sprite = Sprite.GetSprite(Sprite.GetSpriteID("basic_projectile"));
 
-        static readonly HitBox hitBox = new HitBox(16, 16, 4, 0);
+        //static readonly HitBox hitBox = new HitBox(16, 16, 4, 0);
 
         readonly float sinA, cosA;
 
@@ -69,7 +69,7 @@ namespace GameEngine.Entities.Projectiles
                 Remove();
             }
             if (Distance() > _range) Remove();
-            if (EntityCollision(position.X, position.Y, hitBox))
+            if (EntityCollision(position.X, position.Y))
             {
                 Remove();
                 level.AddEntity(new ParticleSpawner(position.X, position.Y, _z, particleLife, particleAmount, "particle_red"));

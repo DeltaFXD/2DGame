@@ -1,18 +1,20 @@
-﻿using GameEngine.Graphics;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-
-using GameEngine.Utilities;
-using GameEngine.Inputs;
+using Windows.Foundation;
 using System.Diagnostics;
 using System.Numerics;
+
+using GameEngine.Graphics;
+using GameEngine.Utilities;
+using GameEngine.Inputs;
 
 namespace GameEngine.Entities.Mobs
 {
     class Dummy : Mob
     {
         static MobType type = MobType.DUMMY;
-        static HitBox _hitBox = new HitBox(20, 32, 12, 0);
+        static HitBox _hitBox = new HitBox(20, 64, 4, 0);
+        static Rect renderBox = new Rect(0, 0, 32, 64);
 
         List<Vector2> _path;
         bool _hasPath = false;
@@ -34,7 +36,7 @@ namespace GameEngine.Entities.Mobs
 
             //AI HERE
 
-            if (Mouse.GetButton() == Mouse.Button.Left && !_hasPath)
+            /*if (Mouse.GetButton() == Mouse.Button.Left && !_hasPath)
             {
                 Vector2 vec2 = Mouse.GetIsoCoordinate();
                 _path = AStar.FindPath((int)position.X / 32, (int)position.Y / 32, (int)vec2.X / 32, (int)vec2.Y / 32);
@@ -43,7 +45,7 @@ namespace GameEngine.Entities.Mobs
                     _hasPath = true;
                     Debug.WriteLine("Next node" + _path[_pathIndex]);
                 }
-            }
+            }*/
 
             if (_hasPath)
             {
@@ -90,12 +92,12 @@ namespace GameEngine.Entities.Mobs
         }
         public override void Render(Screen screen)
         {
-            screen.RenderEntity(Coordinate.NormalToIso(position) / 2, 32, AnimatedSprite.GetAnimatedSprite("testmob").GetSprite());
+            screen.RenderEntity(Coordinate.NormalToIso(position) / 2, renderBox, AnimatedSprite.GetAnimatedSprite("testmob").GetSprite());
         }
 
-        public override bool IsHit(float x, float y, HitBox hitbox)
+        public override bool IsHit(float x, float y)
         {
-            return _hitBox.IsInside(x - position.X, y - position.Y, hitbox);
+            return _hitBox.IsInside(x - position.X, y - position.Y);
         }
 
         public override MobType GetMobType()

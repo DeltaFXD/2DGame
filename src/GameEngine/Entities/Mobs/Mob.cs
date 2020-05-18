@@ -59,10 +59,10 @@ namespace GameEngine.Entities.Mobs
 
 		protected void Shoot(Vector2 projectileXY, double angle)
 		{
-			level.AddEntity(new BasicProjectile(projectileXY, 16, angle, this));
+			level.AddEntity(new BasicProjectile(projectileXY, 32, angle, this));
 		}
 
-		public abstract bool IsHit(float x, float y, HitBox hitbox);
+		public abstract bool IsHit(float x, float y);
 
 		public abstract MobType GetMobType();
 

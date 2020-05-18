@@ -126,13 +126,14 @@ namespace GameEngine.Graphics
 
 
         //TODO: Recheck bounds for this
-        public void RenderEntity(Vector2 pos, int spriteSize, CanvasBitmap sprite, float opacity = 1.0f)
+        public void RenderEntity(Vector2 pos, Rect renderBox, CanvasBitmap sprite, float opacity = 1.0f)
         {
             if (cds == null) return;
             //Boundary check
-            if (0 > (pos.X - xOffset + spriteSize) || width / 2 < (pos.X - xOffset - spriteSize) || -drawHeightAbs > (pos.Y - yOffset + spriteSize) || height / 2 < (pos.Y - yOffset)) return;
+            if (0 > (pos.X - xOffset + renderBox.Width) || width / 2 < (pos.X - xOffset - renderBox.Width) || -drawHeightAbs > (pos.Y - yOffset + renderBox.Height) || height / 2 < (pos.Y - yOffset)) return;
             //Draw
-            cds.DrawImage(sprite, pos.X - xOffset - spriteSize / 2, pos.Y - yOffset, sprite_base, opacity, CanvasImageInterpolation.NearestNeighbor);
+            Vector2 boxOffset = Coordinate.IsoToNormal(new Vector2((float)renderBox.Width, (float)renderBox.Height));
+            cds.DrawImage(sprite, pos.X - xOffset - boxOffset.X / 2, pos.Y - yOffset - boxOffset.Y * 2, renderBox, opacity, CanvasImageInterpolation.NearestNeighbor);
         }
         public void RenderRectangleSpecialBounds(float xPos, float yPos, int spriteSize, CanvasBitmap sprite, float opacity = 1.0f)
         {

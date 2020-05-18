@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameEngine.Entities.Mobs;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -6,12 +7,11 @@ namespace GameEngine.Levels
 {
     class LevelGenerator : Level
     {
-
         Random random;
-        public LevelGenerator(int seed, int size)
+        public LevelGenerator(int seed, int size, bool gen_npc)
         {
             random = new Random(seed);
-            Generate(size);
+            Generate(size, gen_npc);
         }
 
         int NextGaussian(int mean, int sigma)
@@ -22,7 +22,7 @@ namespace GameEngine.Levels
             return (int)Math.Round(r);
         }
 
-        void Generate(int size)
+        void Generate(int size, bool gen_npc)
         {
             List<Room> rooms = new List<Room>();
             List<Hallway> hallways = new List<Hallway>();
@@ -352,6 +352,53 @@ namespace GameEngine.Levels
             //Make minimap
             CreateMinimapData(rooms, hallways, size + 2);
             Debug.Write("Minimap data created");
+
+            //Generate NPCs
+            if (gen_npc)
+            {
+                int s = GenerateEntities(rooms);
+                Debug.WriteLine("Generated: " + s + " NPCs & Objects");
+            }
+        }
+
+        int GenerateEntities(List<Room> rooms)
+        {
+            int sum = 0;
+            int biggestRoom = 0;
+            //Search for biggest room
+            for (int i = 1; i < rooms.Count;i++)
+            {
+                if (rooms[biggestRoom].GetSize() < rooms[i].GetSize())
+                {
+                    biggestRoom = i;
+                }
+            }
+            int biggestRoomID = rooms[biggestRoom].Id;
+            //Spawn mobs in normal rooms
+            rooms.ForEach(room =>
+            {
+                if (room.Id != 0 && room.Id != biggestRoomID)
+                {
+                    int c = room.GetSize() / 25;
+                    while (c > 0)
+                    {
+                        int x = random.Next(room.X * Map.tileSize, (room.X + room.Width) * Map.tileSize);
+                        int y = random.Next(room.Y * Map.tileSize, (room.Y + room.Height) * Map.tileSize);
+                        if (random.Next(100) > 50)
+                        {
+                            AddEntity(new Dummy(x, y));
+                        }
+                        else
+                        {
+                            AddEntity(new Dummy(x, y));
+                        }
+                        c--;
+                        sum++;
+                    }
+                }
+            });
+
+            return sum;
         }
 
         void FilterRooms(List<Room> rooms)

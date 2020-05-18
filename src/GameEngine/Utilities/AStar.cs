@@ -47,6 +47,19 @@ namespace GameEngine.Utilities
             _xEnd = xEnd;
             _yEnd = yEnd;
             Debug.WriteLine("Finding path,from X: " + xStart + " Y: " + yStart + " to X: " + xEnd + " Y: " + yEnd);
+            if (xEnd < 0 || xEnd > _mapWidth || yEnd < 0 || yEnd > _mapHeight)
+            {
+                Debug.WriteLine("Returning null because destination out of the map");
+                return null;
+            }
+            else
+            {
+                if (_map[(int)xEnd, (int)yEnd] == -1)
+                {
+                    Debug.WriteLine("Returning null because destination out of the map");
+                    return null;
+                }
+            }
             _current = new Node(null, xStart, yStart, 0, 0);
 
             _closed.Add(_current);

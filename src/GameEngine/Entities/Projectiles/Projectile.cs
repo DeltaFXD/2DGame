@@ -25,7 +25,7 @@ namespace GameEngine.Entities.Projectiles
 			_z = z;
 		}
 
-		protected bool EntityCollision(float x, float y, HitBox hitbox)
+		protected bool EntityCollision(float x, float y)
 		{
 			bool collision = false;
 			Mob mob;
@@ -33,9 +33,9 @@ namespace GameEngine.Entities.Projectiles
 			for (int i = 0; i < mobs.Count(); i++)
 			{
 				mob = mobs[i];
-				if (mob.IsHit(x, y, hitbox) && mob.GetMobType() != _owner.GetMobType())
+				if (mob.IsHit(x, y) && mob.GetMobType() != _owner.GetMobType())
 				{
-					if (mob.Damaged((int)_damage)) mob.SetKiller(_owner.GetMobType());
+					//if (mob.Damaged((int)_damage)) mob.SetKiller(_owner.GetMobType());
 					collision = true;
 				}
 			}

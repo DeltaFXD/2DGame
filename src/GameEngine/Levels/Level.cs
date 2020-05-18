@@ -15,6 +15,8 @@ namespace GameEngine.Levels
     {
         Stopwatch watch = new Stopwatch();
         List<Entity> entities = new List<Entity>();
+        List<Entity> active_entities = new List<Entity>();
+        List<Player> players = new List<Player>();
         List<Entity> tmp = new List<Entity>();
         List<EntityCorrection> corrections = new List<EntityCorrection>();
         //protected Action mapLoading;
@@ -120,12 +122,16 @@ namespace GameEngine.Levels
             {
                 if (entity is Mob m) mobs.Add(m);
             });
+            /*Debug.WriteLine("entity count: " + entities.Count);
+            mobs = entities.FindAll(e => e is Mob).ConvertAll(e => (Mob)e);
+            Debug.WriteLine("mob count: " + mobs.Count);*/
             return mobs;
         }
 
         public void AddEntity(Entity entity)
         {
             entity.Initalize(this);
+            if (entity is Player p) players.Add(p);
             tmp.Add(entity);
             if (map != null)
             {
@@ -159,6 +165,7 @@ namespace GameEngine.Levels
 
             entities.AddRange(tmp);
             tmp.Clear();
+
             //Remove entities from map first
             if (map != null)
             {
@@ -170,14 +177,26 @@ namespace GameEngine.Levels
             //Remove entities
             entities.RemoveAll(entity => entity.IsRemoved());
 
-            //Update entities
-            entities.ForEach(entity => entity.Update());
+            //Maintain active entities
+            active_entities.Clear();
+            entities.ForEach(e =>
+            {
+                bool inside = false;
+                players.ForEach(p =>
+                {
+                    if (p.IsWithin(e.GetXY())) inside = true;
+                });
+                if (inside) active_entities.Add(e);
+            });
+
+            //Update active entities
+            active_entities.ForEach(entity => entity.Update());
 
             //Update map after entities
             if (map != null)
             {
                 map.Update();
-                map.UpdateSectors(entities);
+                map.UpdateSectors(active_entities);
             }
         }
 

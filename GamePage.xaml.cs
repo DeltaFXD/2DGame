@@ -121,7 +121,7 @@ namespace Game2D
                 Random random = new Random();
                 seed = random.Next(100000000);
 
-                level = new LevelGenerator(seed, 500);
+                level = new LevelGenerator(seed, 500, true);
 
                 Entity.GenID = true;
 
@@ -353,7 +353,7 @@ namespace Game2D
                                     LevelGenData data = (LevelGenData)p;
                                     seed = data.Seed;
 
-                                    level = new LevelGenerator(seed, data.Size);
+                                    level = new LevelGenerator(seed, data.Size, false);
 
                                     //Create Player
                                     player = new Player(0, 0, key);

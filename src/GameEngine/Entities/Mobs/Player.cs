@@ -5,13 +5,16 @@ using GameEngine.Graphics;
 using GameEngine.Utilities;
 using GameEngine.Entities.Projectiles;
 using System.Numerics;
+using Windows.Foundation;
+using GameEngine.Levels;
 
 namespace GameEngine.Entities.Mobs
 {
     class Player : Mob
     {
         static MobType type = MobType.PLAYER;
-        static HitBox _hitBox = new HitBox(20, 32, 12, 0);
+        static HitBox _hitBox = new HitBox(32, 64, 0, 0);
+        static Rect renderBox = new Rect(0, 0, 32, 64);
 
         KeyBoard input;
         protected int fireRate;
@@ -77,19 +80,39 @@ namespace GameEngine.Entities.Mobs
             {
                 Vector2 vec2 = Mouse.GetIsoCoordinate() - position;
                 double angle = Math.Atan2(vec2.Y, vec2.X);
-                Shoot(position , angle);
+                Shoot(position + new Vector2(28, 28), angle);
                 fireRate = BasicProjectile.GetRateOfFire();
             }
         }
 
         public override void Render(Screen screen)
         {
-            screen.RenderEntity(Coordinate.NormalToIso(position) / 2, 32, AnimatedSprite.GetAnimatedSprite("player").GetSprite());
+            screen.RenderEntity(Coordinate.NormalToIso(position) / 2, renderBox, AnimatedSprite.GetAnimatedSprite("player").GetSprite());
         }
 
-        public override bool IsHit(float x, float y, HitBox hitbox)
+        public bool IsWithin(Vector2 coord)
         {
-            return _hitBox.IsInside(x - position.X, y - position.Y, hitbox);
+            float xTL = position.X - 40 * Map.tileSize;
+            float yTL = position.Y - 40 * Map.tileSize;
+            float xBR = position.X + 40 * Map.tileSize;
+            float yBR = position.Y + 40 * Map.tileSize;
+
+            float x = coord.X;
+            float y = coord.Y;
+
+            if (x > xTL && x < xBR && y > yTL && y < yBR)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override bool IsHit(float x, float y)
+        {
+            return _hitBox.IsInside(x - position.X, y - position.Y);
         }
 
         public override MobType GetMobType()
