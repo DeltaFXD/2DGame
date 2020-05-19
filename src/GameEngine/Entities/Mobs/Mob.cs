@@ -53,6 +53,14 @@ namespace GameEngine.Entities.Mobs
 				position.X += xChange;
 				position.Y += yChange;
 			}
+			else if (!Collision(0, yChange))
+			{
+				position.Y += yChange * 2;
+			}
+			else if (!Collision(xChange, 0))
+			{
+				position.X += xChange * 2;
+			}
 		}
 
 		public int GetHP()

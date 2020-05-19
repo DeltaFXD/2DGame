@@ -6,6 +6,7 @@ using GameEngine.Utilities;
 using GameEngine.Entities;
 using GameEngine.Entities.Mobs;
 using System;
+using GameEngine.Entities.PickupAbles;
 
 namespace GameEngine.Levels
 {
@@ -54,7 +55,7 @@ namespace GameEngine.Levels
                     {
                         if (walls[w].IsBehind(entities[e].GetX(), entities[e].GetY()))
                         {
-                            if (!(entities[e] is Mob))
+                            if (!(entities[e] is Mob) && !(entities[e] is PickupAble))
                             {
                                 //Set render mode to iso
                                 screen.SetRenderMode(RenderMode.Isometric);

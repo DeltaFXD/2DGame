@@ -1,4 +1,5 @@
 ﻿using GameEngine.Entities.Mobs;
+using GameEngine.Entities.PickupAbles;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -382,13 +383,23 @@ namespace GameEngine.Levels
                     int c = room.GetSize() / 25;
                     while (c > 0)
                     {
-                        int x = random.Next(room.X * Map.tileSize, (room.X + room.Width) * Map.tileSize);
-                        int y = random.Next(room.Y * Map.tileSize, (room.Y + room.Height) * Map.tileSize);
-                        if (random.Next(100) > 50)
+                        int x = random.Next(room.X * Map.tileSize, (room.X + room.Width - 1) * Map.tileSize);
+                        int y = random.Next(room.Y * Map.tileSize, (room.Y + room.Height - 1) * Map.tileSize);
+                        int r = random.Next(100);
+                        if (r > 75)
                         {
-                            AddEntity(new Dummy(x, y));
+                            x -= x % Map.tileSize;
+                            y -= y % Map.tileSize;
+                            if (random.Next(100) > 50)
+                            {
+                                AddEntity(new Arrows(x, y, random.Next(10, 20)));
+                            }
+                            else
+                            {
+                                AddEntity(new HP_Potion(x, y, 20));
+                            }
                         }
-                        else
+                        else if (r > 0)
                         {
                             AddEntity(new Dummy(x, y));
                         }

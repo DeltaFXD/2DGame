@@ -7,6 +7,7 @@ using GameEngine.Entities.Projectiles;
 using System.Numerics;
 using Windows.Foundation;
 using GameEngine.Levels;
+using GameEngine.Entities.PickupAbles;
 
 namespace GameEngine.Entities.Mobs
 {
@@ -18,12 +19,14 @@ namespace GameEngine.Entities.Mobs
 
         KeyBoard input;
         protected int fireRate;
+        public int Ammo { get; private set; }
 
         protected Player(float x, float y) : base()
         {
             position.X = x;
             position.Y = y;
             fireRate = 0;
+            Ammo = 50;
         }
         public Player(float x , float y, KeyBoard input) : base()
         {
@@ -31,6 +34,7 @@ namespace GameEngine.Entities.Mobs
             position.Y = y;
             this.input = input;
             fireRate = 0;
+            Ammo = 50;
         }
 
         public override void Update()
@@ -186,14 +190,37 @@ namespace GameEngine.Entities.Mobs
             }
         }
 
+        public void Consume(PickupAble pickup_able)
+        {
+            switch (pickup_able.Type)
+            {
+                case PickupType.Arrows:
+                    {
+                        Ammo += pickup_able.Value;
+                        break;
+                    }
+                case PickupType.HP_Potion:
+                    {
+                        currentHP += pickup_able.Value;
+                        CheckHP();
+                        break;
+                    }
+                case PickupType.Mana_Potion:
+                    {
+                        break;
+                    }
+            }
+        }
+
         private void UpdateShooting()
         {
-            if (Mouse.GetButton() == Mouse.Button.Left && fireRate <= 0)
+            if (Mouse.GetButton() == Mouse.Button.Left && fireRate <= 0 && Ammo != 0)
             {
                 Vector2 vec2 = Mouse.GetIsoCoordinate() - position;
                 double angle = Math.Atan2(vec2.Y, vec2.X);
                 Shoot(position + new Vector2(28, 28), angle);
                 fireRate = BasicProjectile.GetRateOfFire();
+                Ammo--;
             }
         }
 

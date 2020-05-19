@@ -128,6 +128,11 @@ namespace GameEngine.Levels
             return mobs;
         }
 
+        public List<Player> GetPlayers()
+        {
+            return players;
+        }
+
         public void AddEntity(Entity entity)
         {
             entity.Initalize(this);

@@ -161,7 +161,7 @@ namespace GameEngine.Graphics
                         yAbs = by + y;
                         for (int bx = 0; bx < WDS * 4; bx++)
                         {
-                            xAbs = bx + x * WDS * 4;
+                            xAbs = bx + x * 4;
                             bitmap_bytes[bx + by * WDS * 4] = bytes[xAbs + yAbs * sheetWidth * 4];
                         }
                     }

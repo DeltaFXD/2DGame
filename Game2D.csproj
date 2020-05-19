@@ -148,6 +148,10 @@
     <Compile Include="src\GameEngine\Entities\Mobs\MobType.cs" />
     <Compile Include="src\GameEngine\Entities\Mobs\OtherPlayer.cs" />
     <Compile Include="src\GameEngine\Entities\Mobs\Player.cs" />
+    <Compile Include="src\GameEngine\Entities\PickupAbles\Arrows.cs" />
+    <Compile Include="src\GameEngine\Entities\PickupAbles\HP_Potion.cs" />
+    <Compile Include="src\GameEngine\Entities\PickupAbles\PickupAble.cs" />
+    <Compile Include="src\GameEngine\Entities\PickupAbles\PickupType.cs" />
     <Compile Include="src\GameEngine\Entities\Particles\Particle.cs" />
     <Compile Include="src\GameEngine\Entities\Projectiles\BasicProjectile.cs" />
     <Compile Include="src\GameEngine\Entities\Projectiles\Projectile.cs" />
@@ -212,6 +216,8 @@
     <Content Include="resources\sounds\test.mp3" />
     <Content Include="resources\spritesheets\mobs_sheet_data.txt" />
     <Content Include="resources\spritesheets\mobs_sprites.png" />
+    <Content Include="resources\spritesheets\object_sheet_data.txt" />
+    <Content Include="resources\spritesheets\object_sprites.png" />
     <Content Include="resources\spritesheets\player_sheet_data.txt" />
     <Content Include="resources\spritesheets\player_sprites.png" />
     <Content Include="resources\spritesheets\tiles_sheet_data.txt" />

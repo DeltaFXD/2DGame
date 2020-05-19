@@ -103,11 +103,11 @@ namespace GameEngine.Levels
             } 
             prev_state = now;
 
-            //If the minimap doesn't exists yet try to create one
-            if (minimapImage == null && minimap != null) CreateNewMinimap();
+            //If the minimap doesn't exists we force an update
+            if (minimapImage == null && minimap != null) player_moved = true;
 
             //Updating minimap data
-            if (player_moved & minimap != null)
+            if (player_moved && minimap != null)
             {
                 int lx = playerX - 5;
                 int ly = playerY - 5;

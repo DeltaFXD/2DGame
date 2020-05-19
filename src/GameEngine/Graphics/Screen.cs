@@ -4,6 +4,8 @@ using System.Numerics;
 using Windows.Foundation;
 
 using GameEngine.Utilities;
+using Windows.UI;
+using Microsoft.Graphics.Canvas.Text;
 
 namespace GameEngine.Graphics
 {
@@ -182,6 +184,16 @@ namespace GameEngine.Graphics
 
                 cds.DrawImage(sprite, x, y, renderBox);
             }   
+        }
+
+        public void RenderText(float x, float y, string text, CanvasTextFormat format)
+        {
+            if (cds == null) return;
+
+            //Bound check just in case
+            if (x < 0 || x > width || y < 0 || y > height) return;
+
+            cds.DrawText(text, x, y, Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF), format);
         }
 
         public int GetWidth()

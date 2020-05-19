@@ -45,6 +45,7 @@ namespace Game2D
         bool animated_assests_ready = false;
         bool animated_assests_ready2 = false;
         bool animated_assests_ready3 = false;
+        bool animated_assests_ready4 = false;
         Player player;
         PlayerUI ui;
         KeyBoard key;
@@ -262,6 +263,7 @@ namespace Game2D
             animated_assests_ready = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\player_sheet_data.txt", @"\resources\spritesheets\player_sprites.png");
             animated_assests_ready2 = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\mobs_sheet_data.txt", @"\resources\spritesheets\mobs_sprites.png");
             animated_assests_ready3 = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\ui_sheet_data.txt", @"\resources\spritesheets\ui_sprites.png");
+            animated_assests_ready4 = await AnimatedSprite.LoadSheet(@"\resources\spritesheets\object_sheet_data.txt", @"\resources\spritesheets\object_sprites.png");
 
             //LoadSounds
             await Sound.LoadSound("test.mp3");
@@ -279,6 +281,7 @@ namespace Game2D
             if (!animated_assests_ready) return;
             if (!animated_assests_ready2) return;
             if (!animated_assests_ready3) return;
+            if (!animated_assests_ready4) return;
             args.DrawingSession.Antialiasing = CanvasAntialiasing.Aliased;
             screen.SetCDS(args.DrawingSession);
             //In client state can be null
@@ -334,7 +337,7 @@ namespace Game2D
                 test = false;
             }
 
-            if (animated_assests_ready && animated_assests_ready2 && animated_assests_ready3)
+            if (animated_assests_ready && animated_assests_ready2 && animated_assests_ready3 && animated_assests_ready4)
                 AnimatedSprite.GetUpdateables().ForEach(e => e.Update());
 
             if (type == GameType.Client) client.Update();
