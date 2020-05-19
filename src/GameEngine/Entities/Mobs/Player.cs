@@ -41,6 +41,7 @@ namespace GameEngine.Entities.Mobs
         {
             //Debug.WriteLine(position);
             CheckHP();
+            IsDead();
             int xChange = 0;
             int yChange = 0;
             if (fireRate > 0) fireRate--;

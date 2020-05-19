@@ -182,6 +182,8 @@ namespace GameEngine.Levels
             //Remove entities
             entities.RemoveAll(entity => entity.IsRemoved());
 
+            players.RemoveAll(player => player.IsRemoved());
+
             //Maintain active entities
             active_entities.Clear();
             entities.ForEach(e =>

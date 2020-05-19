@@ -35,7 +35,7 @@ namespace GameEngine.Entities.Projectiles
 				mob = mobs[i];
 				if (mob.IsHit(x, y) && mob.GetMobType() != _owner.GetMobType())
 				{
-					//if (mob.Damaged((int)_damage)) mob.SetKiller(_owner.GetMobType());
+					if (mob.Damaged((int)_damage)) mob.SetKiller(_owner.GetMobType());
 					collision = true;
 				}
 			}

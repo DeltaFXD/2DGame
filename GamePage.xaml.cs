@@ -27,6 +27,7 @@ using GameEngine;
 using System.Threading;
 using GameEngine.Entities;
 using GameEngine.UI;
+using Microsoft.Graphics.Canvas.Text;
 
 namespace Game2D
 {
@@ -287,6 +288,14 @@ namespace Game2D
             //In client state can be null
             if (level != null) level.Render(player.GetXY(), screen);
             if (ui != null) ui.Render(screen);
+            if (player != null && player.IsRemoved()) 
+            {
+                CanvasTextFormat format = new CanvasTextFormat();
+                format.FontSize = 100;
+                format.HorizontalAlignment = CanvasHorizontalAlignment.Center;
+                format.VerticalAlignment = CanvasVerticalAlignment.Center;
+                screen.RenderText(screen.GetWidth() / 2, screen.GetHeight() / 2, "GAME OVER", format);
+            }
         }
 
         private void Canvas_Update(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)

@@ -7,6 +7,9 @@ using System.Numerics;
 using GameEngine.Graphics;
 using GameEngine.Utilities;
 using GameEngine.Inputs;
+using GameEngine.Entities.Projectiles;
+using System;
+using GameEngine.Levels;
 
 namespace GameEngine.Entities.Mobs
 {
@@ -20,11 +23,16 @@ namespace GameEngine.Entities.Mobs
         bool _hasPath = false;
         int _pathIndex = 0;
         Vector2 _prev_position;
+        int fireRate;
+
+        public int Ammo { get; private set; }
 
         public Dummy(float x, float y) : base()
         {
             position.X = x;
             position.Y = y;
+            Ammo = 100;
+            fireRate = 0;
         }
 
         public override void Update()
@@ -33,19 +41,25 @@ namespace GameEngine.Entities.Mobs
             IsDead();
             int xChange = 0;
             int yChange = 0;
-
+            if (fireRate > 0) fireRate--;
             //AI HERE
 
-            /*if (Mouse.GetButton() == Mouse.Button.Left && !_hasPath)
+            level.GetPlayers().ForEach(player =>
             {
-                Vector2 vec2 = Mouse.GetIsoCoordinate();
-                _path = AStar.FindPath((int)position.X / 32, (int)position.Y / 32, (int)vec2.X / 32, (int)vec2.Y / 32);
-                if (_path != null)
+                float dist = (player.GetX() - position.X) * (player.GetX() - position.X) + (player.GetY() - position.Y) * (player.GetY() - position.Y);
+                if (dist < (Map.tileSize * Map.tileSize * 8))
                 {
-                    _hasPath = true;
-                    Debug.WriteLine("Next node" + _path[_pathIndex]);
+                    UpdateShooting(player.GetXY() - position);
                 }
-            }*/
+                else if (!_hasPath && dist < (Map.tileSize * Map.tileSize * 16 * 16))
+                {
+                    _path = AStar.FindPath((int)position.X / 32, (int)position.Y / 32, (int)player.GetX() / 32, (int)player.GetY() / 32);
+                    if (_path != null)
+                    {
+                        _hasPath = true;
+                    }
+                }
+            });
 
             if (_hasPath)
             {
@@ -74,8 +88,8 @@ namespace GameEngine.Entities.Mobs
                         _path = null;
                         _pathIndex = 0;
                         _hasPath = false;
-                    } else
-                        Debug.WriteLine("Next node" + _path[_pathIndex]);
+                    }/* else
+                        Debug.WriteLine("Next node" + _path[_pathIndex]);*/
                 }
             }
 
@@ -91,6 +105,17 @@ namespace GameEngine.Entities.Mobs
                 Move(xChange, yChange);
             }
             UpdateSprite();
+        }
+
+        private void UpdateShooting(Vector2 vec2)
+        {
+            if (fireRate <= 0 && Ammo != 0)
+            {
+                double angle = Math.Atan2(vec2.Y, vec2.X);
+                Shoot(position + new Vector2(28, 28), angle);
+                fireRate = BasicProjectile.GetRateOfFire();
+                Ammo--;
+            }
         }
 
         void UpdateSprite()
