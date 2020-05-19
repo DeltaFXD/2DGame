@@ -46,7 +46,7 @@ namespace GameEngine.Utilities
             _yStart = yStart;
             _xEnd = xEnd;
             _yEnd = yEnd;
-            Debug.WriteLine("Finding path,from X: " + xStart + " Y: " + yStart + " to X: " + xEnd + " Y: " + yEnd);
+            //Debug.WriteLine("Finding path,from X: " + xStart + " Y: " + yStart + " to X: " + xEnd + " Y: " + yEnd);
             if (xEnd < 0 || xEnd > _mapWidth || yEnd < 0 || yEnd > _mapHeight)
             {
                 Debug.WriteLine("Returning null because destination out of the map");
@@ -68,7 +68,7 @@ namespace GameEngine.Utilities
             {
                 if (_open.Count() == 0)
                 {
-                    Debug.WriteLine("Returning null because _open is empty");
+                    //Debug.WriteLine("Returning null because _open is empty");
                     return null;
                 }
                 _current = _open[0];
@@ -93,6 +93,7 @@ namespace GameEngine.Utilities
 
         static void AddNeigborsToOpenList()
         {
+            if (Distance((int)_xStart, (int)_yStart) > 50) return;
             Node node;
             for (int x = -1; x <= 1; x++)
             {
