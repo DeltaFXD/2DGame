@@ -95,243 +95,253 @@ namespace GameEngine.Levels
                     w = 10;
                     h = 10;
                 }
-                if (room.IsOpen(BranchDir.West) || room.IsOpen(BranchDir.East))
+                BranchDir dir = (BranchDir)random.Next(4);
+                while (!room.IsOpen(dir))
                 {
-                    width = random.Next(4, 6);
-                    height = random.Next(2, 4);
-                    if (room.IsOpen(BranchDir.East))
-                    {
-                        if ((room.X + room.Width + width + w) < size)
-                        {
-                            x = room.X + room.Width + width;
-                            y = random.Next(room.CenterY - h / 2, room.CenterY - width / 2);
-                            if (y < 0) y = room.Y;
-                            if ((x + w) < size && (y + h) < size)
-                            {
-                                Hallway hallway = new Hallway(room.X + room.Width, room.CenterY - height / 2, width, height, HallWayOrientation.Horizontal);
-                                Room new_room = new Room(x, y, w, h, room);
-                                bool good = true;
-                                rooms.ForEach(r =>
-                                {
-                                    if (r.IsInside(new_room)) good = false;
-                                });
-                                if (good)
-                                {
-                                    rooms.Add(new_room);
-                                    hallways.Add(hallway);
-                                    new_room.Allocate(BranchDir.West, hallway);
-                                    room.Allocate(BranchDir.East, hallway);
-                                    int b;
-                                    if (depth >= 3) b = random.Next(2, 3); else b = random.Next(1, 3);
-                                    if (depth == 1) b = 0;
-                                    if (depth >= 5) b = 3;
-                                    while (b != 0)
-                                    {
-                                        int open_b = random.Next(4);
-                                        if (new_room.OpenBranch(open_b)) b--;
-                                    }
-                                    room = new_room;
-                                    depth--;
-                                    rn++;
-                                    hn++;
-                                }
-                                else
-                                {
-                                    if (again == 0)
-                                    {
-                                        room.Close(BranchDir.East);
-                                        Debug.WriteLine("10 retry was not enough east");
-                                        again = 10;
-                                    }
-                                    again--;
-                                }
-                            }
-                            else
-                            {
-                                room.Close(BranchDir.East);
-                            }
-                        }
-                        else
-                        {
-                            room.Close(BranchDir.East);
-                        }
-                    }
-                    else
-                    {
-                        if ((room.X - width - w) > 0)
-                        {
-                            x = room.X - width - w;
-                            y = random.Next(room.CenterY - h / 2, room.CenterY - width / 2);
-                            if (y < 0) y = room.Y;
-                            if ((x + w) < size && (y + h) < size)
-                            {
-                                Hallway hallway = new Hallway(room.X - width, room.CenterY - height / 2, width, height, HallWayOrientation.Horizontal);
-                                Room new_room = new Room(x, y, w, h, room);
-                                bool good = true;
-                                rooms.ForEach(r =>
-                                {
-                                    if (r.IsInside(new_room)) good = false;
-                                });
-                                if (good)
-                                {
-                                    rooms.Add(new_room);
-                                    hallways.Add(hallway);
-                                    new_room.Allocate(BranchDir.East, hallway);
-                                    room.Allocate(BranchDir.West, hallway);
-                                    int b;
-                                    if (depth >= 3) b = random.Next(2, 3); else b = random.Next(1, 3);
-                                    if (depth == 1) b = 0;
-                                    if (depth >= 5) b = 3;
-                                    while (b != 0)
-                                    {
-                                        int open_b = random.Next(4);
-                                        if (new_room.OpenBranch(open_b)) b--;
-                                    }
-                                    room = new_room;
-                                    depth--;
-                                    rn++;
-                                    hn++;
-                                }
-                                else
-                                {
-                                    if (again == 0)
-                                    {
-                                        room.Close(BranchDir.West);
-                                        Debug.WriteLine("10 retry was not enough on west");
-                                        again = 10;
-                                    }
-                                    again--;
-                                }
-                            }
-                            else
-                            {
-                                room.Close(BranchDir.West);
-                            }
-                        }
-                        else
-                        {
-                            room.Close(BranchDir.West);
-                        }
-                    }
+                    dir = (BranchDir)random.Next(4);
                 }
-                else
+                switch (dir)
                 {
-                    width = random.Next(2, 4);
-                    height = random.Next(4, 6);
-                    if (room.IsOpen(BranchDir.South))
-                    {
-                        if ((room.Y + room.Height + height + h) < size)
+                    case BranchDir.North:
                         {
-                            x = random.Next(room.CenterX - w / 2, room.CenterX - width / 2);
-                            if (x < 0) x = room.X;
-                            y = room.Y + room.Height + height;
-                            if ((x + w) < size && (y + h) < size)
+                            width = random.Next(2, 4);
+                            height = random.Next(4, 6);
+                            if ((room.Y - height - h) > 0)
                             {
-                                Hallway hallway = new Hallway(room.CenterX - width / 2, room.Y + room.Height, width, height, HallWayOrientation.Vertical);
-                                Room new_room = new Room(x, y, w, h, room);
-                                bool good = true;
-                                rooms.ForEach(r =>
+                                x = random.Next(room.CenterX - w / 2, room.CenterX - width / 2);
+                                if (x < 0) x = room.X;
+                                y = room.Y - height - h;
+                                if ((x + w) < size && (y + h) < size)
                                 {
-                                    if (r.IsInside(new_room)) good = false;
-                                });
-                                if (good)
-                                {
-                                    rooms.Add(new_room);
-                                    hallways.Add(hallway);
-                                    new_room.Allocate(BranchDir.North, hallway);
-                                    room.Allocate(BranchDir.South, hallway);
-                                    int b;
-                                    if (depth >= 3) b = random.Next(2, 3); else b = random.Next(1, 3);
-                                    if (depth == 1) b = 0;
-                                    if (depth >= 5) b = 3;
-                                    while (b != 0)
+                                    Hallway hallway = new Hallway(room.CenterX - width / 2, room.Y - height, width, height, HallWayOrientation.Vertical);
+                                    Room new_room = new Room(x, y, w, h, room);
+                                    bool good = true;
+                                    rooms.ForEach(r =>
                                     {
-                                        int open_b = random.Next(4);
-                                        if (new_room.OpenBranch(open_b)) b--;
+                                        if (r.IsInside(new_room)) good = false;
+                                    });
+                                    if (good)
+                                    {
+                                        rooms.Add(new_room);
+                                        hallways.Add(hallway);
+                                        new_room.Allocate(BranchDir.South, hallway);
+                                        room.Allocate(BranchDir.North, hallway);
+                                        int b;
+                                        if (depth >= 3) b = random.Next(2, 3); else b = random.Next(1, 3);
+                                        if (depth == 1) b = 0;
+                                        if (depth >= 5) b = 3;
+                                        while (b != 0)
+                                        {
+                                            int open_b = random.Next(4);
+                                            if (new_room.OpenBranch(open_b)) b--;
+                                        }
+                                        room = new_room;
+                                        depth--;
+                                        rn++;
+                                        hn++;
                                     }
-                                    room = new_room;
-                                    depth--;
-                                    rn++;
-                                    hn++;
+                                    else
+                                    {
+                                        if (again == 0)
+                                        {
+                                            room.Close(BranchDir.North);
+                                            Debug.WriteLine("10 retry was not enough on north");
+                                            again = 10;
+                                        }
+                                        again--;
+                                    }
                                 }
                                 else
                                 {
-                                    if (again == 0)
-                                    {
-                                        room.Close(BranchDir.South);
-                                        Debug.WriteLine("10 retry was not enough on south");
-                                        again = 10;
-                                    }
-                                    again--;
-                                }
-                            }
-                            else
-                            {
-                                room.Close(BranchDir.South);
-                            }
-                        }
-                        else
-                        {
-                            room.Close(BranchDir.South);
-                        }
-                    }
-                    else
-                    {
-                        if ((room.Y - height - h) > 0)
-                        {
-                            x = random.Next(room.CenterX - w / 2, room.CenterX - width / 2);
-                            if (x < 0) x = room.X;
-                            y = room.Y - height - h;
-                            if ((x + w) < size && (y + h) < size)
-                            {
-                                Hallway hallway = new Hallway(room.CenterX - width / 2, room.Y - height, width, height, HallWayOrientation.Vertical);
-                                Room new_room = new Room(x, y, w, h, room);
-                                bool good = true;
-                                rooms.ForEach(r =>
-                                {
-                                    if (r.IsInside(new_room)) good = false;
-                                });
-                                if (good)
-                                {
-                                    rooms.Add(new_room);
-                                    hallways.Add(hallway);
-                                    new_room.Allocate(BranchDir.South, hallway);
-                                    room.Allocate(BranchDir.North, hallway);
-                                    int b;
-                                    if (depth >= 3) b = random.Next(2, 3); else b = random.Next(1, 3);
-                                    if (depth == 1) b = 0;
-                                    if (depth >= 5) b = 3;
-                                    while (b != 0)
-                                    {
-                                        int open_b = random.Next(4);
-                                        if (new_room.OpenBranch(open_b)) b--;
-                                    }
-                                    room = new_room;
-                                    depth--;
-                                    rn++;
-                                    hn++;
-                                }
-                                else
-                                {
-                                    if (again == 0)
-                                    {
-                                        room.Close(BranchDir.North);
-                                        Debug.WriteLine("10 retry was not enough on north");
-                                        again = 10;
-                                    }
-                                    again--;
+                                    room.Close(BranchDir.North);
                                 }
                             }
                             else
                             {
                                 room.Close(BranchDir.North);
                             }
+                            break;
                         }
-                        else
+                    case BranchDir.East:
                         {
-                            room.Close(BranchDir.North);
+                            width = random.Next(4, 6);
+                            height = random.Next(2, 4);
+                            if ((room.X + room.Width + width + w) < size)
+                            {
+                                x = room.X + room.Width + width;
+                                y = random.Next(room.CenterY - h / 2, room.CenterY - width / 2);
+                                if (y < 0) y = room.Y;
+                                if ((x + w) < size && (y + h) < size)
+                                {
+                                    Hallway hallway = new Hallway(room.X + room.Width, room.CenterY - height / 2, width, height, HallWayOrientation.Horizontal);
+                                    Room new_room = new Room(x, y, w, h, room);
+                                    bool good = true;
+                                    rooms.ForEach(r =>
+                                    {
+                                        if (r.IsInside(new_room)) good = false;
+                                    });
+                                    if (good)
+                                    {
+                                        rooms.Add(new_room);
+                                        hallways.Add(hallway);
+                                        new_room.Allocate(BranchDir.West, hallway);
+                                        room.Allocate(BranchDir.East, hallway);
+                                        int b;
+                                        if (depth >= 3) b = random.Next(2, 3); else b = random.Next(1, 3);
+                                        if (depth == 1) b = 0;
+                                        if (depth >= 5) b = 3;
+                                        while (b != 0)
+                                        {
+                                            int open_b = random.Next(4);
+                                            if (new_room.OpenBranch(open_b)) b--;
+                                        }
+                                        room = new_room;
+                                        depth--;
+                                        rn++;
+                                        hn++;
+                                    }
+                                    else
+                                    {
+                                        if (again == 0)
+                                        {
+                                            room.Close(BranchDir.East);
+                                            Debug.WriteLine("10 retry was not enough east");
+                                            again = 10;
+                                        }
+                                        again--;
+                                    }
+                                }
+                                else
+                                {
+                                    room.Close(BranchDir.East);
+                                }
+                            }
+                            else
+                            {
+                                room.Close(BranchDir.East);
+                            }
+                            break;
                         }
-                    }
+                    case BranchDir.South:
+                        {
+                            width = random.Next(2, 4);
+                            height = random.Next(4, 6);
+                            if ((room.Y + room.Height + height + h) < size)
+                            {
+                                x = random.Next(room.CenterX - w / 2, room.CenterX - width / 2);
+                                if (x < 0) x = room.X;
+                                y = room.Y + room.Height + height;
+                                if ((x + w) < size && (y + h) < size)
+                                {
+                                    Hallway hallway = new Hallway(room.CenterX - width / 2, room.Y + room.Height, width, height, HallWayOrientation.Vertical);
+                                    Room new_room = new Room(x, y, w, h, room);
+                                    bool good = true;
+                                    rooms.ForEach(r =>
+                                    {
+                                        if (r.IsInside(new_room)) good = false;
+                                    });
+                                    if (good)
+                                    {
+                                        rooms.Add(new_room);
+                                        hallways.Add(hallway);
+                                        new_room.Allocate(BranchDir.North, hallway);
+                                        room.Allocate(BranchDir.South, hallway);
+                                        int b;
+                                        if (depth >= 3) b = random.Next(2, 3); else b = random.Next(1, 3);
+                                        if (depth == 1) b = 0;
+                                        if (depth >= 5) b = 3;
+                                        while (b != 0)
+                                        {
+                                            int open_b = random.Next(4);
+                                            if (new_room.OpenBranch(open_b)) b--;
+                                        }
+                                        room = new_room;
+                                        depth--;
+                                        rn++;
+                                        hn++;
+                                    }
+                                    else
+                                    {
+                                        if (again == 0)
+                                        {
+                                            room.Close(BranchDir.South);
+                                            Debug.WriteLine("10 retry was not enough on south");
+                                            again = 10;
+                                        }
+                                        again--;
+                                    }
+                                }
+                                else
+                                {
+                                    room.Close(BranchDir.South);
+                                }
+                            }
+                            else
+                            {
+                                room.Close(BranchDir.South);
+                            }
+                            break;
+                        }
+                    case BranchDir.West:
+                        {
+                            width = random.Next(4, 6);
+                            height = random.Next(2, 4);
+                            if ((room.X - width - w) > 0)
+                            {
+                                x = room.X - width - w;
+                                y = random.Next(room.CenterY - h / 2, room.CenterY - width / 2);
+                                if (y < 0) y = room.Y;
+                                if ((x + w) < size && (y + h) < size)
+                                {
+                                    Hallway hallway = new Hallway(room.X - width, room.CenterY - height / 2, width, height, HallWayOrientation.Horizontal);
+                                    Room new_room = new Room(x, y, w, h, room);
+                                    bool good = true;
+                                    rooms.ForEach(r =>
+                                    {
+                                        if (r.IsInside(new_room)) good = false;
+                                    });
+                                    if (good)
+                                    {
+                                        rooms.Add(new_room);
+                                        hallways.Add(hallway);
+                                        new_room.Allocate(BranchDir.East, hallway);
+                                        room.Allocate(BranchDir.West, hallway);
+                                        int b;
+                                        if (depth >= 3) b = random.Next(2, 3); else b = random.Next(1, 3);
+                                        if (depth == 1) b = 0;
+                                        if (depth >= 5) b = 3;
+                                        while (b != 0)
+                                        {
+                                            int open_b = random.Next(4);
+                                            if (new_room.OpenBranch(open_b)) b--;
+                                        }
+                                        room = new_room;
+                                        depth--;
+                                        rn++;
+                                        hn++;
+                                    }
+                                    else
+                                    {
+                                        if (again == 0)
+                                        {
+                                            room.Close(BranchDir.West);
+                                            Debug.WriteLine("10 retry was not enough on west");
+                                            again = 10;
+                                        }
+                                        again--;
+                                    }
+                                }
+                                else
+                                {
+                                    room.Close(BranchDir.West);
+                                }
+                            }
+                            else
+                            {
+                                room.Close(BranchDir.West);
+                            }
+                            break;
+                        }
                 }
             }
             Debug.WriteLine("Generated: " + rn + " rooms and " + hn + " hallways");
@@ -474,13 +484,22 @@ namespace GameEngine.Levels
             //Fill floor with room tiles
             rooms.ForEach(room =>
             {
+                int type = random.Next(100);
                 for (int y = room.Y;y < (room.Y+room.Height); y++)
                 {
                     for (int x = room.X; x< (room.X+room.Width);x++)
                     {
-                        int r = random.Next(100);
-                        if (r < 80) floor[x, y] = 2;
-                        else floor[x, y] = 6;
+                        if (type > 50)
+                        {
+                            int r = random.Next(100);
+                            if (r < 80) floor[x, y] = 2;
+                            else if (r < 20) floor[x, y] = 6;
+                            else floor[x, y] = 19;
+                        }
+                        else
+                        {
+                            floor[x, y] = 20;
+                        }
                     }
                 }
             });

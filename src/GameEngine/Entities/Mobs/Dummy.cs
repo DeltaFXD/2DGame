@@ -24,6 +24,8 @@ namespace GameEngine.Entities.Mobs
         int _pathIndex = 0;
         Vector2 _prev_position;
         int fireRate;
+        int pathfinding_cooldown = 0;
+        int penality = 1;
 
         public int Ammo { get; private set; }
 
@@ -43,7 +45,7 @@ namespace GameEngine.Entities.Mobs
             int yChange = 0;
             if (fireRate > 0) fireRate--;
             //AI HERE
-
+            if (pathfinding_cooldown > 0) pathfinding_cooldown--;
             level.GetPlayers().ForEach(player =>
             {
                 float dist = (player.GetX() - position.X) * (player.GetX() - position.X) + (player.GetY() - position.Y) * (player.GetY() - position.Y);
@@ -51,12 +53,15 @@ namespace GameEngine.Entities.Mobs
                 {
                     UpdateShooting(player.GetXY() - position);
                 }
-                else if (!_hasPath && dist < (Map.tileSize * Map.tileSize * 16 * 16))
+                else if (!_hasPath && pathfinding_cooldown <= 0 && dist < (Map.tileSize * Map.tileSize * 16 * 16))
                 {
+                    pathfinding_cooldown = 60 * penality;
+                    penality++;
                     _path = AStar.FindPath((int)position.X / 32, (int)position.Y / 32, (int)player.GetX() / 32, (int)player.GetY() / 32);
                     if (_path != null)
                     {
                         _hasPath = true;
+                        penality = 1;
                     }
                 }
             });
@@ -84,7 +89,8 @@ namespace GameEngine.Entities.Mobs
                     _pathIndex++;
                     if (_pathIndex == _path.Count())
                     {
-                        Debug.WriteLine("Destination reached");
+                        //Debug.WriteLine("Destination reached");
+                        pathfinding_cooldown = 0;
                         _path = null;
                         _pathIndex = 0;
                         _hasPath = false;

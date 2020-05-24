@@ -12,7 +12,7 @@ namespace GameEngine.Entities.Projectiles
     {
         static readonly int rateOfFire = 10;
         static readonly int particleLife = 30;
-        static readonly int particleAmount = 30;
+        static readonly int particleAmount = 10;
         static readonly int xOffsetSize = 8;
         static readonly int yOffsetSize = 8;
         static Sprite sprite = Sprite.GetSprite(Sprite.GetSpriteID("basic_projectile"));
