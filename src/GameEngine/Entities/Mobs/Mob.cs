@@ -27,6 +27,9 @@ namespace GameEngine.Entities.Mobs
         protected bool moving = false;
 		protected bool prev_moving = false;
 
+		protected bool attacking = false;
+		protected bool prev_attacking = false;
+
 		protected AnimatedSprite sprite;
 
 		MobType killer = MobType.NONE;

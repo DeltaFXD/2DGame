@@ -75,15 +75,17 @@ namespace GameEngine.Entities.Mobs
             if (xChange != 0 || yChange != 0)
             {
                 moving = true;
+                attacking = false;
                 Move(xChange, yChange);
             }
+            prev_attacking = attacking;
             UpdateShooting();
             UpdateSprite();
         }
 
         void UpdateSprite()
         {
-            if (previous_direction == direction && prev_moving == moving)
+            if (previous_direction == direction && prev_moving == moving && prev_attacking == attacking)
             {
                 return;
             }
@@ -97,6 +99,10 @@ namespace GameEngine.Entities.Mobs
                             {
                                 sprite = AnimatedSprite.GetAnimatedSprite("p_east");
                             }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("pa_east");
+                            }
                             else
                             {
                                 sprite = AnimatedSprite.GetAnimatedSprite("p_east");
@@ -108,6 +114,10 @@ namespace GameEngine.Entities.Mobs
                             if (moving)
                             {
                                 sprite = AnimatedSprite.GetAnimatedSprite("p_north_east");
+                            }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("pa_north_east");
                             }
                             else
                             {
@@ -121,6 +131,10 @@ namespace GameEngine.Entities.Mobs
                             {
                                 sprite = AnimatedSprite.GetAnimatedSprite("p_north");
                             }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("pa_north");
+                            }
                             else
                             {
                                 sprite = AnimatedSprite.GetAnimatedSprite("p_north");
@@ -132,6 +146,10 @@ namespace GameEngine.Entities.Mobs
                             if (moving)
                             {
                                 sprite = AnimatedSprite.GetAnimatedSprite("p_north_west");
+                            }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("pa_north_west");
                             }
                             else
                             {
@@ -145,6 +163,10 @@ namespace GameEngine.Entities.Mobs
                             {
                                 sprite = AnimatedSprite.GetAnimatedSprite("p_west");
                             }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("pa_west");
+                            }
                             else
                             {
                                 sprite = AnimatedSprite.GetAnimatedSprite("p_west");
@@ -156,6 +178,10 @@ namespace GameEngine.Entities.Mobs
                             if (moving)
                             {
                                 sprite = AnimatedSprite.GetAnimatedSprite("p_south_west");
+                            }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("pa_south_west");
                             }
                             else
                             {
@@ -169,6 +195,10 @@ namespace GameEngine.Entities.Mobs
                             {
                                 sprite = AnimatedSprite.GetAnimatedSprite("p_south");
                             }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("pa_south");
+                            }
                             else
                             {
                                 sprite = AnimatedSprite.GetAnimatedSprite("p_south");
@@ -180,6 +210,10 @@ namespace GameEngine.Entities.Mobs
                             if (moving)
                             {
                                 sprite = AnimatedSprite.GetAnimatedSprite("p_south_east");
+                            }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("pa_south_east");
                             }
                             else
                             {
@@ -215,14 +249,22 @@ namespace GameEngine.Entities.Mobs
 
         private void UpdateShooting()
         {
-            if (Mouse.GetButton() == Mouse.Button.Left && fireRate <= 0 && Ammo != 0)
+            if (Mouse.GetButton() == Mouse.Button.Left)
             {
-                Vector2 vec2 = Mouse.GetIsoCoordinate() - position;
-                double angle = Math.Atan2(vec2.Y, vec2.X);
-                Shoot(position + new Vector2(28, 28), angle);
-                fireRate = BasicProjectile.GetRateOfFire();
-                Ammo--;
+                if (fireRate <= 0 && Ammo != 0 && !moving)
+                {
+                    Vector2 vec2 = Mouse.GetIsoCoordinate() - position;
+                    double angle = Math.Atan2(vec2.Y, vec2.X);
+                    Shoot(position + new Vector2(28, 28), angle);
+                    fireRate = BasicProjectile.GetRateOfFire();
+                    Ammo--;
+                    attacking = true;
+                }
             }
+            else
+            {
+                attacking = false;
+            }    
         }
 
         public override void Render(Screen screen)
