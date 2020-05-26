@@ -149,11 +149,15 @@ namespace GameEngine.Entities.Mobs
                         {
                             if (moving)
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("mm_east");
+                            }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("ma_east");
                             }
                             else
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("m_east");
                             }
                             break;
                         }
@@ -161,11 +165,15 @@ namespace GameEngine.Entities.Mobs
                         {
                             if (moving)
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("mm_north_east");
+                            }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("ma_north_east");
                             }
                             else
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("m_north_east");
                             }
                             break;
                         }
@@ -173,11 +181,15 @@ namespace GameEngine.Entities.Mobs
                         {
                             if (moving)
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("mm_north");
+                            }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("ma_north");
                             }
                             else
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("m_north");
                             }
                             break;
                         }
@@ -185,11 +197,15 @@ namespace GameEngine.Entities.Mobs
                         {
                             if (moving)
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("mm_north_west");
+                            }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("ma_north_west");
                             }
                             else
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("m_north_west");
                             }
                             break;
                         }
@@ -197,11 +213,15 @@ namespace GameEngine.Entities.Mobs
                         {
                             if (moving)
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("mm_west");
+                            }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("ma_west");
                             }
                             else
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("m_west");
                             }
                             break;
                         }
@@ -209,11 +229,15 @@ namespace GameEngine.Entities.Mobs
                         {
                             if (moving)
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("mm_south_west");
+                            }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("ma_south_west");
                             }
                             else
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("m_south_west");
                             }
                             break;
                         }
@@ -221,11 +245,15 @@ namespace GameEngine.Entities.Mobs
                         {
                             if (moving)
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("mm_south");
+                            }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("ma_south");
                             }
                             else
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("m_south");
                             }
                             break;
                         }
@@ -233,11 +261,15 @@ namespace GameEngine.Entities.Mobs
                         {
                             if (moving)
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("mm_south_east");
+                            }
+                            else if (attacking)
+                            {
+                                sprite = AnimatedSprite.GetAnimatedSprite("ma_south_east");
                             }
                             else
                             {
-                                sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+                                sprite = AnimatedSprite.GetAnimatedSprite("m_south_east");
                             }
                             break;
                         }
@@ -246,7 +278,7 @@ namespace GameEngine.Entities.Mobs
         }
         public override void Render(Screen screen)
         {
-            if (sprite == null) sprite = AnimatedSprite.GetAnimatedSprite("testmob");
+            if (sprite == null) sprite = AnimatedSprite.GetAnimatedSprite("m_south_east");
             screen.RenderEntity(Coordinate.NormalToIso(position) / 2, renderBox, sprite.GetSprite());
         }
 

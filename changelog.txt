@@ -104,3 +104,4 @@
 -Player idle animation & better path finding
 -Shooting logic and shooting animation
 -Fix shooting animation
+-Add movement animation & Mob walking/idle animation
