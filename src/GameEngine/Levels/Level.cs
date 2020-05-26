@@ -207,6 +207,36 @@ namespace GameEngine.Levels
             }
         }
 
+        public bool InLineOfSight(int xstart, int ystart, int xend, int yend)
+        {
+            bool result = true;
+            xstart /= Map.tileSize;
+            ystart /= Map.tileSize;
+            xend /= Map.tileSize;
+            yend /= Map.tileSize;
+            while (xstart != xend && ystart != yend)
+            {
+                if (xstart != xend)
+                {
+                    if (xstart < xend) xstart++;
+                    else xstart--;
+                }
+
+                if (ystart != yend)
+                {
+                    if (ystart < yend) ystart++;
+                    else ystart--;
+                }
+
+                Tile tile = map.GetTile(xstart, ystart);
+                if (tile == null) result = false;
+                else if (tile.IsSolid()) result = false;
+
+                if (!result) break;
+            }
+            return result;
+        }
+
         public bool TileCollision(int xChange, int yChange, int width, int height)
         {
             bool solid = false;

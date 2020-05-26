@@ -100,3 +100,5 @@
 -Make AStar more reasonable
 #2020.05.24
 -Fix level generation bias & Misc
+#2020.05.26
+-Player idle animation & better path finding

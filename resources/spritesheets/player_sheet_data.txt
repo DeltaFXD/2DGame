@@ -1,1 +1,8 @@
-player 4 20 0 0 32 64
+p_south_east 4 20 0 0 32 64
+p_east 4 20 32 0 32 64
+p_north_east 4 20 64 0 32 64
+p_north 4 20 96 0 32 64
+p_north_west 4 20 128 0 32 64
+p_west 4 20 160 0 32 64
+p_south_west 4 20 192 0 32 64
+p_south 4 20 224 0 32 64

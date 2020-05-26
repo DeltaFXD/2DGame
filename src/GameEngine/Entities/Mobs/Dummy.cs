@@ -52,6 +52,13 @@ namespace GameEngine.Entities.Mobs
                 if (dist < (Map.tileSize * Map.tileSize * 8))
                 {
                     UpdateShooting(player.GetXY() - position);
+                } else if (!_hasPath && dist < (Map.tileSize * Map.tileSize * 16 * 16) && level.InLineOfSight((int)position.X, (int)position.Y, (int)player.GetX(), (int)player.GetY())) {
+                    _path = new List<Vector2>
+                    {
+                        new Vector2(player.GetX() / Map.tileSize, player.GetY() / Map.tileSize)
+                    };
+                    _hasPath = true;
+                    penality = 1;
                 }
                 else if (!_hasPath && pathfinding_cooldown <= 0 && dist < (Map.tileSize * Map.tileSize * 16 * 16))
                 {
@@ -69,7 +76,7 @@ namespace GameEngine.Entities.Mobs
             if (_hasPath)
             {
                 Vector2 currentDest = _path[_pathIndex];
-                currentDest *= 32;
+                currentDest *= Map.tileSize;
                 if (currentDest.X != position.X)
                 {
                     if (currentDest.X > position.X)
