@@ -105,3 +105,4 @@
 -Shooting logic and shooting animation
 -Fix shooting animation
 -Add movement animation & Mob walking/idle animation
+-Add shooting animation for mobs

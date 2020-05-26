@@ -45,6 +45,7 @@ namespace GameEngine.Entities.Mobs
             int yChange = 0;
             if (fireRate > 0) fireRate--;
             //AI HERE
+            prev_attacking = attacking;
             if (pathfinding_cooldown > 0) pathfinding_cooldown--;
             level.GetPlayers().ForEach(player =>
             {
@@ -63,11 +64,13 @@ namespace GameEngine.Entities.Mobs
                     _hasPath = true;
                     _pathIndex = 0;
                     penality = 1;
+                    attacking = false;
                 }
                 else if (!_hasPath && pathfinding_cooldown <= 0 && dist < (Map.tileSize * Map.tileSize * 16 * 16))
                 {
                     pathfinding_cooldown = 60 * penality;
                     penality++;
+                    attacking = false;
                     _path = AStar.FindPath((int)position.X / 32, (int)position.Y / 32, (int)player.GetX() / 32, (int)player.GetY() / 32);
                     if (_path != null)
                     {
@@ -119,6 +122,7 @@ namespace GameEngine.Entities.Mobs
             if (xChange != 0 || yChange != 0)
             {
                 moving = true;
+                attacking = false;
                 Move(xChange, yChange);
             }
             UpdateSprite();
@@ -130,14 +134,24 @@ namespace GameEngine.Entities.Mobs
             {
                 double angle = Math.Atan2(vec2.Y, vec2.X);
                 Shoot(position + new Vector2(28, 28), angle);
+                angle += Math.PI;
+                if (angle < (Math.PI * 0.125) || angle > (Math.PI * 1.875)) direction = Direction.West;
+                else if (angle < (Math.PI * 0.375)) direction = Direction.NorthWest;
+                else if (angle < (Math.PI * 0.625)) direction = Direction.North;
+                else if (angle < (Math.PI * 0.875)) direction = Direction.NorthEast;
+                else if (angle < (Math.PI * 1.125)) direction = Direction.East;
+                else if (angle < (Math.PI * 1.375)) direction = Direction.SouthEast;
+                else if (angle < (Math.PI * 1.625)) direction = Direction.South;
+                else if (angle < (Math.PI * 1.875)) direction = Direction.SouthWest;
                 fireRate = BasicProjectile.GetRateOfFire();
                 Ammo--;
+                attacking = true;
             }
         }
 
         void UpdateSprite()
         {
-            if (previous_direction == direction && prev_moving == moving)
+            if (previous_direction == direction && prev_moving == moving && prev_attacking == attacking)
             {
                 return;
             }
