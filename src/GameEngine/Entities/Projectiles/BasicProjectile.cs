@@ -10,7 +10,7 @@ namespace GameEngine.Entities.Projectiles
 {
     class BasicProjectile : Projectile
     {
-        static readonly int rateOfFire = 10;
+        static readonly int rateOfFire = 30;
         static readonly int particleLife = 30;
         static readonly int particleAmount = 10;
         static readonly int xOffsetSize = 8;
